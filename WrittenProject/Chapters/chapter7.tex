@@ -1,0 +1,53 @@
+%!TEX root = ../template.tex
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% chapter4.tex
+%% NOVA thesis document file
+%%
+%% Chapter with lots of dummy text
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\typeout{NT FILE chapter4.tex}%
+
+\chapter{Text Mining Time Series}
+\label{cha:text_}
+
+
+
+\section{Synthatic Search on Time Series}
+
+We have made 2 approaches, one which uses a translation of the time series into the symbolic domain and another in which we associate extracted features with words.
+
+
+I AM NOT HAPPY WITH THIS SEPARATION...IT FEELS LIKE IT COULD HAVE A MORE HOMOGENEOUS STRUCTURE
+
+A human language is foremost a means of communication, in which the information is represented by sentences, composed by words that can be broken into sequences of symbols. The diversity of possible arrangements of symbols and words gives the versatility in the process of transmitting information. The analysis of how symbols and words can be arranged in order to have a valid structure and comprise meaningful information involves the study of grammar and meaning~\citep{davidCrystal}.
+\par
+Time series are, in their turns, carriers of information about a certain measure. These comprise sequences of ordered real domain numerical data observed during a given temporal interval, which are typically plotted as variations in amplitude. As aforementioned, the visual perception of the morphological behaviour of these series is, in many cases, enough to solve the problem and find the pattern that is being searched.
+\par
+In terms of morphology, many attributes can be extracted from the visual perception of the signal, such as rising and falling slopes, concavity, direction, amplitude thresholding, frequency, time and amplitude range of a slope, among others. For instance, we can identify positive peaks by finding a rising slope followed by a falling slope, which is precisely the mechanism developed in Horowitz \textit{et. al.} for peak detection in electrocardiography~\citep{Horowitz}.
+\par
+The combination of these attributes into a sequence of primitives is a symbolic characterization of the signal that enables the use of text parsing tools, such as regular expressions, for searching the desired pattern.
+
+\subsection{Regular Expressions for Time Series}
+
+In 1943, McCulloch and Walter Pitts made the first theoretical description in a logic interpretation of the physiological events of neuron networks that served as inspiration for Kleen (1956) to create a set of rules that represent a finite state machine. Kleene described the nerve net as an arrangement of a finite number of neurons, where each has a sequence of states/events represented by integers. The state's values are influenced by the sensory response to the environment~\citep{Kleene}, and are said to be equally spaced in time. This algebraic description of neural nets can be extrapolated for time-series, in which the sequence of numbers is abstracted as a sequence of states to which values correspond to the sensory response of the environment. 
+\par
+The set of regular rules is a way of describing a specific sequence of states in the neural net - \textit{a pattern}. This functionality has been extended into the field of text processing, in which this set of rules is able to describe a pattern as a sequence of characters, designated as a regular expression. Using a symbolic representation to characterize the sequence of states of time series in multiple attributes, regular expressions can be extended as a time series's parser to search patterns on it \citep{Thompson}. 
+
+\subsection{A Tool of Thought}
+
+In 1980, Kenneth E. Iverson has discussed the importance of notation, nomenclature and language as tools of thought \citep{APL1}. A regular expression is a good example of a tool of thought, by expressing the recognition of a pattern into a sequence of characters, but other examples can be given, such as in chemistry, botany and especially in mathematics. 
+\par
+E. Iverson believed that, although mathematical notation is not universal and unambiguous, it provides one of the best-known and best-developed examples of language as a tool of thought. With this in mind, he developed a programming language called APL (A Programming Language), which has the advantages of being universal and unambiguous, and incorporated the principles of mathematical notation.[\textbf{referencia}]
+\par
+One of the fundamental characteristics of this tool is the provision of graphic symbols for the execution of functions and operations, which are meant to express the thought of the user in solving a problem. The tool presented in this work is inspired by this reasoning and uses graphical symbols in the pre-processing and symbolic connotation steps. With this, the proposed tool profits of E. Iverson ideas to be intuitive, simple to use yet complex enough to reach the desired end, being a powerful tool of thought for query search in time series. 
+
+\subsection{The Syntactic Pattern Quest}
+
+In this study, we propose a tool that focuses in ease simple query search tasks in time series, which we refer as \gls{SSTS}. This is achieved by an innovative methodology, where the user gives a syntactic nature to time series, which turns the search procedure less verbose and more related with the reasoning of the user in recognizing the desired pattern.
+
+\subsection{Time Series Representation}
+
+\section{Towards Natural Language for Pattern Search}
+
+\section{Classification of Time Series Documents}

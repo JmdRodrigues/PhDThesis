@@ -1,0 +1,331 @@
+%!TEX root = ../template.tex
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% chapter2.tex
+%% NOVA thesis document file
+%%
+%% Chapter with the template manual
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\typeout{NT FILE chapter2.tex}%
+
+\chapter{Time Series Fundamentals}
+\label{cha:theory}
+
+The content of this thesis is diverse and covers several different topics. Therefore, the reader will appreciate that we set the foundations that are necessary to fully capture the essence of this work. For this, we provide an introduction to each of the topics addressed, the global definitions and used notation in this work. We start by explaining occupational domain variables and corresponding sensors used to monitor these. The data of interest in this work is \textit{time series} and the global definitions and notations are provided. Standard pre-processing methods, representation forms and distance measures are also explained. In this chapter, only global definitions will be made. Each further chapter will have additional and more contextualized definitions when needed.
+
+
+The information gathered by sensor are physical quantities that vary with time. These are called \textit{time series} and are the main topic of this work.
+
+\begin{itemize}
+    \item \textbf{Definition 1 - Time Series (T) - } A time series is a sequence of real values ordered in time with length $n \in \mathbb{N}$: $T = (t_1, t_2, ..., t_n)$.
+    Several domains of data rely in the acquisition of multiple time series from multiple axis of the same sensor (e.g. the 3-axis accelerometer) or from multiple sources (e.g. IMU as a fusion of three different sensors), creating a \textit{multi-dimensional time series}.
+    
+    \item \textbf{Definition 2 - Multi-Dimensional T (MT) - } A \textit{MT} is a set of $k \in \mathbb{N}$ time series belonging to the same acquisition: $\{T_1, T_2, ..., T_k\}$.
+
+Segments of interest are often searched inside a \textit{time series}. A segment is called a \textit{subsequence}:
+    
+    \item \textbf{Definition 3 - Subsequence - } A \textit{subsequence} is a segment of the time series with size $w \in \mathbb{N}$ and starting from a given position \textit{i} and ending at position \textit{i+w} from the \textit{T} or \textit{MT}.
+    
+A common strategy used in time series data mining is  the moving window. 
+
+    \item \textbf{Definition 4 - Moving Window - } A \textit{moving window} is a process of sliding along a time series $T$ to apply a specific method on each \textit{subsequence} it hovers. The window has, such as the \textit{subsequence} a predefined size $w \in \mathbb{N}$, which starts at a given position \textit{i} and ends at position \textit{i+w}. The process is iterative and can be made overlapping windows or not. The next window will start at \textit{i+o}, being \textit{o} the overlapping size.
+
+\end{itemize}
+
+With this process, each \textit{subsequence} can be filtered, features can be extracted or distances can be measured. We will show several utilities of this technique further when introducing methods used to pre-process a raw time series.
+\par
+Depending on the context and which conditions the data is gathered, the raw information can contain several sources of disturbance or should be transformed into another dimension to extract the information that matters. The set of tasks taken to prepare the \textit{time series} to enhance information retrieval is called \textit{pre-processing}.
+\par
+The pre-processing steps we will discuss involve filtering, normalization and transformation.
+
+\section{Filtering}
+\label{subsubsec:filt}
+
+Time series have multiple sources of disturbance. This disturbance is usually called \textit{noise} and is defined as an unwanted form of energy, but it can have multiple interpretations. It can be caused by internal sources inside a device, such as \textit{white noise}, or be due to external sources, such as motion artifacts, wandering baseline, sensor detachment or the magnetic field from surrounding devices \cite{}. Any of these disturbances will affect the analysis stage and should be detected or removed.
+\par
+Several methods can be used to reduce the influence of noise in the analysis. Standard filtering methods, such as low-pass, band-pass and high-pass filters can be used to reduce the presence of specific frequency bandwidths that are not relevant. There are many configurations for these types of filters, being one commonly used the \textit{Butterworth} filter.
+
+Another often used method that has the purpose of reducing the presence of noise and represents a variation of a low-pass filter is the smoothing technique. Several variations of this technique exist, being the simplest one a moving average, which uses a moving window, calculating the mean in each iteration.
+
+Another type of disturbance on the data that is usually removed is a wandering baseline. An example typically occurs in ECG signals, where the respiration creates a wandering baseline on the signal. This type of disturbance has a very low frequency compared to the meaningful information on the data and can be removed by subtracting a \textit{smoothed} version of the original data.
+
+\section{Normalization} 
+\label{subsec:normalize}
+
+Normalization of data is an important step in any data mining process. It is essential for data uniformization and scaling, while keeping the morphology and shape of the time series. Several methods can be used for this purpose, namely:
+
+\begin{equation}
+\overline{T} = \frac{T}{max(|T|)}
+\end{equation}
+
+the normalized signal ($\overline{T}$) is scaled by the absolute maximum of $T$. It is the simplest approach to normalization and guarantees that values are scaled linearly and their modulus cannot be higher than 1.
+\par
+A variation of this process is the normalization by the range of amplitudes, which is as follows:
+
+\begin{equation}
+\overline{T} = \frac{T-min(T)}{max(T)-min(T)}
+\end{equation}
+
+here the signal $T$ is normalized to range between [0,1].
+Another normalization method, called \textit{z-normalization}, is very commonly used and relies on the distribution of its values:
+
+\begin{equation}
+\overline{T} = \frac{T-\mu_T}{\sigma_T}
+\end{equation}
+
+where the time series $T$ is subtracted by its mean, $\mu_T$ and scaled by its standard deviation, $\sigma_T$. The resulting values represent how many standard deviations the signal is away from the mean.
+
+
+\section{Transformation} 
+\label{subsec:transform}
+
+In information retrieval, data has often to be re-scaled, simplified, approximate or represented into another data type. Each can contribute in their own way to capture the most relevant and meaningful information, or discover a new type of information that once was hidden in the original data. Dozens of methods exist for time series representation, such as Singular Value Decomposition (SVD) or wavelet transform, but only a few will be explained.
+\par
+One of the first and most well known techniques suggested for time series transformation was the Discrete Fourier Transform (DFT) \citep{fourier}. The idea behind this concept is that any signal, of any complexity, is a decomposition of a finite number of sine waves. Each wave is represented by a complex number, known as the Fourier coefficient, transforming the signal from the time domain to the frequency domain \cite{fourier2}. This transformation allows to see the signal in a different manner, highlighting which frequencies concentrate more or less energy. It unveils the presence of specific types of noise or artifacts, or periodic shapes. Figure \ref{fig:fourier} shows the transformation of a signal into the frequency domain.
+\par
+Frequency properties are very relevant to characterize a time series, but others can also be used to get a full characterization of the signal. The process of feature extraction is also a transformation method commonly employed. It is performed by a moving window from which features are extracted. For each feature, $f$, a feature vector is computed.
+
+\begin{itemize}
+
+\item \textbf{Definition 5 - Feature Series - F}A \textit{feature series}, \textit{F}, is a feature representation of a time series with size m that depends on the overlap size $o \in \mathbb{N}$ of the sliding process: $m = \frac{n}{w-o}$. Considering the existence of MT, the \textit{feature series} range from $f_{1,1}$ to $f_{k,m}$.
+    
+When extracting more than one feature, these are grouped into a \textit{feature matrix}.
+    
+    \item \textbf{Definition 5 - Feature Matrix - F_M}A \textit{feature matrix}, $F_M$, is the set of $r$ features extracted for \textit{k} time series, with size $r \times (k\times m)$.
+
+\end{itemize}
+
+\par
+Another common used transformation method to simplify a time series and reduce its dimension is the piecewise aggregate approximation(PAA) \cite{paa}. The process is to keep the average of the \textit{N} equi-sized subsequences in which the original signal with length \textit{n} is segmented, which results in $\overline{T} = \overline{t_1}, \overline{t_2}, ...,\overline{t_N}$, such that \cite{paa}
+
+\begin{equation}
+\overline{t_i} = \frac{N}{n} \sum^{\frac{n}{N}i}_{j=\frac{n}{N}(i-1)+1} t_j
+\end{equation}
+
+An example is showed in Figure \ref{fig:paa}. The resulting signal has reduced noise and size, while conserving its trend.
+\par
+From this method, a new representation technique was born, transforming the signal from the numerical to the symbolic domain. It is called Symbolic Aggregate approXimation (SAX). This method applies PAA to a z-normalized time series and indexes a letter to each sample of the simplified signal based on the distribution of its amplitude values. The signal's amplitude values are separated in bins with equal probability. The number of bins is equal to the size of the \textit{alphabet} chosen. Figure \ref{fig:sax} shows an example of the signal transformed into a string with 3 letters in its alphabet. Such as the DFT, SAX opens doors to analyze time series in a completely different manner, profiting from the much acquired knowledge in text mining.
+
+DEFINE A SAX OR SYMBOLIC TIME SERIES HERE
+
+\par
+
+In this thesis we will use feature vectors for several purposes. We also propose a novel symbolic representation technique for time series that is used for expressive pattern search and classification. In order to perform search or classification, we have to be able to calculate the difference/similarity between two time series or \textit{subsequences}.
+
+\section{Distance Measures}
+\label{sec:distance}
+
+There is an exhaustive number of distance measure for time series, but two of the classical standard measures still provide state-of-the art results in most time series data mining tasks, namely the euclidean distance (ED) and the dynamic time warping (DTW).
+\par
+The ED is the most straightforward distance measure for time series. Let us consider two time series, $Q$ and $C$, of length $n$, so that\\
+\\
+$Q = q_1, q_2, ..., q_i, ..., q_n$\\
+$C = c_1, c_2, ..., c_i, ..., c_n$\\
+
+The distance between these two time series under the ED is:
+
+\begin{equation}
+ED(Q,C) = \sqrt{\Sigma^n_i=1 (q_i - c_i)^2}
+\end{equation}
+
+which represents the square root of the sum of the squared amplitude differences between the samples of each signal. Although the distance measure is simple to compute, it is highly susceptible to typical distortions on time series. When using ED, these distortions must be removed, otherwise, other methods, invariant to these distortions, should be used. Examples of distortions are the amplitude and offset distortion, phase distortion, and local scaling ("warping") distortion. The first can be compensated by the z-normalized ED:
+
+\begin{equation}
+z\_ED(Q,C) = \sqrt{2m(1-\frac{\Sigma^m_{i=1}Q_iC_i - m\mu_Q\mu_C}{m\sigma_Q\sigma_C})}
+\end{equation}
+
+where $\mu_Q$ and $\mu_C$ are the mean of the time series pair and $\sigma_Q$ and $\sigma_C$ are the standard deviation.
+
+The \textit{warping} distortion can be solved with an elastic measure. For this purpose, DTW is typically used.
+\par
+The DTW distance measures the alignment between two time series. Let us consider two time series, $Q$ and $C$, of length $n$ and $m$, respectively:\\
+\\
+$Q = q_1, q_2, ..., q_i, ..., q_n$\\
+$C = c_1, c_2, ..., c_j, ..., c_m$\\
+\\
+The alignment is measured by means of a distance matrix with size $n$-by-$m$, where the $(i^{th},j^{th})$ cell of the matrix contains the $d(q_i, c_j)$ between the two points $q_i$ and $c_j$, being $d=(q_i - c_j)^2$ \cite{dtw}. Figure \ref{fig:dtw} shows an example of a distance matrix between two time series. The matrix fully describes the difference between the two time series and maps where these align. The mapping is made by a warping path, $W$, that represent the set of matrix cells that minimize the warping cost, also defined as the cumulative distance of these cells \cite{dtw}
+
+\begin{equation}
+W = w_1, w_2, ..., w_k, ..., w_K; \quad \quad max(m,n) \leq K < m+n+1
+\end{equation} 
+
+\begin{equation}
+DTW(Q,C) = min \sqrt{\Sigma^K_{k=1} w_k}
+\end{equation} 
+
+The cumulative distance $\gamma(i,j)$ is calculated as $d(q_i,c_j)$ of the current cell added to the minimum distance adjacent to that cell:
+
+\begin{equation}
+\gamma(i,j) = d(q_i,c_j)+min\{\gamma(i-1,j-1), \gamma(i-1, j), \gamma(i, j-1)\}
+\end{equation} 
+
+When two time series with the same length have a linear warping path, such that $w_k=(i,j)_k, i=j=k$, we have a special case of the ED. DTW has a time and space complexity of $O(nm)$ while the ED has linear complexity ($O(n)$).
+\par
+A different type of distance measure is also used to cope with complexity invariance. This distance uses a complexity correction factor ($CF$) with an existing distance measure, such as ED \cite{complexity}:
+
+\begin{equation}
+CD(Q,C) = ED(Q,C)\timesCF(Q,C)
+\end{equation}
+
+The $CF$ is defined as \cite{complexity}:
+
+\begin{equation}
+CF = \frac{max\{CE(Q),CE(C)\}}{min\{CE(Q),CE(C)\}}
+\end{equation}
+
+where $CE$ represents the complexity estimate of a time series. This estimate is calculated based on the intuition that if we could  "stretch" a time series until it becomes a straight line, this line would be as long as the complexity of the signal. It can be computed as the sum of the $n-th$ discrete differences along the time series\cite{complexity}:
+
+\begin{equation}
+CE(Q) = \sqrt{\Sigma^{n-1}_{i=1} (q_i - q_{i+1})^2}
+\end{equation}
+
+These distance measures are performed on the original representation domain of time series. As we showed above, other representation techniques can be employed, creating opportunities for other types of approaches. In this work, we explore other representation techniques to create novel ways of exploring time series. Then, we find that the reader will appreciate that we describe other distance measures employed, namely in the feature-based domain and symbolic-based domain. 
+\par
+As mentioned, a feature series $F$ can be computed from the original time series to represent it based on a specific feature. If the size of the \textit{moving window} is equal to the size of the time series, than $F$ is represented by a single value. Otherwise, each \textit{subsequence} highlighted by the \textit{moving window} is characterized by the feature and the $F$ is computed as an array. When multiple features are extracted, each \textit{subsequence} is characterized by a set of features, creating a feature vector $\vec{f}$ with $r$ feature values. Vector based distance measures can be used with these feature vectors to compare different time series or \textit{subsequences}. There are several vector-based distance measures, including the already mentioned euclidean distance or the manhattan distance, but we will only describe the cosine similarity/distance.
+\par
+The cosine similarity is a measure of the angle between two vectors determining if these are pointing in the same direction. Consider two feature vectors $\vec{f_a}}$ and $\vec{f_B}$. Their cosine similarity is computed as their normalized dot product \cite{cosine}
+
+\begin{equation}
+CS = \frac{\vec{f_A} \cdot \vec{f_B}}{||\vec{f_A}|| ||\vec{f_B}||}
+\end{equation}
+
+being $||\vec{f_A}||$ and $||\vec{f_B}||$ the euclidean norm of each feature vector, defined as $\sqrt{\Sigma_{i=1}^{r} f_{Ai}}$ and $\sqrt{\Sigma_{i=1}^{r} f_{Bi}}$, respectively \cite{cosine}.
+
+
+
+
+
+
+
+
+
+  \begin{itemize}
+  
+    
+    
+    This feature set characterizes the TS (MTS) in several dimensions that range from spectral, temporal or statistical. This characterization is used to compute the \textit{self-similarity matrix}.
+    
+    \item \textbf{Definition 6 - Self-Simialrity Matrix (SSM) - }
+    An \textit{SSM} is a pairwise distance matrix between each \textit{subsequence} of the \textit{TS}. In this work, it is computed by simply calculating the dot product between the $F_M$ and its transpose.
+    
+    The \textit{SSM} reveals several meaningful structures that indicate the presence of \textit{events}.
+    
+    \item \textbf{Definition 7 - Event} An \textit{event} is an instant in time \textit{e} that indicates the presence of a relevant occurrence in the TS. This instant is one sample of the TS. Multiple \textit{events} segment the TS into several \textit{subsequences} of different lengths. Therefore, event detection is often considered TS segmentation \cite{cpd_alan}.
+    
+    In this work, we highlight two categories of event significance, based on the type of \textit{event} that we search, namely \textit{change point event} and \textit{periodic event}
+    
+    \item \textbf{Definition 8 - Change Point Event - } A \textit{change point event} indicates a significant change between one instant defined by \textit{subsequence} \textit{i} and \textit{subsequence} \textit{i+1}, segmented the time series. These events can be computed with the \textit{novelty function}.
+    
+    \item \textbf{Definition 9 - Periodic Event - } A \textit{periodic event} segments the periods of a cyclic time series into cyclic \textit{subsequences}. These events can be computed with the \textit{similarity function}. 
+\end{itemize}
+
+
+
+This work proposes a structure-based method to perform classification of time series. Using a textual representation of time series. It promotes the usage of text-based queries for the description of the signal and textually transcribes its dynamics. This section explains what is a time series, its relationship with the linguistic transformation and how this solution fits within the problematic.
+
+\subsection{Global Definitions}
+
+We start by defining what is a \textit{time series}:
+
+
+\textit{\textbf{Definition 2.1}} A Time Series is an ordered sequence of $n \in \mathbb{N}$ real-valued samples, indexed by time.
+
+\[ts = (ts_1,\dotsb,ts_n)\]
+
+
+In this work we transcribe structures of the time series to text, which correspond to \textit{subsequences}.\\
+
+\textit{\textbf{Definition 2.2}} A Time Series \textit{subsequence} is a segment of a time series with an ordered sequence of $s \in \mathbb{N}$ real-valued samples, indexed by time, with $length_s < n$:
+\[sts = (sts_1,\dotsb,sts_s)\]
+
+
+These \textit{subsequences} are associated to a word or sequence of words, which can be defined as a \textit{pattern}.\\
+
+\textit{\textbf{Definition 2.3}} A Pattern is a \textit{subsequence} or a combination of \textit{subsequences} of a time series with a specific morphological representation or shape.
+
+ 
+ These \textit{patterns} are characterized by \textit{characters} and \textit{words}, which can be derived by means of \textit{SSTS} queries.
+ 
+\subsection{Time Series Textual Abstraction}
+
+The proposed method, conceptually developed based on text mining techniques, abstracts how a time series can be structured in a linguistic representation, similar to how the human would describe a time series with words. In order to introduce the reader with this abstraction and representation, we explain how we use \textit{SSTS} to make this abstraction.
+\par
+The transformation from the numerical domain to the textual domain is made using \textit{SSTS} \cite{ssts}. This method uses three steps to perform a query search on the time series and finding the corresponding pattern. The steps include (1) the pre-processing; (2) the symbolic connotation and (3) the search:
+
+\begin{itemize}
+    \item Pre-processing: prepare the signal for the translation into the textual domain, removing noise or any disturbance in the signal that affects the pattern search;
+    \item Connotation: transforms each sample of the time series into a character by extracting properties of the signal that are based on a conversion rule either defined by the user, or pre-defined in our vocabulary; 
+    \item Search: regular expression query that is matched on the textual pattern and corresponds to a \textit{pattern} on the \textit{time series}.
+\end{itemize}
+
+An example of the detection of shapes with the help of \textit{SSTS} in a set of time series is made in Figure \ref{fig:SSTS_example}. The example shows the potential of this mechanism to create the description made in Figure \ref{fig:interp_data}. 
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.85\linewidth]{Figures/SSTS_example.png}
+    \caption{(Top) Using SSTS to detect the rising stage of a time series. Each step of the process is written described as follows: (1) pre-processing: \textit{Sm} is the function \textit{Smooth} with a window size of 25 samples; (2) connotation: \textit{D1}, indicates the first derivate, from which each sample is converted to \textit{z} - Flat, \textit{p} - rising and \textit{n} falling; (3) search - regular expression \textit{p+} searches for all sequences with 1 or more \textit{p} characters. (Bottom) Example of sentence generation. Using the other search queries (\textit{p+, n+, z+}), we can find the derivative patterns and convert it into ordered words.}
+    \label{fig:SSTS_example}
+\end{figure}
+
+We therefore define \textit{character}, \textit{word} and \textit{sentence}, based on the concepts mentioned above.\\
+
+\textit{\textbf{Definition 2.4}} A \textit{character} is an unit symbolic element. In our work, we use the \textbf{connotation} step from \textit{SSTS} to transcribe the time series into a sequence of \textit{characters} based on a property. The mentioned properties, corresponding characters used to translate the time series and associated words are the following:\\
+\textbf{\textit{amplitude:}} binary representation of the amplitude based on a threshold. Character \textbf{\textit{0}} means the sample is below the threshold while \textbf{\textit{1}} means it is above it.\\
+\textbf{\textit{first derivative:}} estimated slope that a sample belongs to, with a threshold to limit flat areas. Characters given to each sample are \textbf{\textit{p}} when slope is positive and higher than the threshold, \textit{\textbf{n}} when negative and higher than the threshold, while \textbf{\textit{z}} when the slope is below the threshold.\\
+\textbf{\textit{height of a slope:}} Describes the slope in terms of height, that is, how high is a slope, either if positive or negative. The characters are case sensitive, being \textbf{\textit{r}} for a low rise and \textit{\textbf{R}} for a high rise. The same for falling (\textbf{\textit{F}} or \textbf{\textit{f}}).\\
+\textbf{\textit{slope speed:}} the amplitude of the first derivative, characterizing quick (\textbf{\textit{Q}}) and slow (\textbf{\textit{q}}) samples of the signal.\\
+\textbf{\textit{second derivative:}} second derivative of a signal to indicate concavity. When positive, concavity is convex (\textit{\textbf{C}}), while when negative, it is concave (\textbf{\textit{D}}).\\
+
+
+The transcription results in sequences of \textit{characters}. Specific \textit{characters} sequences are translated into \textit{words}.\\
+
+\textit{\textbf{Definition 2.5}} A \textit{word} is a sequence of \textit{characters}. \textit{SSTS} has the \textbf{search} step which provides a way of extracting specific patterns with regular expression queries. We pre-defined a set of search queries that correspond to specific words, such as \textit{rise}, \textit{fall}, \textit{peak}, \textit{valley}, etc.... These words can be associated with a single character (e.g. rise = \textbf{\textit{p+}}) or a combination of them (e.g. peak = \textbf{\textit{p+[z]n+}}). Examples of common matches are presented in Figure.
+
+This set of words belong to a \textit{vocabulary}.\\
+
+\textit{\textbf{Definition 2.6}} The \textit{vocabulary} comprehends the set of words available in a pre-defined set of \textit{SSTS} queries.
+
+The \textit{words} used can be ordered to form a \textit{sentence}.\\
+
+\textit{\textbf{Definition 2.7}} \space \space A \textit{sentence} is a set of \textit{words} or tokens organized sequentially. In this work we create multiple sentences based on the types of \textit{connotation} methods used to transcribe the time series. In Figure \ref{fig:SSTS_example}.Bottom, a time series is translated into the \textit{sentence} \textbf{\textit{Flat Rise Fall Rise Flat}} based on a set of \textit{SSTS} queries from the derivative connotation (\textit{\textbf{p+, z+}} and \textbf{\textit{n+}}). 
+For each time series, one document is generated. 
+
+\textit{Sentences} can be added to a \textit{document}. \\
+
+\textit{\textbf{Definition 2.8}} \space \space A \textit{document} is a piece of text with a collection of words or tokens that are used to build sentences. It can be made of only one sentence or multiple ones. In this work, a \textit{time series document} will have multiple sentences as groups of describing patterns. 
+Finally, the higher hierarchy in textual information is the \textit{corpus}.\\
+
+\textit{\textbf{Definition 2.9}} \space \space The \textit{corpus} is a collection of text material (group of documents). It represents the higher level of textual information. This collection is typically annotated and used for machine learning tasks. In this case, a corpus will be represented by the set of documents that describe a time series dataset.
+
+Since this work follows the steps of \textit{NLP} strategies for document classification, we will define \textit{Bag of Words} (BoW).\\
+
+\textit{\textbf{Definition 2.10}} \space \space A BoW is a feature matrix representation of a corpus, being the feature the number of occurrences of each word, the term-frequency (\textit{tf}):
+\begin{equation}
+    tf_{t,d} = \frac{f_{t,d}}{\sum\limits_{t'\in d} f_{t',d}}, 
+\end{equation}
+
+being \textit{t} the term that exists in a document, \textit{d} the document, \textit{t'} the term that belongs to document \textit{d}.
+
+We use the BoW to vectorize the textual representation of each time series.
+
+Most of the times, \textit{n-grams} are used in addition to single words.\\
+
+\textit{\textbf{Definition 2.11}} \space \space \textit{N-grams} are a span of followed words that are counted in the BoW. It gives more context to words that are frequently followed by a specific word. As with time series we have temporal order of occurrences, this feature is very important. An example of \textit{2-gram} from the sentence \textit{Rise Flat Fall} would be \textit{Rise Flat} and \textit{Flat Fall}.
+
+\section{Sensing Human Posture, Motion and Physiology}
+\label{sec:sensor}
+
+
+\section{Linguistic Nature of Time Series} % (fold)
+\label{sec:linguistic}
+
+
+%
+% Please note that
+% \begin{center}
+%   \textbf{\large this package and template are not official for FCT/NOVA}.
+% \end{center}
+
+
+
+% \printbibliography[heading=subbibliography, segment=\therefsegment, title={\bibname\ for chapter~\thechapter}]
