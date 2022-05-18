@@ -6,35 +6,42 @@
 %% Chapter with lots of dummy text
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\typeout{NT FILE chapter4.tex}%
+\typeout{NT FILE chapter7.tex}%
 
-\chapter{Text Mining Time Series}
+\chapter{Language for Time Series Data Mining}
 \label{cha:text_}
 
-
-
-\section{Synthatic Search on Time Series}
-
-We have made 2 approaches, one which uses a translation of the time series into the symbolic domain and another in which we associate extracted features with words.
-
-
-I AM NOT HAPPY WITH THIS SEPARATION...IT FEELS LIKE IT COULD HAVE A MORE HOMOGENEOUS STRUCTURE
-
-A human language is foremost a means of communication, in which the information is represented by sentences, composed by words that can be broken into sequences of symbols. The diversity of possible arrangements of symbols and words gives the versatility in the process of transmitting information. The analysis of how symbols and words can be arranged in order to have a valid structure and comprise meaningful information involves the study of grammar and meaning~\citep{davidCrystal}.
+Human language is foremost a means of communication, in which the information is represented by sentences, composed by words that can be broken into sequences of symbols. The diversity of possible arrangements of symbols and words gives the versatility in the process of transmitting information. The analysis of how symbols and words can be arranged in order to have a valid structure and comprise meaningful information involves the study of grammar and meaning~\citep{davidCrystal}.
 \par
 Time series are, in their turns, carriers of information about a certain measure. These comprise sequences of ordered real domain numerical data observed during a given temporal interval, which are typically plotted as variations in amplitude. As aforementioned, the visual perception of the morphological behaviour of these series is, in many cases, enough to solve the problem and find the pattern that is being searched.
 \par
 In terms of morphology, many attributes can be extracted from the visual perception of the signal, such as rising and falling slopes, concavity, direction, amplitude thresholding, frequency, time and amplitude range of a slope, among others. For instance, we can identify positive peaks by finding a rising slope followed by a falling slope, which is precisely the mechanism developed in Horowitz \textit{et. al.} for peak detection in electrocardiography~\citep{Horowitz}.
 \par
-The combination of these attributes into a sequence of primitives is a symbolic characterization of the signal that enables the use of text parsing tools, such as regular expressions, for searching the desired pattern.
+We can think of this morphological description in terms of a characterization by means of features. These features can either be used to transform the signal into a symbolic representation, in which each sample is converted to a symbol, or a feature-based representation, in which a \textit{word-feature series} characterizes the time series for a specific property. 
+\par
+In this chapter we present two proposed strategies to use text for pattern search on time series. The first profits of a symbolic characterization of the signal, introducing a novel representation, while the second, uses a feature based representation of the signal, being each feature attributed to one word. 
 
-\subsection{Regular Expressions for Time Series}
+
+\section{Syntactic Search on Time Series}
+
+\subsection{Preparing the Data}
+
+\subsection{Connotation - The Symbolic Time Series}
+
+- connotation -
+
+\subsection{Expressive Syntactic Search}
+
+- search -
+
+In this study, we propose a tool that focuses in ease simple query search tasks in time series, which we refer as \gls{SSTS}. This is achieved by an innovative methodology, where the user gives a syntactic nature to time series, which turns the search procedure less verbose and more related with the reasoning of the user in recognizing the desired pattern.
+
+
 
 In 1943, McCulloch and Walter Pitts made the first theoretical description in a logic interpretation of the physiological events of neuron networks that served as inspiration for Kleen (1956) to create a set of rules that represent a finite state machine. Kleene described the nerve net as an arrangement of a finite number of neurons, where each has a sequence of states/events represented by integers. The state's values are influenced by the sensory response to the environment~\citep{Kleene}, and are said to be equally spaced in time. This algebraic description of neural nets can be extrapolated for time-series, in which the sequence of numbers is abstracted as a sequence of states to which values correspond to the sensory response of the environment. 
 \par
 The set of regular rules is a way of describing a specific sequence of states in the neural net - \textit{a pattern}. This functionality has been extended into the field of text processing, in which this set of rules is able to describe a pattern as a sequence of characters, designated as a regular expression. Using a symbolic representation to characterize the sequence of states of time series in multiple attributes, regular expressions can be extended as a time series's parser to search patterns on it \citep{Thompson}. 
 
-\subsection{A Tool of Thought}
 
 In 1980, Kenneth E. Iverson has discussed the importance of notation, nomenclature and language as tools of thought \citep{APL1}. A regular expression is a good example of a tool of thought, by expressing the recognition of a pattern into a sequence of characters, but other examples can be given, such as in chemistry, botany and especially in mathematics. 
 \par
@@ -42,12 +49,45 @@ E. Iverson believed that, although mathematical notation is not universal and un
 \par
 One of the fundamental characteristics of this tool is the provision of graphic symbols for the execution of functions and operations, which are meant to express the thought of the user in solving a problem. The tool presented in this work is inspired by this reasoning and uses graphical symbols in the pre-processing and symbolic connotation steps. With this, the proposed tool profits of E. Iverson ideas to be intuitive, simple to use yet complex enough to reach the desired end, being a powerful tool of thought for query search in time series. 
 
-\subsection{The Syntactic Pattern Quest}
 
-In this study, we propose a tool that focuses in ease simple query search tasks in time series, which we refer as \gls{SSTS}. This is achieved by an innovative methodology, where the user gives a syntactic nature to time series, which turns the search procedure less verbose and more related with the reasoning of the user in recognizing the desired pattern.
 
-\subsection{Time Series Representation}
+
+
+
+\section{Towards Interpretable Time Series Classification with SSTS}
+
+Extend the usage of the symbolic mechanism. Having text 
+
+\subsection{Using SSTS to translate Time Series}
+
+\subsection{Vectorization of Time Series Documents}
+
+\subsection{Towards Interpretable Results}
+
 
 \section{Towards Natural Language for Pattern Search}
 
-\section{Classification of Time Series Documents}
+\subsection{Mapping Features to Words}
+
+\subsection{Linguistic Operators}
+
+\subsection{Natural Language Query for Time Series}
+
+The proposed method, conceptually developed based on text mining techniques, abstracts how a time series can be structured in a linguistic representation, similar to how the human would describe a time series with words. In order to introduce the reader with this abstraction and representation, we explain how we use \textit{SSTS} to make this abstraction.
+\par
+The transformation from the numerical domain to the textual domain is made using \textit{SSTS} \cite{ssts}. This method uses three steps to perform a query search on the time series and finding the corresponding pattern. The steps include (1) the pre-processing; (2) the symbolic connotation and (3) the search:
+
+\begin{itemize}
+    \item Pre-processing: prepare the signal for the translation into the textual domain, removing noise or any disturbance in the signal that affects the pattern search;
+    \item Connotation: transforms each sample of the time series into a character by extracting properties of the signal that are based on a conversion rule either defined by the user, or pre-defined in our vocabulary; 
+    \item Search: regular expression query that is matched on the textual pattern and corresponds to a \textit{pattern} on the \textit{time series}.
+\end{itemize}
+
+An example of the detection of shapes with the help of \textit{SSTS} in a set of time series is made in Figure \ref{fig:SSTS_example}. The example shows the potential of this mechanism to create the description made in Figure \ref{fig:interp_data}. 
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.85\linewidth]{Figures/SSTS_example.png}
+    \caption{(Top) Using SSTS to detect the rising stage of a time series. Each step of the process is written described as follows: (1) pre-processing: \textit{Sm} is the function \textit{Smooth} with a window size of 25 samples; (2) connotation: \textit{D1}, indicates the first derivate, from which each sample is converted to \textit{z} - Flat, \textit{p} - rising and \textit{n} falling; (3) search - regular expression \textit{p+} searches for all sequences with 1 or more \textit{p} characters. (Bottom) Example of sentence generation. Using the other search queries (\textit{p+, n+, z+}), we can find the derivative patterns and convert it into ordered words.}
+    \label{fig:SSTS_example}
+\end{figure}

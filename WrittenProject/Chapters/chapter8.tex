@@ -1,19 +1,225 @@
+
 %!TEX root = ../template.tex
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% chapter4.tex
+%% chapter8.tex
 %% NOVA thesis document file
 %%
 %% Chapter with lots of dummy text
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\typeout{NT FILE chapter4.tex}%
+\typeout{NT FILE chapter8.tex}%
 
-\chapter{Examples of Ergonomy}
-\label{cha:data}
+\chapter{Applications, Results and Validation}
+\label{cha:results}
 
+\section{Validation Metrics}
+
+% -> event is considered a specific moment in time
+% -> can you detect the right moment
+% -> how far are you from the right moment
+
+The validation metrics differ depending on the type of events we are searching. The ones used for evaluating the performance when using the \textit{novelty function} are calculating the recall, precision and F1-measure in detecting the ground truth events, as well as calculating the distance at which the detected events are from the ground-truth events. In the other hand, the detection of periodic events by means of the \textit{similarity function} is validated by calculating the number of correctly segmented periods. Each of this validation strategies are explained further.
+
+\subsection{Validate Events Detection}
+
+Each record is compared sample by sample and the performance is evaluated by considering the number of true positives (TP), false positives and negatives (FP, FN). As the ground-truth event is one sample, we added an error margin to have a proper validation. This margin dictates if an event can be TP, FP or FN. In this work, we used the window size as the chosen margin. The estimated events are considered one of the following categories:
+
+\begin{itemize}
+    \item TP - is counted when the estimated event is in the margin around the ground-truth event;
+    
+    \item FP - is counted whenever it is out of a margin around the ground-truth event, or when there is more than one estimated event inside the margin;
+    
+    \item FN - is counted when there is no estimated event inside the margin of the ground-truth events.
+    
+\end{itemize}
+
+% \begin{figure}
+%     \centering
+%     \includegraphics[width=\linewidth]{Figures/confusionMatrix.pdf}
+%     \caption{Illustration of the rules for assigning an event as True Positive (TP), False Positive (FP) and False Negative (FN). Blue events are ground-truth surrounded by the error margin in light-blue. Orange events are estimated events.}
+%     \label{fig:confusionMat}
+% \end{figure}
+
+From the count of TP, FP and FN, we are able to calculate performance metrics, such as Precision, Recall and F1-measure, which are calculated as follows:
+
+\begin{equation}
+    Pre = \frac{TP}{TP+FP}
+\end{equation}
+
+\begin{equation}
+    Rec = \frac{TP}{TP+FN}
+\end{equation}
+
+\begin{equation}
+    F1 = 2 \cdot \frac{Pre \cdot Rec}{Pre+Rec}
+\end{equation}
+
+% \begin{equation}
+%     Acc = \frac{TP}{TP+FP+FN}
+% \end{equation}
+
+Additionally, the distance of the TP events from the ground-truth events is calculated with several distance-based metrics, namely the mean-absolute-error (MAE), the mean-squared-error (MSE) and the mean-signed-error (MsE):
+
+\begin{equation}
+    MAE = \sum^{k}_{i=1} \frac{|g_{i} - e_{i}|}{k}
+\end{equation}
+
+\begin{equation}
+    MSE = \frac{1}{k} \sum^{k}_{i=1} (g_{i} - e_{i})^2
+\end{equation}
+
+\begin{equation}
+    ME = \frac{1}{k} \sum^{k}_{i=1} (g_{i} - e_{i})
+\end{equation}
+
+The precision measure is relevant to indicate if the method is able to only estimate events that belong to the ground-truth category, while the recall measure is an important indication of how many ground-truth events are missed in the estimation of the method. Both measures are combined in the F1-measure. The true negative samples are not considered since most of them would be correctly estimated, which would wrongly improve the accuracy.
+\par
+The distance-based metrics evaluate how far are the TP from the corresponding ground-truth events (MAE and MSE) and which is the direction of estimation of events (if before or after the ground-truth events - ME).
+\par
+These are the metrics employed for all datasets except for \textit{Dataset 8}, for which the evaluation was made considering their internal measures, as explained in \cite{cpd_alan}.
+
+% \begin{itemize}
+%     \item Mean Absolute Error (How close the predicted event is from the ground truth)
+%     \item Mean Squared Error (Square error of the previous one)
+%     \item Mean Signed Difference (Calculate the direction of the error, if previous or after the ground truth)
+%     \item Indicate the reason why these measures occur (is this because of the overlap of the feature extraction process, is it because of the kernel window?) 
+% \end{itemize}
+
+
+
+\section{Segmentation Performance}
+
+In this section, we present several examples in how this method is useful for the segmentation of time series. The reader will appreciate that we also provide a measure of the algorithm's performance considering ground truth events (as presented in Section \ref{sec:dataset} and \ref{sec:the_ssm}), while also testing our proposed solution by comparing it with several methods for change point detection from the \textit{Turing Change Point Detection Benchmark} \cite{cpd_alan}.
+\par
+In addition, we give insights about how this method could be used to summarize a time series and assist the labelling process of time series.
+\par
+We make available all the code and results on the online repository.
+\par
+This section is divided into three main categories: (1) Validate the usage of the \gls{SSM} on segmentation with several use-cases; (2) Provide intuition over the parameters used, explain specific use-cases results, show the difference when using multi-dimensional time series and comments on the scalability and speed (3) coments on how to explore the usage of the \gls{SSM} for summarization and labelling.
+
+
+The proposed method has been tested on publicly available datasets from different domains to infer its performance on detecting change point events. These datasets have categorized labels that were used to generate ground-truth events. These include different contexts (HAR, Hand Posture, Noise Detection, etc...) and different types of data (Inertial data, EMG and ECG). More details are given on the problem associated with each dataset on Section \ref{sec:dataset}.
+\par
+The method has been computed in the same conditions and by following the same procedure for all records of all datasets. The features used have been the same for each record, varying the time scale parameter, the overlap size of the sliding window and the kernel size parameter. The peak detection strategy was the same for all records, which is based on a threshold value. The threshold value varied for each record.  
+\par
+Results for publicly available datasets are presented in Tables \ref{tab:overall_cpd} and \ref{tab:overall_cpd_dist}. Table \ref{tab:overall_cpd} indicates the performance in detecting the change point events. 
+
+
+% Dataset 1 (Kaggle) & ACC & 3 & HAR & 98 & 16 & 16 & 0.860 & 0.860 & 0.754 & 0.860 \\
+% 			Dataset 2 (UCI1) & ACC-GYR & 6 & HAR & 157 & 18 & 22 & 0.897 & 0.877 & 0.797 & 0.887 \\
+% 			Dataset 3 (UCI3) & ACC-GYR & 6 & HAR & 1378 & 313 & 263 & 0.815 & 0.840 & 0.705 & 0.827 \\
+% 			Dataset 4 (UCI4) & ACC-GYR & 12 & HAR & 499 & 71 & 38 & 0.875 & 0.929 & 0.821 & 0.902 \\
+% 			Dataset 5 (UCI5) & EMG & 8 &  & 309 & 16 & 30 & 0.951 & 0.912 & 0.870 & 0.931 \\
+% 			Dataset 6 (Physionet1) & ECG & 1 & Noise & 132 & 25 & 10 & 0.841 & 0.930 & 0.790 & 0.883 \\
+% 			Dataset 7 (Physionet2) & ECG & 4 & Noise & 21 & 2 & 3 & 0.913 & 0.875 & 0.808 & 0.894 \\
+
+\begin{table*}
+	\begin{center}
+		\begin{tabular}{lccccccccc}
+			\toprule
+			Dataset & Signals & \# Ch & Task & TP & FP & FN & Prec (\%) & Rec (\%) & F1 (\%) \\
+			\toprule
+			Dataset 1 & ACC & 3 & HACP & 98 & 16 & 16 & 0.860 & 0.860 & 0.860 \\
+			Dataset 2 & ACC-GYR & 6 & HACP & 157 & 18 & 22 & 0.897 & 0.877 & 0.887 \\
+			Dataset 3 & ACC-GYR & 6 & HACP & 1378 & 313 & 263 & 0.815 & 0.840 & 0.827 \\
+			Dataset 4 & ACC-GYR & 12 & HACP & 499 & 71 & 38 & 0.875 & 0.929 & 0.902 \\
+			Dataset 5 & EMG & 8 & Act/Rel & 309 & 0 & 72 & 1.000 & 0.811 & 0.811 \\
+			Dataset 6  & ECG & 1 & Noise & 132 & 25 & 10 & 0.841 & 0.930 & 0.883 \\
+			Dataset 7  & ECG & 4 & Noise & 21 & 2 & 3 & 0.913 & 0.875 & 0.894 \\
+			\midrule
+			Total  & N.A. & N.A. & N.A. & 2629 & 465 & 386 & 0.850 & 0.872 & 0.861 \\
+			\bottomrule
+		\end{tabular}
+	\end{center}
+	\caption{Overall results for the performance of the method on change point detection. The dimension of the records is presented on the column \textit{\# Ch}, as well as the types of signals used and the task in which  applied (HACP - Human Activity Change Point detection; Act/Rel - Activation/Relaxation of the EMG detection and Noise detection).}
+	\label{tab:overall_cpd}
+\end{table*}
+
+
+\begin{table}
+	\begin{center}
+% 		\begin{tabular}{l|c|c|c|c}
+% 			Dataset & T_s (s) & MAE/T_s (\%) & MSE/T_s (\%) & MsE/T_s (\%)\\
+% 			\toprule
+% 			Dataset 1 & 5 & 2.665 & 7.102 & -0.578 \\
+% 			Dataset 2 & 10 & 2.879 & 8.291 & -0.653 \\
+% 			Dataset 3 & 1 & 0.338 & 0.114 & -0.043 \\
+% 			Dataset 4 & 25 & 5.779 & 33.392 & -0.009 \\
+% 			Dataset 5 & 1 & 1.081 & 1.169 & -0.133 \\
+% 			Dataset 6 & 10 & 1.972 & 3.889 & -0.875 \\
+% 			Dataset 7 & 1 & 0.172 & 0.030 & -0.062 \\
+% 			\midrule
+% 			Average & N.A. & 1.777 & 3.156 & -0.142 \\
+% 		\end{tabular}
+        \begin{tabular}{lccc}
+            \toprule
+			Dataset & $T_s$ (s) & $MAE/T_s$ & $MsE/T_s$ \\
+			\toprule
+			Dataset 1 & 5 & 0.53 & -0.12 \\
+			Dataset 2 & 10 & 0.29 & -0.07 \\
+			Dataset 3 & 1 & 0.34 & -0.04 \\
+			Dataset 4 & 25 & 0.23 & -0.00 \\
+			Dataset 5 & 1 & 1 & -0.13 \\
+			Dataset 6 & 10 & 0.12 & -0.09 \\
+			Dataset 7 & 1 & 0.17 & -0.06 \\
+			\midrule
+			Average & N.A. & 0.32 & -0.07 \\
+			\bottomrule
+		\end{tabular}
+	\end{center}
+	\caption{Distance error as a ratio of the time scale ($T_s$) for the detected TP.}
+	\label{tab:overall_cpd_dist}
+\end{table}
+
+\subsection{Further Application 1: Search by Example}
+
+\subsection{Further Application 2: Multidimensional Segmentation}
+
+The proposed method accepts both single and multidimensional records. The difference regards the number of features extracted. As presented on Figure \ref{fig:SSM_scheme}, the same set of features are extracted for each time series of the record and combined in the $F_M$. 
+\par
+Using a single time series of a multivariate record is optional and depends on the detection's purpose. In some cases, using a single time series from a multidimensional record can lead to missing relevant events undetected. An example of this can be seen on Figure \ref{fig:occupancy_uni} with record \textit{"Occupancy"} from Dataset 8. 
+\par
+The record is a multi-dimensional time series that measures room occupancy based on temperature, humidity, light and CO2. All events can only be detected if using several time series of the record \cite{cpd_alan}. On Figure \ref{fig:occupancy_uni}.left, a single time series was analyzed by the proposed method to detect relevant events, while Figure \ref{fig:occupancy_uni}.right presents the application of the method to all the time series of the record. The results are different because the information from all the time series is combined, while with the single dimensional record, the detected events resulted from the information available on the single time series.\\
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\linewidth]{Figures/example_occupancy.png}
+    \caption{Proposed method applied on "\textit{Occupancy}" record of Dataset 7. A single time series of the record is used to extract events.}
+    \label{fig:occupancy_uni}
+\end{figure}
+
+
+% {\small \textbf{Time-scale and Overlap selection}}\\
+
+% The entry parameters that are necessary to perform a change point event search are the time scale and overlap percentage. The combination of these parameters has a relevant effect on the results obtained, since it defines the detail at which the method will perform the search. This is inherently due to the feature extraction process, which guides the method in the detection process. Lower time scale values promote the detection of events less spaced in time, while larger time scale values induce a smoothing effect on the feature extraction process and promote larger spaced events. The resolution at which the events are searched is based on the overlap percentage. 
+% \par
+% The time scale and overlap percentage can be defined depending on the purpose of the detection. On Table \ref{tab:overall_cpd_dist} are presented the average time scale used for each dataset, which results indicate that the method is able to adapt the search based on purpose of the detection, by changing the time scale. 
+
+\section{SSTS Performance}
+
+\subsection{Expressiveness Measure}
+
+\subsection{Classification Results}
+
+\subsection{Interpretability of Data Representation}
+
+
+\section{Natural Language Search Performance}
+
+
+
+\section{Application to Occupational Scenario}
+\label{cha:application_occ}
+
+
+\subsection{Storytelling Occupational Data}
+\label{subsec:storytel}
 
 1 - Example of the data we acquired in Volkswagen when we arrived and tried to compare two workstations. We were trying to find specific cyclic moments and labelled it by hand. We can use this tool to make this identification (SSM):
 
-
 2 - Describe the pattern by means of words or a regular expression
+
+\subsection{Pattern Search in Occupational Data}
+\label{subsec:search}
+
 

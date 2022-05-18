@@ -8,106 +8,119 @@
 
 \typeout{NT FILE chapter4.tex}%
 
-\chapter{Detection of Events and Summarization of Time Series}
+\chapter{Unveiling the \textit{Grammar} of Time Series}
 \label{cha:methods1}
 
-Have a small introduction about the problematic and inspiration in time series from the audio domain.
+In this chapter is described the process to unveil the structure of a time series. The next sections will start by giving an explanation of the relevant information that has to be retrieved and demonstrates how to perform it. The main method is inspired by what is done in \textit{music structure analysis} for segmentation and audio-thumbnailing. The process follows the steps of building a similarity matrix by means of a feature-based representation of a time series. While having already been extensively studied for audio signal structure analysis\cite{Mueller15_FMP_SPRINGER, audiolabs1, audiolabs2, cpd_audio}, this knowledge has not yet been extended to other types of \textit{time series} domains, which could greatly benefit from it \cite{muller_music_health}.
 
-Será que poderia colocar isto sobre um tema maior? e depois ter tools desenvolvidas nesse ambito?
-Tools: Annotation, Segmentation, One-click segmentation of periodic events, summarization and profiling
+\section{The Problem}
 
-\section{}
-
-\subsection{Feature Representation}
-
-The extraction of relevant events from time series starts by computing the \gls{SSM}. This matrix has structural information, which provides pointers of the presence of the aforementioned events, detectable within the next steps. Figure \ref{fig:SSM_scheme} summarizes the steps involved in calculating the \gls{SSM}.
-
-\begin{figure*}
-    \centering
-    \includegraphics[width=0.9\linewidth]{Figures/figure_ssm_scheme.pdf}
-    \caption{Main process to reach the \gls{SSM}. The information needed to calculate the \gls{SSM} are the record and the input parameters: the window size (w) and the overlapping percentage (o). The first stage involves the feature extraction process, based on \textit{w} and \textit{o} values. Features are extracted on each window (1, 2..., N), being N the total number of windows. From the first window ($w_1$), are extracted features (f1, f2..., $f_K$}, being \textit{K} the number of features used. The feature number is also associated with a shape (circle, triangle, etc...). The features can be extracted on multivariate records, being \textit{M} the number of records used. Each feature is positioned as a row on the $F_M$. Then follows the \gls{SSM} computation.
-    \label{fig:SSM_scheme}
-\end{figure*}
-
-\subsubsection{Feature Extraction}
-
-As mentioned in section \ref{sec:intro}, an event is defined as a significant change in the properties of the time series. Therefore, our proposed hypothesis relies on evaluating the changes that occur in a group of features of one or multidimensional time series of a record. The events' extraction depends on the richness of the set of features into translating the changes and disruptions of the signal. Behavioural changes might be related with different types of features (e.g. some changes might only be related with the mean, but others might be related with the frequency).
-\par 
-For example, the average feature translates changes of a group of samples through time, while the standard deviation the local disruptions. Conclusively, as a feature may be sensitive for a type of change, the type of features should be diverse to identify a multivariate set of events and scan different types of signals. For this purpose, we used the available features from the TSFEL~\cite{barandas_tsfel_2020} Python library presented in the Feature Table xxxx, in Annex 2.
+Defining what is relevant in a time series highly depends on the context and purpose of the analysis, but globally, for any type of time series, there is a general interest in understanding how the signal is structured, specially for tasks related with data annotation/labeling. The structure of a time series is built of \textit{segments} delimited by \textit{events}. The problem is the search for \textit{events} that are significant. 
 \par
-The features are extracted in each sliding window with size $m$, with an overlap of size $o$ percent. These two parameters have a large influence on the results. The first defines the time scale at which features are extracted. Consequently, the larger the window's size, the larger the time scale at which feature values change. The second parameter defines the pixel-resolution of the resulting feature-signal, reducing the amount of information (down-sampling) with the decrease in the overlap value.
-\par
-After all the features are extracted, the output will be a feature matrix ($F_{M}$), where the rows represent each feature and the columns the corresponding time-window. Features extracted from a multidimensional record are ordered in the $F_M$ as rows as well. The total number of rows can be, at maximum: $f \times k$, being \textit{f} the number of time series being analysed and \textit{k} the number of features extracted, as illustrated in Figure \ref{fig:SSM_scheme}. Finally, each row is z-normalized.
-\par
-%The $window_s$ and $overlap_p$ parameters have a large influence on the results. The first defines the time scale at which features are extracted, therefore the higher is the size of the window, the larger is the time scale at which feature values change. Regarding the second parameter, it defines the resolution of the resulting feature-signal, therefore the higher is the overlap percentage, less information is lost and the higher is the resolution. 
+From definition 4 of Chapter \ref{sec:global}, we highlight two primary considerations for the detection of events: (1) an event is a change in the behavior of the time series, and (2) it has to be significant both \textit{statistically} and \textit{qualitatively}. The \textit{qualitative} aspect indicates subjectivity from the analyst because of the domain or context of the problem. Considering this, we will start by explaining the dimensions of the problem: (1) search and (2) type of significance. 
 
-
-
-
-
-% \textbf{what varies because of time scale}
-% Tenho de acrescentar na introducao, no problem definition que a time scale representa a dimensao de procura...ou seja, a escala maior ou menor pode ser diferente, e por isso, a dimensao em que procuramos por eventos varia...
-
-\subsubsection{The Self Similarity Matrix}
-\label{sec:the_ssm}
+\subsection{Search Dimension}
 
 \begin{figure}
-    \centering
-    \includegraphics[width=0.90\linewidth]{Figures/Example_SSM.png}
-    \caption{Description of informative structures of the \textit{SSM}. Based on the \gls{SSM} presented in Figure \ref{fig:first_image}, we show a simplified view with highlights on the relevant structures. The record has 4 main structures: A - homogeneous segment, which corresponds to the BVP periodic signal; B - homogeneous segment of missed data; C - homogeneous segment with detachment of the sensor. The boxes (blue) highlight homogeneous blocks while the sub-diagonals (orange) highlight periodicity in the segment. \textit{nf} and \textit{sf} indicate that the novelty and similarity functions are computed based on this information. Segment C has a cross-pattern, which indicates periodicity and symmetry}. 
-    \label{fig:ssm_description}
+\begin{subfigure}{.5\textwidth}
+	\centering
+	\includegraphics[width=0.95\linewidth]{event_search.png}
+	\label{fig:event_search}
+	\caption{}
+\end{subfigure}%
+\begin{subfigure}{.5\textwidth}
+	\centering
+	\includegraphics[width=0.95\linewidth]{event_type.png}
+	\label{fig:event_search}
+	\caption{}
+\end{subfigure}
+\caption{(a) Categories of search of events. In this case are shown Dimension, Window and Domain. (b) Examples of different type of events that can be considered significant in a time series.}
 \end{figure}
 
-After grouping all the features extracted, the next stage highlights the differences with the time series segments through the creation of the \gls{SSM}. This process consists in comparing each segment with the others within the record. Since each column of the $F_M$ is the feature characterization of each time-window, the comparison between segments is achieved by calculating the dot product between the transposed $F_{M}$ and itself:
+Figures \ref{fig:event_search} and \ref{fig:event_type} are an illustrated summary of the two dimensions of the problem. Regarding the \textit{search} dimension, it is formed by three layers: \textit{(1) dimensionality}: the search can be made in one or multiple time series. In the multidimensional space, events can occur simultaneously in several time series, but other events can be specific for each of them (e.g. an accelerometer signal has 3 dimensions, but some gestures might be noticeable in only one of them); \textit{(2) time scale}: \textit{events} might occur in different time scales (e.g. when looking in a \textit{TS} of 1 hour long, we might see some relevant events, but when looking for a \textit{subsequence} of 10 minutes (zooming-in), other events are revealed); \textit{(3) domain}: the search procedure might be made directly on the time series by means of time properties, a distance measure (e.g. Euclidean distance), or can be made on the representation level, such as the feature domain.
 
-%After grouping all the features extracted from the set of time series, the next stage has the purpose of enhancing the differences along the time series segments. For this, we need to compare each segment of the time series with each other, and create a matrix of self-similarity (SSM). This is possible to achieve with the $F_M$. Each column of the $F_M$ is a feature characterization of each segment of the time series. Therefore, one way of computing a similarity evaluation of the time series, is to compare each column of the $F_M$ with each other. This is possible by computing the dot product between the transposed $F_{M}$ and itself:
+\subsection{Type Dimension}
+
+In what regards the \textit{event} type, we show in Figure \ref{fig:event_type} examples of events that are considered significant in a time series: \textit{(1) Property change:} when the change of a property or set of properties is greater than a threshold, such as changes on the mean (FIND THUMBNAIL IMAGE) or frequency (\includegraphics[height=3.5ex, valign=m]{walking_jogging.png}), \textit{(2) Peak/Valley}: peaks and valleys can typically be associated with significant physical changes (e.g. the peaks of an ECG signal \includegraphics[height=3.5ex, valign=m]{high_peak_ecg.png}), \textit{(3) Periodicity}: if a signal is periodic, the moment each period starts is considered relevant (e.g. the cycles of a BVP signal (e.g. the peaks of an ECG signal \includegraphics[height=2.5ex, valign=m]{bvp_segment.png}), \textit{(4) recurrent pattern}: re-occurrences of similar \textit{subsequences} with a certain shape or \textit{(5) anomaly}: very dissimilar \textit{subsequences} are relevant to indicate (e.g. noise in a clean signal \includegraphics[height=3ex, valign=m]{ecg_noise_thumbnail.png}).
+
+\subsection{Proposal}
+
+In order to fill as much ground as possible in this problematic, we started by defining the search space considering that if the time series would be transformed in the feature space, any change in any of the features would be relevant, for instance, we might be searching for changes in the mean, standard deviation, mean frequency or other property. By characterizing the signal into the feature space, we are able to explore changes in all feature representations. Additionally, an event should separate two different behaviors. The notion of \textit{difference} in time series can be associated with \textit{distance/similarity}. This would enable to find change points, recurrent patterns, anomalies and periodic shapes. 
+\par
+Therefore, we propose an unsupervised methodology that searches for events in (1) uni and multi dimensional space, (2) with a fixed time scale, but with potential to be used in multi-time scale and (3) on a \gls{SSM} computed by a feature space representation of the time series. The events that will be searched are any relevant change in the matrix related with a change point and/or periodic event.
+\par
+We provide evidence that the proposed method is reliable for the detection of the mentioned events, supporting our claims with several examples in multiple time series domains (it is type agnostic) and comparing the results with state-of-the-art methods. Besides, we highlight that these events are all extracted from the same source of information (\textit{SSM}), while also providing some insights in how this could be expanded for multi-time scale search, used for summarization and labelling.
+    
+%IMPORTANT
+%Besides, at the feature level, we are able to very easily include the information of \textit{MTS}. The fact that features can be used for this purpose might help in targeting and fine tuning the selection of features that work better for specific types of events or work domains (e.g. we might only be interested in changes related with frequency and not mean fluctuations, therefore, frequency features should be chosen, making targeted event search).
+
+%Tools: Annotation, Segmentation, One-click segmentation of periodic events, summarization and profiling
+
+\section{Building the SSM}
+
+In this section, we explain the steps of the proposed method. The extraction of relevant events from time series starts by computing the \gls{SSM}. As explained in Chapter \ref{subsec:dist_matrix}, this matrix has relevant structural information to retrieve \textit{events}, namely \textit{blocks} and \textit{paths}. Figure \ref{fig:SSM_scheme} summarizes the steps involved in calculating the \gls{SSM}.
+
+\begin{figure}
+\centering
+    \includegraphics[width=\linewidth]{SSM_steps.pdf}
+    \caption{Main process to reach the \gls{SSM}. The information needed to calculate the \gls{SSM} are the record and the input parameters: the window size (w) and the overlapping percentage (o). The first stage involves the feature extraction process, based on \textit{w} and \textit{o} values. Features are extracted on each window (1, 2..., N), being N the total number of windows. From the first window ($w_1$), are extracted features (f1, f2..., $f_K$, being \textit{K} the number of features used. The feature number is also associated with a shape (circle, triangle, etc...). The features can be extracted on multivariate records, being \textit{M} the number of records used. Each feature is positioned as a row on the $F_M$. Then follows the \gls{SSM} computation.}
+    \label{fig:SSM_scheme}
+\end{figure}
+
+\subsection{Feature Extraction}
+
+The structural information present on the SSM depends on the richness of the set of features into translating the changes and disruptions of the signal. Behavioral changes might be related with a variate set of features. As a feature may be sensitive for a type of change, the type of features should be diverse to identify a multivariate set of events and scan all types of signals. For this purpose, we used the available features from the TSFEL~\cite{barandas_tsfel_2020} Python library presented in the Feature Table \textbf{xxxx}.
+\par
+The features are extracted in a moving window with a size $w$, specified by the user, with an overlap of size $o$. These two parameters have a large influence on the results. The first defines the time scale at which features are extracted, therefore the wider the window, the more \textit{zoomed-out} will be the search. The second parameter defines the pixel-resolution of the resulting feature series, decreasing the amount of information (down-sampling) with a smaller overlap.
+\par
+The extracted features are grouped into a feature matrix ($F_{M}$), where the rows represent each feature and the columns the corresponding \textit{subsequence}, described by all features. Features extracted from a multidimensional record are ordered in the $F_M$ as rows as well. The total number of rows can be, at maximum: $r \times k$, being \textit{k} the number of time series being analyzed and \textit{r} the number of features extracted, as illustrated in Figure \ref{fig:SSM_scheme}.
+
+\subsection{Feature-based Self Similarity Matrix}
+\label{sec:the_ssm}
+
+After grouping all the features extracted, the next stage applies a distance measure to the feature space and computes the \gls{SSM}. This process consists in comparing each \textit{subsequence} with the all the others within the time series record. Since each column of the $F_M$ is the feature characterization of each \textit{subsequence} by the entire set of features, the comparison between segments is achieved by calculating the dot product between the z-normalized transposed $F_{M}$ and itself:
 
 \begin{equation}
     SSM = F^T_M F_M
 \end{equation}
 
-The dot product gives a similarity score based on the feature values of each time window. Cells of the \gls{SSM} with higher similarity scores indicate that the corresponding time windows have similar feature values \cite{audiolabs1, audiolabs2}. As a result, the \gls{SSM} provides rich visual information, highlighting structures, such as blocks and diagonals, that describe the signal's morphological behavior over time.
+The dot product gives a similarity score based on the feature values of each \textit{subsequence}. Cells of the \gls{SSM} with higher similarity scores indicate that the corresponding \textit{subsequences} have similar feature values \cite{audiolabs1, audiolabs2}. As a result, the \gls{SSM} provides rich visual information, highlighting structures, such as blocks and paths, that describe the signal's morphological behavior over time and its structure.
 \par
-In Figure \ref{fig:ssm_description}, the main structures are illustrated and highlighted in an example of an \textit{\gls{SSM}} \cite{audiolabs1}. These structures are used to extract relevant information about the time series. Our proposed methods for annotation take advantage of these main structures to extract the desired information:
-
-\begin{itemize}
-    \item \textbf{Sub-Diagonals -} When high similarity diagonals appear on the \gls{SSM}, parallel to the main diagonal, we can infer that the columns and corresponding rows of the \gls{SSM} segmented by the \textit{sub} diagonal have similar feature values. Therefore, the \textit{sub} diagonals' presence is a means of detecting reoccurring patterns of the time series. In Figure \ref{fig:ssm_description}, the events \textbf{e1}, assigned as orange circles, correspond to events that represent a periodic pattern on the time series.
-    
-    \item \textbf{Blocks -} Blocks are represented by square shaped structures on the \gls{SSM} that highlight areas of the time series with a homogeneous morphology, i.e., a block has a homogeneous behavior on its length. The change between block structures along the main diagonal indicates a relevant change of morphology and behavior on the time series. We can detect events on the time series associated with transitions between homogeneous blocks of information. Additionally, blocks with a similar color are an indication that the corresponding segments on the time series have similar properties. In Figure \ref{fig:ssm_description}, the block structures along the diagonal that can be tagged as "A" and "B" respectively, represent different homogeneous areas of the time series, for instance, in block "A", the structure is periodic, as diagonals are present in it. Whereas in block "B", it is not periodic and represents an area of the signal different from block "A".
-\end{itemize}
-
-Several methods can be used to extract the valuable information provided by the \gls{SSM}. As aforementioned, (1) the information provided by the diagonals enhances the presence of periodical behavior, (2) the presence of blocks indicates an area of the time series with a homogeneous morphology, (3) transition between blocks indicate the presence of a significant change on the time series and (4) blocks and segments of the \gls{SSM} that are similar have higher matching values, while dissimilar ones have lower matching values.
-%(4) the color of the blocks can be used to extract the presence of very similar or dissimilar segments of the time series.
-\par
-In this work, we applied several strategies on the \gls{SSM} to extract this information and validated these approaches in multiple datasets.
-
-\subsection{\gls{SSM} and event search}
-
-The \gls{SSM} is a data representation of the record that allows extracting relevant information, such as the identification of relevant events. Several techniques can be used to extract most of this available information. These differ according to the structures we are searching for, namely, when searching for \textit{off} diagonals on the \gls{SSM}, we are searching for changes representing periodic events, while when searching for blocks, we are searching for relevant changes on the time series or homogeneous areas. The first process requires the identification of the starting point of each diagonal, while the second process applies a strategy that involves sliding a square matrix, with a checkerboard pattern, along the main diagonal, to search for changes between homogeneous blocks. This reasoning has been inspired by several works applied in the context of musical structure analysis from audio signals, namely the works of \textit{Meinard Muller et al.} \cite{Mueller15_FMP_SPRINGER, MuellerZ19_FMP_ISMIR} and applied on an extended set of time series. The concepts presented for event search on time series are based on repetition search, homogeneous search and novelty search. Each of the used strategies is explained further.
-
-\subsubsection{Change Point Event Search}
-
-The search of change point events is inspired by a method used in musical structure analysis and presented by \textit{Foote et al.} \cite{foote2000}. The process involves searching for transitions between block structures using a sliding square matrix. The result is a 1 dimensional function designated \textit{novelty function}.
-\par
-As aforementioned, block structures represent homogeneous segments of the time series, therefore by identifying the transition between blocks we are detecting moments in time with a relevant change on the time series properties. 
 
 \begin{figure}
     \centering
-    \includegraphics[width=\linewidth]{Figures/KernelDescription.pdf}
-    \caption{Description of the matrix (kernel) used to compute the \textit{novelty function}. The checkerboard pattern is achieved by combining kernel $K_H$ - measure of homogeneity; and $K_C$ - measure of cross-similarity. The resulting kernel ($K_N$) is combined with a Gaussian function to generate $K_G$. The Figure is based on the works of \textit{Mueller et al.} \cite{Mueller15_FMP_SPRINGER, MuellerZ19_FMP_ISMIR}}
-    \label{fig:kernel_shape}
+    \includegraphics[width=\linewidth]{SSM_example.pdf}
+    \caption{Description of informative structures of the \textit{SSM}. Based on the \gls{SSM} presented in Figure \ref{fig:first_image}, we show a simplified view with highlights on the relevant structures. The record has 4 main structures: A - homogeneous segment, which corresponds to the BVP periodic signal; B - homogeneous segment of missed data; C - homogeneous segment with detachment of the sensor. The boxes (blue) highlight homogeneous blocks while the sub-diagonals (orange) highlight periodicity in the segment. \textit{nf} and \textit{sf} indicate that the novelty and similarity functions are computed based on this information. Segment C has a cross-pattern, which indicates periodicity and symmetry}. 
+    \label{fig:ssm_description}
 \end{figure}
 
-As showed on Figure \ref{fig:ssm_description}, block transitions along the diagonal are represented by a checkerboard pattern. Detecting such patterns can be made by correlating a standard checkerboard matrix with the diagonal of the \gls{SSM}. For this, a sliding squared matrix, designated kernel, is used. As illustrated in Figure \ref{fig:kernel_shape}, the kernel has a checkerboard pattern and is combined with a Gaussian function to add a smoothing factor. The kernel, $K_N$, is a combination of two different kernels: $K_H$ and $K_C$. The first is responsible for identifying the homogeneity of the \gls{SSM} in each side of the center point along the diagonal. The higher the homogeneity, the higher will be the values in these sections. The latter measures the level of cross-similarity, returning higher values in cases of high cross-similarity. Therefore, when sliding the kernel $K_N$ along the diagonal, a higher correlation value will be returned when it reaches a segment of the \gls{SSM} with a similar checkerboard pattern. The result is the mentioned \textit{novelty function} ($nova$) \cite{Dannenberg2008, Mueller15_FMP_SPRINGER, MuellerZ19_FMP_ISMIR}.
+In Figure \ref{fig:ssm_description}, the main structures are illustrated and highlighted in an example of an \textit{\gls{SSM}} \cite{audiolabs1}. These structures are illustrated on the time series of example 1 (Figure \ref{fig:cold_start}. As mentioned in Chapter \ref{cha:methods1}, the main structures are \textit{blocks} and \textit{paths}. Our proposed methods for annotation takes advantage of these main structures to extract the desired information.
+\par
+\textit{Paths} show recurrence of patterns, which is an indication of matching the morphology between corresponding \textit{subsequences}. The example highlights circles in the \textit{sf} layer, indicating recurrence. In \textit{block} "C" are also visible \textit{inverse-paths}, which indicate symmetry, which means that the corresponding \textit{subsequences} are similar in reverse. The cross-path in \textit{block} "C" means that the \textit{subsequences} are periodic and symmetric.
+\par
+Differently, \textit{blocks} are square shaped structure that indicate homogeneous areas of the \gls{SSM}, which translate as constant behavior in the time series. The change between block structures along the main diagonal indicates a relevant change of morphology and behavior on the time series. In Figure \ref{fig:ssm_description}, the \gls{SSM} is segmented into several blocks on layer \textit{nf}. The triangular shapes indicate the change point that separate blocks "A", "B" and "C". Besides \textit{paths} and \textit{blocks}, the \gls{SSM} provides distance measures between \textit{subsequences}, which can be used to highlight dissimilar segments, such as anomalies or highlight very similar \textit{subsequences}, such as motifs (pattern).
+\par
+Several strategies were applied on the \gls{SSM} to extract the mentioned information. Further are explained the approaches used.
+
+\section{Detection of Events}
+
+The \gls{SSM} is a powerful visual tool \textit{per se}, highlighting relevant information that could be missed if looking at the raw time series. However, being the information on the \gls{SSM}, it should be possible to retrieve it automatically. 
+Here are described the methods used to retrieve \textit{block} transition information and \textit{paths} information.
+
+\subsection{Block Change Detection}
+
+The search for \textit{novelty} is inspired by a method used in musical structure analysis and presented by \textit{Foote et al.} \cite{foote2000}. The process involves searching for transitions between \textit{blocks} using a moving checkerboard square matrix. The result is a 1 dimensional function designated \textit{novelty function} - \textit{nova}.
+\par
+As showed on Figure \ref{fig:kernel_description}, block transitions along the diagonal are represented by a checkerboard pattern. Detecting such patterns can be made by correlating a standard checkerboard matrix with the diagonal of the \gls{SSM}. For this, a sliding squared matrix, designated \textit{kernel}, is used. As illustrated in Figure \ref{fig:kernel_shape}, the kernel has a checkerboard pattern and is combined with a Gaussian function to add a smoothing factor. The kernel, $K_N$, is a combination of two different kernels: $K_H$ and $K_C$. The first is responsible for identifying the homogeneity of the \gls{SSM} in each side of the center point along the diagonal. The higher the homogeneity, the higher will be the values in these sections. The latter measures the level of cross-similarity, returning higher values in cases of high cross-similarity. Therefore, when sliding the kernel $K_N$ along the diagonal, a higher correlation value will be returned when it reaches a segment of the \gls{SSM} with a similar checkerboard pattern. The result is the mentioned $nova$ \cite{Dannenberg2008, Mueller15_FMP_SPRINGER, MuellerZ19_FMP_ISMIR}.
 
 \begin{figure}
     \centering
-    \includegraphics[width=0.95\linewidth]{Figures/KernelSlide.png}
-    \caption{The process to compute the novelty function is described. Kernel $K_G$ is slided along the diagonal of the \gls{SSM} to compute the \textit{novelty function} presented as the bottom sub-plot. Positions A and B show the effect of block transitions on the \textit{novelty function}. Figure based on the works of \cite{Dannenberg2008, Mueller15_FMP_SPRINGER, MuellerZ19_FMP_ISMIR}.}
-    \label{fig:kernel_slide}
+    \includegraphics[width=\linewidth]{kernel_sliding.pdf}
+    \caption{(left) Description of the matrix (kernel) used to compute the \textit{novelty function}. The checkerboard pattern is achieved by combining kernel $K_H$ - measure of homogeneity; and $K_C$ - measure of cross-similarity. The resulting kernel ($K_N$) is combined with a Gaussian function to generate $K_G$. The Figure is based on the works of \textit{Mueller et al.} \cite{Mueller15_FMP_SPRINGER, MuellerZ19_FMP_ISMIR}; (right) The process to compute the novelty function is described. Kernel $K_G$ is slided along the diagonal of the \gls{SSM} to compute the \textit{novelty function} presented as the bottom sub-plot. Positions A and B show the effect of block transitions on the \textit{novelty function}. Figure based on the works of \cite{Dannenberg2008, Mueller15_FMP_SPRINGER, MuellerZ19_FMP_ISMIR}.}
+    \label{fig:kernel_description}
 \end{figure}
 
-As showed in Figure \ref{fig:kernel_slide}, the kernel in position \textbf{A}, which is placed on an area of high homogeneity, returns a value close to $0$ when summing the product between it and the section of the \gls{SSM} it overlaps. In the other end, in position \textbf{B}, the kernel reaches a transition segment of the \gls{SSM}, which results in high correlation values. The \textit{novelty function} is high in these transition segments \cite{Dannenberg2008, Mueller15_FMP_SPRINGER, MuellerZ19_FMP_ISMIR}.
+As showed in Figure \ref{fig:kernel_description} (left), the kernel in position \textbf{A}, which is placed on an area of high homogeneity, returns a value close to $0$ when summing the product between it and the section of the \gls{SSM} it overlaps. In the other end, in position \textbf{B}, the kernel reaches a segment with low cross-similarity and high diagonal similarity, which results in high correlation values with a checkerboard pattern. The \textit{nova} is high in these transition segments \cite{Dannenberg2008, Mueller15_FMP_SPRINGER, MuellerZ19_FMP_ISMIR}.
 \par
 Each section of the kernel has the same size, \textit{L}, being the total kernel size configured by $D = 2 \times L + 1$, with $L \in \mathbb{N}$ . The kernel has an odd size to adapt zero values in centered points. It also has total size D $\times$ D, being $K_{N}$ defined by the following function \cite{Mueller15_FMP_SPRINGER, MuellerZ19_FMP_ISMIR}:
 
@@ -115,301 +128,127 @@ Each section of the kernel has the same size, \textit{L}, being the total kernel
         K_N(i,j)  = \sgn(a_i) \cdot \sgn(b_j)
 \end{equation}
 
-, being $a, b \in [-L:L]$ and "\sgn" representing the sign function, which indicates the sign of the value (1, 0 or -1).
+being $a, b \in [-L:L]$ and "\sgn" representing the sign function, which indicates the sign of the value (1, 0 or -1).
 \par
 A radially symmetric Gaussian function is used to smooth the Kernel, with the following equation \cite{Mueller15_FMP_SPRINGER, MuellerZ19_FMP_ISMIR}:
 
 \begin{equation}
-    \phi(s,t) = \exp(-\frac{1}{2L\sigma^2}(s^2 + t^2))
+    \phi(p,u) = \exp(-\frac{1}{2L\sigma^2}(p^2 + u^2))
 \end{equation}
 
-, being $\sigma$ the standard deviation, equal for both $x$ and $y$ dimensions of the matrix, $L$ the size of each kernel's section, and $s$ and $t$ the position in the $x$ and $y$ dimensions, respectively. The final kernel is computed by point-wise multiplication with the Gaussian function:
+being $\sigma$ the standard deviation, equal for both $x$ and $y$ dimensions of the matrix, $L$ the size of each kernel's section, and $p$ and $u$ the position in the $x$ and $y$ dimensions, respectively. The final kernel is computed by point-wise multiplication with the Gaussian function:
 
 \begin{equation}
     K_{G} = \phi \cdot K_{N}    
 \end{equation}
 
-After defining the kernel, it is used to compute the novelty function and reveal moments where relevant changes occur on the time series. The novelty function is calculated by correlating the kernel with the diagonal of the matrix:
+The \textit{nova} is calculated by correlating the kernel with the diagonal of the matrix:
 
 \begin{equation}
-    nova(n) = \sum^{2L+1}_{i,j=0} K_{G}(a_i,b_j)SSM(n+a_i, n+b_j)
+    nova(m) = \sum^{2L+1}_{i,j=0} K_{G}(a_i,b_j)SSM(m+a_i, m+b_j)
 \end{equation}
 
-, being the sample of the novelty function $n \in [0-N]$ and $a, b \in [-L:L]$.
+, being the sample of the novelty function $m \in [0-N]$ and $a, b \in [-L:L]$.
 \par
-The change point events are represented by local maxima (peaks) in the novelty function. The location of each peak can be calculated using a peak finding algorithm. In our work, we used a naive approach that detects peaks greater than a defined threshold.
+The change point events are represented by local maxima (peaks) in \textit{nova}, which can be detected by standard peak finding strategies.
 
-\subsubsection{Periodic Search}
-
-As aforementioned, \textit{sub} diagonals indicate the presence of similarity and reoccurring patterns can be visualized on the \gls{SSM}. The moment in time the \textit{sub} diagonals start indicates the position at which the period of the pattern begins. In order to find the periodicity available by the \textit{sub} diagonals, we compute the similarity function, $s_f$, which is calculated by summing the values of the $\gls{SSM}$ column-wise, being each element of the $sf$ calculated by:
-
-\begin{equation}
-sf(x) = \sum_{i=0}^{N}{SSM_{ix}}
-\end{equation}
-
-\noindent where \textit{i} is the column position for the sum, $sf_{j}$ the sample of the function at position \textit{j} and \textit{N} the size of one of the dimensions of the \textit{\gls{SSM}}. As segments with similar morphology will be similarly described by the extracted features, the columns will have a similar representation, hence a similar value on the \textit{sf}. In cases where the time series is periodic, the similarity function will enhance this behaviour by having valleys at the moment the diagonal starts. The identification of events related with the periodicity of a time series is then possible by searching for valleys on the similarity function.   
-
-\subsection{Validation Metrics}
-
-% -> event is considered a specific moment in time
-% -> can you detect the right moment
-% -> how far are you from the right moment
-
-The validation metrics differ depending on the type of events we are searching. The ones used for evaluating the performance when using the \textit{novelty function} are calculating the recall, precision and F1-measure in detecting the ground truth events, as well as calculating the distance at which the detected events are from the ground-truth events. In the other hand, the detection of periodic events by means of the \textit{similarity function} is validated by calculating the number of correctly segmented periods. Each of this validation strategies are explained further.
-
-\subsubsection{Validate Events Detection}
-
-Each record is compared sample by sample and the performance is evaluated by considering the number of true positives (TP), false positives and negatives (FP, FN). As the ground-truth event is one sample, we added an error margin to have a proper validation. This margin dictates if an event can be TP, FP or FN. In this work, we used the window size as the chosen margin. The estimated events are considered one of the following categories:
-
-\begin{itemize}
-    \item TP - is counted when the estimated event is in the margin around the ground-truth event;
-    
-    \item FP - is counted whenever it is out of a margin around the ground-truth event, or when there is more than one estimated event inside the margin;
-    
-    \item FN - is counted when there is no estimated event inside the margin of the ground-truth events.
-    
-\end{itemize}
-
-% \begin{figure}
-%     \centering
-%     \includegraphics[width=\linewidth]{Figures/confusionMatrix.pdf}
-%     \caption{Illustration of the rules for assigning an event as True Positive (TP), False Positive (FP) and False Negative (FN). Blue events are ground-truth surrounded by the error margin in light-blue. Orange events are estimated events.}
-%     \label{fig:confusionMat}
-% \end{figure}
-
-From the count of TP, FP and FN, we are able to calculate performance metrics, such as Precision, Recall and F1-measure, which are calculated as follows:
-
-\begin{equation}
-    Pre = \frac{TP}{TP+FP}
-\end{equation}
-
-\begin{equation}
-    Rec = \frac{TP}{TP+FN}
-\end{equation}
-
-\begin{equation}
-    F1 = 2 \cdot \frac{Pre \cdot Rec}{Pre+Rec}
-\end{equation}
-
-% \begin{equation}
-%     Acc = \frac{TP}{TP+FP+FN}
-% \end{equation}
-
-Additionally, the distance of the TP events from the ground-truth events is calculated with several distance-based metrics, namely the mean-absolute-error (MAE), the mean-squared-error (MSE) and the mean-signed-error (MsE):
-
-\begin{equation}
-    MAE = \sum^{k}_{i=1} \frac{|g_{i} - e_{i}|}{k}
-\end{equation}
-
-\begin{equation}
-    MSE = \frac{1}{k} \sum^{k}_{i=1} (g_{i} - e_{i})^2
-\end{equation}
-
-\begin{equation}
-    ME = \frac{1}{k} \sum^{k}_{i=1} (g_{i} - e_{i})
-\end{equation}
-
-The precision measure is relevant to indicate if the method is able to only estimate events that belong to the ground-truth category, while the recall measure is an important indication of how many ground-truth events are missed in the estimation of the method. Both measures are combined in the F1-measure. The true negative samples are not considered since most of them would be correctly estimated, which would wrongly improve the accuracy.
-\par
-The distance-based metrics evaluate how far are the TP from the corresponding ground-truth events (MAE and MSE) and which is the direction of estimation of events (if before or after the ground-truth events - ME).
-\par
-These are the metrics employed for all datasets except for \textit{Dataset 8}, for which the evaluation was made considering their internal measures, as explained in \cite{cpd_alan}.
-
-% \begin{itemize}
-%     \item Mean Absolute Error (How close the predicted event is from the ground truth)
-%     \item Mean Squared Error (Square error of the previous one)
-%     \item Mean Signed Difference (Calculate the direction of the error, if previous or after the ground truth)
-%     \item Indicate the reason why these measures occur (is this because of the overlap of the feature extraction process, is it because of the kernel window?) 
-% \end{itemize}
-
-
-
-\subsection{Self-Similarity}
-\subsection{Novelty Search}
 \subsection{Periodic Search}
 
+As aforementioned, \textit{paths} indicate the presence of similarity and reoccurring patterns can be visualized on the \gls{SSM}. The moment in time the \textit{paths} start indicates the position at which the period of the pattern begins. In order to find the periodicity, we compute the similarity function, $s_f$, which is calculated by summing the values of the $\gls{SSM}$ column-wise (either column-wise or row-wise would work, since the matrix is symmetric), being each element of the $sf$ calculated by:
 
-\subsection{Experimental Evaluation}
+\begin{equation}
+sf(x) = \sum_{i=0}^{m}{SSM_{ix}}
+\end{equation}
 
-In this section, we present several examples in how this method is useful for the segmentation of time series. The reader will appreciate that we also provide a measure of the algorithm's performance considering ground truth events (as presented in Section \ref{sec:dataset} and \ref{sec:the_ssm}), while also testing our proposed solution by comparing it with several methods for change point detection from the \textit{Turing Change Point Detection Benchmark} \cite{cpd_alan}.
-\par
-In addition, we give insights about how this method could be used to summarize a time series and assist the labelling process of time series.
-\par
-We make available all the code and results on the online repository.
-\par
-This section is divided into three main categories: (1) Validate the usage of the \gls{SSM} on segmentation with several use-cases; (2) Provide intuition over the parameters used, explain specific use-cases results, show the difference when using multi-dimensional time series and comments on the scalability and speed (3) coments on how to explore the usage of the \gls{SSM} for summarization and labelling.
+\noindent where \textit{i} is the column position for the sum, $sf_{j}$ the sample of the function at position \textit{j} and \textit{m} the size of one of the dimensions of the \gls{SSM}, which is equal to the feature-series size. As segments with similar morphology will be similarly described by the extracted features, the columns will have a similar representation, hence a similar value on the \textit{sf}. In cases where the time series is periodic, the similarity function will enhance this behavior by having valleys at the moment the \textit{path} starts. The identification of events related with the periodicity of a time series is then possible by searching for local minima (valleys) on the similarity function.  
 
-\subsection{\gls{SSM} for Segmentation}
+\section{Experimental Evaluation in Selected Use-cases}
 
-As presented in Section \ref{sec:the_ssm}, the \gls{SSM} highlights areas of information with similar behaviour as homogeneous blocks. The detection of the transition between these blocks of information is a direct application of this method to change point detection. This results in the extraction of relevant events that segment the time series in differentiated sections. In the other end, sub-diagonals indicate the presence of periodicity. Hereby we present several use-cases of segmentation with the proposed method. Overall results will be presented and discussed.
+After explaining the process to represent the time series into a feature-based similarity matrix and the methods used to retrieve information from it, we present selected use-cases from multiple domains to exemplify its universal usage.
 
-\subsubsection{Visual Examples in selected Use-cases}
+\subsection{Use-Case 1 - Human Activity}
 
-{\normalsize \textbf{Human Activity Segmentation}}\\
-\par
 The example presented in Figure \ref{fig:event_search_demonstration} shows the usage of the \gls{SSM} on a record of Dataset 2. 
-% In this case, the method is not used to classify each motion activity, but rather identify moments of transition between these activities, segmenting the time series in a set of periods.
 
 \begin{figure}
     \centering
-    \includegraphics[width=0.9\linewidth]{Figures/HAR_example_2.png}
+    \includegraphics[width=\linewidth]{use_case1_HAR.pdf}
     \caption{Change point event detection strategy applied on the SSM to search for change point events. The sequence of activities is presented as follows: $Sitting \xrightarrow[]{} Laying \xrightarrow[]{} Walking \xrightarrow[]{} Upstairs \xrightarrow[]{} Downstairs \xrightarrow[]{} Sitting \xrightarrow[]{} Standing \xrightarrow[]{} Laying \xrightarrow[]{} Walking \xrightarrow[]{} Upstairs$. The input variables used are $time_{scale}$=250 samples, $kernel_{size}$=45 samples, overlap=95\%}
-    \label{fig:event_search_demonstration}
+    \label{fig:use_case1}
 \end{figure}
 
-In this example, the method was applied to all the 3-axis of the accelerometer data. We only show the X-axis, which is described with the bottom sequence of activities as captioned in Figure \ref{fig:event_search_dimension}.
+In this example, the method was applied to all the 3-axis of the accelerometer data. All are showed and described with the sequence of activities as captioned in Figure \ref{fig:use_case1}.
 \par
-The \gls{SSM} was computed using a time scale parameter of 250 samples, and an overlap of 95 \%. Blue indicate segments with higher similarity. Along the diagonal, these blocks are visible and change point events are estimated as the transition between these, highlighted by the novelty function. The kernel used for this detection had a size of 45 samples.
+The \gls{SSM} was computed using a window size of 250 samples, and an overlap of 95 \%. Blue indicate segments with higher similarity. Along the diagonal, these blocks are visible and change point events are estimated as the transition between these, highlighted by the \textit{nova} function. The kernel used for this detection had a size of 45 samples.
 \par
-In this example, we can identify that the detected change point events match with the activity transitions. Although all transitions are visible on the novelty function, the ones that correspond to transitions between similar segments of activities are harder to find, namely the transitions between walking activities. This is plausible since the properties of these segments are similar and the morphological difference is not as significant as when transiting between dissimilar activities (between \textit{Laying} and \textit{Walking} for example). There are ways of enhancing these differences, which will be explained further.
+In this example, we can identify that the detected change point events match with the activity transitions. Although all transitions are visible on the novelty function, the ones that correspond to transitions between similar segments of activities are harder to find, namely the transitions between walking activities. This is plausible since the properties of these segments are similar and the morphological difference is not as significant as when shifting between dissimilar activities (e.g. between \textit{Laying} and \textit{Walking}).
 \par
-Any change with a significant change in properties will be detected by the proposed method. As presented in Figure \ref{fig:event_search_dimension}, at the end of the time series, the period in which the subject was performing the \textit{Walking upstairs} activity is affected by other changes in the time series properties. These are significant and also correspond to block transitions, which are also evident in the novelty function. The proposed strategy, being unsupervised, is sensitive to any change, as long as it is observed as a significant change in the signal's properties. In this particular example, since the events do not correspond to transitions between the considered sequence of activities, they were considered as FP.\\
+Any significant change in properties will be detected by the proposed method. As presented in Figure \ref{fig:event_search_dimension}, at the end of the time series, the period in which the subject was performing the \textit{Walking upstairs} activity is affected by other changes in the time series. These are significant and also correspond to \textit{block} transitions, which are also evident in the novelty function. The proposed strategy, being unsupervised, is sensitive to any change, as long as it is observed as a significant change in the signal's properties\\
 
-{\normalsize \textbf{Arterial Blood Pressure}}\\
-\par
-
-This is an experiment on arterial blood pressure data from a physionet dataset \cite{tilt, PhysioNet}. There are change points indicated as a modification in the physiological signal due to a change in the posture of the subject. The change point is very well discovered with our proposed method, as signaled by the ground truth.
 
 \begin{figure}
     \centering
-    \includegraphics[width=0.9\linewidth]{Figures/BVP_example_2.png}
+    \includegraphics[width=\linewidth]{use_case1_HAR_zoom_in.pdf}
     \caption{ABP signal change point detection. The parameters used were a size of 5000 samples, with an overlap of 75\% and a kernel size of 25 samples.}
-    \label{fig:example3}
+    \label{fig:example1_zoom}
 \end{figure}
 
-\vspace{5mm}
-
-{\normalsize \textbf{Noise Detection}}\\
+When \textit{zooming-in} the \textit{SSM} into segment \textit{A}, which shows transitions between walking behaviors, the checkerboard pattern that highlights change points is clearer and the three different walking patterns are easily segmented. The two major peaks in the corresponding \textit{nova} function are from these transitions, as presented in Figure \ref{fig:example1_zoom} (left).  
 \par
+Considering that the signal is a walking behavior, the reader might question the fact that the periodicity of the walking pattern is not exhibited on the matrix. The reason is that the window size used to compute the \gls{SSM} of Figure \ref{fig:use_case1} is too large. If features are extracted with a smaller window size, closer to the walking period, the \textit{paths} that indicate the recurrence of shapes are visible. Figure \ref{fig:example1_zoom} (right) shows the \gls{SSM} built from the segment \textit{B} of the original time series, with a window size of 10 samples and an overlap of 95 \%. The matrix shows the \textit{paths}, from which it is possible to extract the periods with the similarity function ($sf_B$).
+
+
+\subsection{Use-Case 2 - Medical domain}
+
+This is an experiment on arterial blood pressure data from a physionet dataset \cite{tilt, PhysioNet}. There are change points indicated as a modification in the physiological signal due to a change in the posture of the subject. The change point is very well discovered with our proposed method, as signaled by the ground truth (\textit{Posture Change} in Figure \ref{fig:example2_3}.left).
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.85\linewidth]{use_case2and3_bvp_pulsus.pdf}
+    \caption{(a) ABP signal change point detection. The parameters used were a size of 5000 samples, with an overlap of 95\% and a kernel size of 200 samples.}
+    \label{fig:example2_3}
+\end{figure}
+
+The shape of the \gls{ABP} signal in each regime is very similar, being  hard to notice by human eye where the change happened.
+\par
+The same happens on the \gls{ECG} signal from Figure \ref{fig:example2_3}.right. It displays a condition called pulsus paradoxus...the change point is hardly perceivable by human eye, but the proposed strategy is able to clearly show the difference in both regimes.
 
 In ECG signals it is common to find artifacts \cite{dataset6}. In this case we segmented noise from the ECG signal due to a jump performed by the subject with the novelty function. The segment is showed as a large area of red in the matrix, which indicates a dissimilarity with the rest of the signal, as well other structures from the ECG, which can be segmented with a smaller kernel size. In addition, we can compute the similarity function to segment the periods of the ECG.
 
+
+\subsection{Use-case 3 - Multidimensional}
+
+
 \begin{figure}
     \centering
-    \includegraphics[width=0.9\linewidth]{Figures/ECG_example2.png}
+    \includegraphics[width=0.9\linewidth]{use_case4_multi.pdf}
     \caption{ECG signal from Dataset 7. The parameters used were a size of 500 samples, with an overlap of 95\% and a kernel size of 50 samples and 10 samples, respectively.}
-    \label{fig:example3}
+    \label{fig:example4}
 \end{figure}
-
-
-
-{\normalsize \textbf{Motion Analysis in the Industry}}\\
-\par
-
-Another example is from an industrial scenario, where a worker performed cyclic activities and was interrupted several times \cite{antonio, santos_explaining_2020}. The novelty function is able to segment the areas of work versus pause and the similarity function indicates where the working cycles occurred with local minima in the similarity function.
-
-\begin{figure}
-    \centering
-    \includegraphics[width=0.9\linewidth]{Figures/example_industrial.png}
-    \caption{Example of a worker performing cyclic tasks in an industrial setting. The worker has interruption in his/her work which are annotated with the red labels. The novelty (nova) and similarity (sim) functions are computed from the \gls{SSM} generated with a window size of 2500 samples, overlap of 85\% and kernel size of 50 samples.}
-    \label{fig:my_label}
-\end{figure}
-
-
-\subsubsection{Multidimensional Segmentation}
 
 The proposed method accepts both single and multidimensional records. The difference regards the number of features extracted. As presented on Figure \ref{fig:SSM_scheme}, the same set of features are extracted for each time series of the record and combined in the $F_M$. 
 \par
-Using a single time series of a multivariate record is optional and depends on the detection's purpose. In some cases, using a single time series from a multidimensional record can lead to missing relevant events undetected. An example of this can be seen on Figure \ref{fig:occupancy_uni} with record \textit{"Occupancy"} from Dataset 8. 
+Using a single time series of a multivariate record is optional and depends on the detection's purpose. In some cases, using a single time series from a multidimensional record can lead to missing relevant events undetected. An example of this can be seen on Figure \ref{fig:occupancy_uni} with record \textit{"Occupancy"} from Dataset \ref{sec:dataset8}. 
 \par
-The record is a multi-dimensional time series that measures room occupancy based on temperature, humidity, light and CO2. All events can only be detected if using several time series of the record \cite{cpd_alan}. On Figure \ref{fig:occupancy_uni}.left, a single time series was analyzed by the proposed method to detect relevant events, while Figure \ref{fig:occupancy_uni}.right presents the application of the method to all the time series of the record. The results are different because the information from all the time series is combined, while with the single dimensional record, the detected events resulted from the information available on the single time series.\\
-
-\begin{figure}
-    \centering
-    \includegraphics[width=\linewidth]{Figures/example_occupancy.png}
-    \caption{Proposed method applied on "\textit{Occupancy}" record of Dataset 7. A single time series of the record is used to extract events.}
-    \label{fig:occupancy_uni}
-\end{figure}
+The record is a multi-dimensional time series that measures room occupancy based on temperature, humidity, light and CO2. All events can only be detected if using several time series of the record \cite{cpd_alan}. On Figure \ref{fig:occupancy_uni}.left, a single time series was analyzed by the proposed method to detect relevant events, while Figure \ref{fig:occupancy_uni}.right is the result of using all the time series of the record.
 
 
-% {\small \textbf{Time-scale and Overlap selection}}\\
-
-% The entry parameters that are necessary to perform a change point event search are the time scale and overlap percentage. The combination of these parameters has a relevant effect on the results obtained, since it defines the detail at which the method will perform the search. This is inherently due to the feature extraction process, which guides the method in the detection process. Lower time scale values promote the detection of events less spaced in time, while larger time scale values induce a smoothing effect on the feature extraction process and promote larger spaced events. The resolution at which the events are searched is based on the overlap percentage. 
-% \par
-% The time scale and overlap percentage can be defined depending on the purpose of the detection. On Table \ref{tab:overall_cpd_dist} are presented the average time scale used for each dataset, which results indicate that the method is able to adapt the search based on purpose of the detection, by changing the time scale. 
-
-\subsubsection{Event Detection Performance}
-
-The proposed method has been tested on publicly available datasets from different domains to infer its performance on detecting change point events. These datasets have categorized labels that were used to generate ground-truth events. These include different contexts (HAR, Hand Posture, Noise Detection, etc...) and different types of data (Inertial data, EMG and ECG). More details are given on the problem associated with each dataset on Section \ref{sec:dataset}.
-\par
-The method has been computed in the same conditions and by following the same procedure for all records of all datasets. The features used have been the same for each record, varying the time scale parameter, the overlap size of the sliding window and the kernel size parameter. The peak detection strategy was the same for all records, which is based on a threshold value. The threshold value varied for each record.  
-\par
-Results for publicly available datasets are presented in Tables \ref{tab:overall_cpd} and \ref{tab:overall_cpd_dist}. Table \ref{tab:overall_cpd} indicates the performance in detecting the change point events. 
-
-
-% Dataset 1 (Kaggle) & ACC & 3 & HAR & 98 & 16 & 16 & 0.860 & 0.860 & 0.754 & 0.860 \\
-% 			Dataset 2 (UCI1) & ACC-GYR & 6 & HAR & 157 & 18 & 22 & 0.897 & 0.877 & 0.797 & 0.887 \\
-% 			Dataset 3 (UCI3) & ACC-GYR & 6 & HAR & 1378 & 313 & 263 & 0.815 & 0.840 & 0.705 & 0.827 \\
-% 			Dataset 4 (UCI4) & ACC-GYR & 12 & HAR & 499 & 71 & 38 & 0.875 & 0.929 & 0.821 & 0.902 \\
-% 			Dataset 5 (UCI5) & EMG & 8 &  & 309 & 16 & 30 & 0.951 & 0.912 & 0.870 & 0.931 \\
-% 			Dataset 6 (Physionet1) & ECG & 1 & Noise & 132 & 25 & 10 & 0.841 & 0.930 & 0.790 & 0.883 \\
-% 			Dataset 7 (Physionet2) & ECG & 4 & Noise & 21 & 2 & 3 & 0.913 & 0.875 & 0.808 & 0.894 \\
-
-\begin{table*}
-	\begin{center}
-		\begin{tabular}{lccccccccc}
-			\toprule
-			Dataset & Signals & \# Ch & Task & TP & FP & FN & Prec (\%) & Rec (\%) & F1 (\%) \\
-			\toprule
-			Dataset 1 & ACC & 3 & HACP & 98 & 16 & 16 & 0.860 & 0.860 & 0.860 \\
-			Dataset 2 & ACC-GYR & 6 & HACP & 157 & 18 & 22 & 0.897 & 0.877 & 0.887 \\
-			Dataset 3 & ACC-GYR & 6 & HACP & 1378 & 313 & 263 & 0.815 & 0.840 & 0.827 \\
-			Dataset 4 & ACC-GYR & 12 & HACP & 499 & 71 & 38 & 0.875 & 0.929 & 0.902 \\
-			Dataset 5 & EMG & 8 & Act/Rel & 309 & 0 & 72 & 1.000 & 0.811 & 0.811 \\
-			Dataset 6  & ECG & 1 & Noise & 132 & 25 & 10 & 0.841 & 0.930 & 0.883 \\
-			Dataset 7  & ECG & 4 & Noise & 21 & 2 & 3 & 0.913 & 0.875 & 0.894 \\
-			\midrule
-			Total  & N.A. & N.A. & N.A. & 2629 & 465 & 386 & 0.850 & 0.872 & 0.861 \\
-			\bottomrule
-		\end{tabular}
-	\end{center}
-	\caption{Overall results for the performance of the method on change point detection. The dimension of the records is presented on the column \textit{\# Ch}, as well as the types of signals used and the task in which  applied (HACP - Human Activity Change Point detection; Act/Rel - Activation/Relaxation of the EMG detection and Noise detection).}
-	\label{tab:overall_cpd}
-\end{table*}
-
-
-\begin{table}
-	\begin{center}
-% 		\begin{tabular}{l|c|c|c|c}
-% 			Dataset & T_s (s) & MAE/T_s (\%) & MSE/T_s (\%) & MsE/T_s (\%)\\
-% 			\toprule
-% 			Dataset 1 & 5 & 2.665 & 7.102 & -0.578 \\
-% 			Dataset 2 & 10 & 2.879 & 8.291 & -0.653 \\
-% 			Dataset 3 & 1 & 0.338 & 0.114 & -0.043 \\
-% 			Dataset 4 & 25 & 5.779 & 33.392 & -0.009 \\
-% 			Dataset 5 & 1 & 1.081 & 1.169 & -0.133 \\
-% 			Dataset 6 & 10 & 1.972 & 3.889 & -0.875 \\
-% 			Dataset 7 & 1 & 0.172 & 0.030 & -0.062 \\
-% 			\midrule
-% 			Average & N.A. & 1.777 & 3.156 & -0.142 \\
-% 		\end{tabular}
-        \begin{tabular}{lccc}
-            \toprule
-			Dataset & $T_s$ (s) & $MAE/T_s$ & $MsE/T_s$ \\
-			\toprule
-			Dataset 1 & 5 & 0.53 & -0.12 \\
-			Dataset 2 & 10 & 0.29 & -0.07 \\
-			Dataset 3 & 1 & 0.34 & -0.04 \\
-			Dataset 4 & 25 & 0.23 & -0.00 \\
-			Dataset 5 & 1 & 1 & -0.13 \\
-			Dataset 6 & 10 & 0.12 & -0.09 \\
-			Dataset 7 & 1 & 0.17 & -0.06 \\
-			\midrule
-			Average & N.A. & 0.32 & -0.07 \\
-			\bottomrule
-		\end{tabular}
-	\end{center}
-	\caption{Distance error as a ratio of the time scale ($T_s$) for the detected TP.}
-	\label{tab:overall_cpd_dist}
-\end{table}
-
-
-
-\section{Time Series Profilling}
+\section{Time Series Profiling}
 
 \subsection{Elements with Relevance}
 \subsection{Minimalist Design}
 (Find better words to describe this)
 \subsection{Summarize Time Series}
 
-\section{Further Developments}
+
+
+%Another example is from an industrial scenario, where a worker performed cyclic activities and was interrupted several times \cite{antonio, santos_explaining_2020}. The novelty function is able to segment the areas of work versus pause and the similarity function indicates where the working cycles occurred with local minima in the similarity function.
+%
+%\begin{figure}
+%    \centering
+%    \includegraphics[width=0.9\linewidth]{example_industrial.png}
+%    \caption{Example of a worker performing cyclic tasks in an industrial setting. The worker has interruption in his/her work which are annotated with the red labels. The novelty (nova) and similarity (sim) functions are computed from the \gls{SSM} generated with a window size of 2500 samples, overlap of 85\% and kernel size of 50 samples.}
+%    \label{fig:my_label}
+%\end{figure}
+
+
