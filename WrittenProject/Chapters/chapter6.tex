@@ -193,62 +193,84 @@ Any significant change in properties will be detected by the proposed method. As
     \label{fig:example1_zoom}
 \end{figure}
 
-When \textit{zooming-in} the \textit{SSM} into segment \textit{A}, which shows transitions between walking behaviors, the checkerboard pattern that highlights change points is clearer and the three different walking patterns are easily segmented. The two major peaks in the corresponding \textit{nova} function are from these transitions, as presented in Figure \ref{fig:example1_zoom} (left).  
+When \textit{zooming-in} the \textit{SSM} into segment \textit{A}, which shows transitions between walking behaviors, the checkerboard pattern that highlights change points is clearer and the three different walking patterns are easily segmented. The two major peaks in the corresponding \textit{nova} function are from these transitions, as presented in Figure \ref{fig:example1_zoom} (left). In addition, the reader might notice that the segments of the matrix related with \textit{walking in stairs} are also segmented into smaller \textit{blocks}. Although the information is not available on the dataset description, we strongly believe these are flight of stairs.
 \par
 Considering that the signal is a walking behavior, the reader might question the fact that the periodicity of the walking pattern is not exhibited on the matrix. The reason is that the window size used to compute the \gls{SSM} of Figure \ref{fig:use_case1} is too large. If features are extracted with a smaller window size, closer to the walking period, the \textit{paths} that indicate the recurrence of shapes are visible. Figure \ref{fig:example1_zoom} (right) shows the \gls{SSM} built from the segment \textit{B} of the original time series, with a window size of 10 samples and an overlap of 95 \%. The matrix shows the \textit{paths}, from which it is possible to extract the periods with the similarity function ($sf_B$).
 
 
 \subsection{Use-Case 2 - Medical domain}
 
-This is an experiment on arterial blood pressure data from a physionet dataset \cite{tilt, PhysioNet}. There are change points indicated as a modification in the physiological signal due to a change in the posture of the subject. The change point is very well discovered with our proposed method, as signaled by the ground truth (\textit{Posture Change} in Figure \ref{fig:example2_3}.left).
+In the medical domain there are several examples of structural information to retrieve. Some signals are periodic, such as the \gls{ECG}, the \gls{ABP} or the \gls{RESP} signals. When acquiring this type of data, several instances might reflect unexpected changes, either because of physiological responses and medical disorders or due to the sensing process. Here we show two examples of physiological changes in two periodic signals.
+\par
+The \gls{ABP} signal can change due to postural changes. An experiment was conducted to study this effect and is available at Physionet \cite{tilt, PhysioNet}. In Figure \ref{fig:example2_3} is showed the process of segmenting the \gls{ABP} signal based on postural changes, signaled with the ground truth. The change points are well perceived by the proposed strategy. The reader can notice that the shape of the \gls{ABP} signal in each regime is very similar, being  hard to notice by human eye where it happened. In addition, the periodicity of the signal is not visible on the matrix because the features were extracted with a window size of 5000 samples, which is much larger than the size period length.
+\par
+The \gls{SSM} of Figure \ref{fig:example2_3}.a also shows which segments are similar to each other. The blue colors of the matrix indicate high similarity and it is clearly presenting that segments with positive \textit{posture change} are more similar.
 
 \begin{figure}
     \centering
-    \includegraphics[width=0.85\linewidth]{use_case2and3_bvp_pulsus.pdf}
+    \includegraphics[width=0.9\linewidth]{use_case2and3_bvp_pulsus.pdf}
     \caption{(a) ABP signal change point detection. The parameters used were a size of 5000 samples, with an overlap of 95\% and a kernel size of 200 samples.}
     \label{fig:example2_3}
 \end{figure}
 
-The shape of the \gls{ABP} signal in each regime is very similar, being  hard to notice by human eye where the change happened.
-\par
-The same happens on the \gls{ECG} signal from Figure \ref{fig:example2_3}.right. It displays a condition called pulsus paradoxus...the change point is hardly perceivable by human eye, but the proposed strategy is able to clearly show the difference in both regimes.
 
-In ECG signals it is common to find artifacts \cite{dataset6}. In this case we segmented noise from the ECG signal due to a jump performed by the subject with the novelty function. The segment is showed as a large area of red in the matrix, which indicates a dissimilarity with the rest of the signal, as well other structures from the ECG, which can be segmented with a smaller kernel size. In addition, we can compute the similarity function to segment the periods of the ECG.
+The same happens on the \gls{ECG} signal from Figure \ref{fig:example2_3}.right. It displays a condition called pulsus paradoxus.... Again, the reader can notice that the change point is hardly perceivable by human eye, but the proposed strategy is able to clearly show the difference in both regimes.
 
 
 \subsection{Use-case 3 - Multidimensional}
 
-
 \begin{figure}
     \centering
     \includegraphics[width=0.9\linewidth]{use_case4_multi.pdf}
-    \caption{ECG signal from Dataset 7. The parameters used were a size of 500 samples, with an overlap of 95\% and a kernel size of 50 samples and 10 samples, respectively.}
+    \caption{Proposed method applied on "\textit{Occupancy}" record of Dataset \ref{sec:dataset8}. (a) A single time series of the record is used to extract events; while in (b) the \gls{SSM} is computed with features extracted from the four available time series.}
     \label{fig:example4}
 \end{figure}
 
 The proposed method accepts both single and multidimensional records. The difference regards the number of features extracted. As presented on Figure \ref{fig:SSM_scheme}, the same set of features are extracted for each time series of the record and combined in the $F_M$. 
 \par
-Using a single time series of a multivariate record is optional and depends on the detection's purpose. In some cases, using a single time series from a multidimensional record can lead to missing relevant events undetected. An example of this can be seen on Figure \ref{fig:occupancy_uni} with record \textit{"Occupancy"} from Dataset \ref{sec:dataset8}. 
+Using a single time series of a multivariate record is optional and depends on the detection's purpose. In some cases, using a single time series from a multidimensional record can lead to missing relevant events undetected. An example of this can be seen on Figure \ref{fig:example4}.a with record \textit{"Occupancy"} from Dataset \ref{sec:dataset8}. 
 \par
-The record is a multi-dimensional time series that measures room occupancy based on temperature, humidity, light and CO2. All events can only be detected if using several time series of the record \cite{cpd_alan}. On Figure \ref{fig:occupancy_uni}.left, a single time series was analyzed by the proposed method to detect relevant events, while Figure \ref{fig:occupancy_uni}.right is the result of using all the time series of the record.
-
+The record is a multi-dimensional time series that measures room occupancy based on temperature, humidity, light and $CO_2$. All events can only be detected if using several time series of the record \cite{cpd_alan}. On Figure \ref{fig:example4}.a, a single time series was analyzed by the proposed method to detect relevant events, while Figure \ref{fig:example4}.b is the result of using all the time series of the record.
 
 \section{Time Series Profiling}
 
+The aforementioned examples show how the proposed method can be used as a strong and reliable visual tool. It is possible to see how a time series is structured, how similar are segments and if these are periodic or not. The information available is quite relevant to support the labeling process of the analyst, but it also can be used to automatically summarize a time series. 
+\par
+Following the presented work, we studied how to use it for a meaningful summary of time series. This process is inspired by methodologies that exist in other scenarios for data summarization techniques with statistical analysis, such as the available methods from the \textit{pandas python library}: \textit{pandas.profile()} and \textit{pandas.describe()}. These methods are able to provide a summarization of the dataset that is given as input. A similar method is not known for time series. First, we should understand what is meaningful and relevant to represent as a summary.
+
 \subsection{Elements with Relevance}
+
+In this section, we have been discussing which elements are relevant in time series, mostly associated with \textit{events}. From \textit{events} we can segment homogeneous \textit{subsequences}, recurrent or periodic patterns and anomalies. The relationship between these segments is possible analyzing their similarity. In addition, a characterization of the segments is possible with a statistical analysis. In that sense, the relevant elements to summarize in a time series are (1) \textit{homogeneous segments}, (2) \textit{periodic patterns}, (3) \textit{recurrent patterns}, (4) \textit{anomalies}, (5) association based on similarity and (6) statistical characterization. Several examples from other domains can be used as inspiration in how to join all these elements in a compact, expressive and intuitive way.
+
 \subsection{Minimalist Design}
-(Find better words to describe this)
+
+Strategies that are typically used to present information in a compact way are found in several domains. In text analysis, for instance, the relationship between repeating sequences is illustrated with arc diagrams \cite{bitmap, arcplots}. These show where repeating sequences occur in a very concise way. This has a range of applications that include, for example text and DNA sequence analysis.
+
+\begin{figure}[b]
+    \centering
+    \begin{subfigure}{0.5\linewidth}
+    \centering
+        \includegraphics[width=0.9\linewidth]{arcplots.pdf}
+        \caption{}
+        \label{fig:genomic}
+    \end{subfigure}%
+    \begin{subfigure}{0.5\linewidth}
+        \centering
+        \includegraphics[width=0.9\linewidth]{genomics.pdf}
+        \caption{}
+        \label{fig:genomic}
+    \end{subfigure}
+    \caption{A - Diagram for string association. This image is taken from the works from \cite{arcplots}; B - Circular plot by OmicCircos. Several layers (Circular tracks) identify genome position, expression heatmaps, correlation between expression and CNV, among other features. The image is taken from the works from \textit{Ying Hu, et al.} \cite{genomics}.}
+\end{figure}
+
+One domain that has a particular relevance in data visualization is genomics. Graphical genome maps are found to concatenate a significant amount of information in a very compact way. Genome features and sequence characteristics are assessed with this visual strategy. An example can be found on Figure \ref{fig:genomic}. This visualization strategy can provide increasing circular layers of information. Although we are used to look at time series from left to right, a circular representation can have benefits to concatenate the information we want to include.
+\par
+In the musical domain, strategies have also been developed that summarize audio time series with segmentation techniques. One of the strategies that is common to be used involves detecting novelty instances on a similarity matrix representation of the audio signal, called \textit{Self-Similarity Matrix} (SSM). This data structure provides a significant range of information that can be used to retrieve structural information, such as block and periodic structures \cite{fmp1, fmp2, audiolabs1, audiolabs2}. This method will inspire our visualization strategy, which will be explained further.
+
 \subsection{Summarize Time Series}
 
 
 
-%Another example is from an industrial scenario, where a worker performed cyclic activities and was interrupted several times \cite{antonio, santos_explaining_2020}. The novelty function is able to segment the areas of work versus pause and the similarity function indicates where the working cycles occurred with local minima in the similarity function.
-%
-%\begin{figure}
-%    \centering
-%    \includegraphics[width=0.9\linewidth]{example_industrial.png}
-%    \caption{Example of a worker performing cyclic tasks in an industrial setting. The worker has interruption in his/her work which are annotated with the red labels. The novelty (nova) and similarity (sim) functions are computed from the \gls{SSM} generated with a window size of 2500 samples, overlap of 85\% and kernel size of 50 samples.}
-%    \label{fig:my_label}
-%\end{figure}
+
 
 
