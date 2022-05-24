@@ -41,7 +41,7 @@ Figures \ref{fig:event_search} and \ref{fig:event_type} are an illustrated summa
 
 \subsection{Type Dimension}
 
-In what regards the \textit{event} type, we show in Figure \ref{fig:event_type} examples of events that are considered significant in a time series: \textit{(1) Property change:} when the change of a property or set of properties is greater than a threshold, such as changes on the mean (FIND THUMBNAIL IMAGE) or frequency (\includegraphics[height=3.5ex, valign=m]{walking_jogging.png}), \textit{(2) Peak/Valley}: peaks and valleys can typically be associated with significant physical changes (e.g. the peaks of an ECG signal \includegraphics[height=3.5ex, valign=m]{high_peak_ecg.png}), \textit{(3) Periodicity}: if a signal is periodic, the moment each period starts is considered relevant (e.g. the cycles of a BVP signal (e.g. the peaks of an ECG signal \includegraphics[height=2.5ex, valign=m]{bvp_segment.png}), \textit{(4) recurrent pattern}: re-occurrences of similar \textit{subsequences} with a certain shape or \textit{(5) anomaly}: very dissimilar \textit{subsequences} are relevant to indicate (e.g. noise in a clean signal \includegraphics[height=3ex, valign=m]{ecg_noise_thumbnail.png}).
+In what regards the \textit{event} type, we show in Figure \ref{fig:event_type} examples of events that are considered significant in a time series: \textit{(1) Property change:} when the change of a property or set of properties is greater than a threshold, such as changes on the mean (FIND THUMBNAIL IMAGE) or frequency (\includegraphics[height=3.5ex, valign=m]{walking_jogging.png}), \textit{(2) Peak/Valley}: peaks and valleys can typically be associated with significant physical changes (e.g. the peaks of an ECG signal \includegraphics[height=3.5ex, valign=m]{high_peak_ecg.png}), \textit{(3) Periodicity}: if a signal is periodic, the moment each period starts is considered relevant (e.g. the cycles of a BVP signal \includegraphics[height=2.5ex, valign=m]{bvp_segment.png}), \textit{(4) recurrent pattern}: re-occurrences of similar \textit{subsequences} with a certain shape or \textit{(5) anomaly}: very dissimilar \textit{subsequences} are relevant to indicate (e.g. noise in a clean signal \includegraphics[height=3ex, valign=m]{ecg_noise_thumbnail.png}).
 
 \subsection{Proposal}
 
@@ -102,12 +102,19 @@ Differently, \textit{blocks} are square shaped structure that indicate homogeneo
 \par
 Several strategies were applied on the \gls{SSM} to extract the mentioned information. Further are explained the approaches used.
 
-\section{Detection of Events}
+\section{Information Retrieval}
 
-The \gls{SSM} is a powerful visual tool \textit{per se}, highlighting relevant information that could be missed if looking at the raw time series. However, being the information on the \gls{SSM}, it should be possible to retrieve it automatically. 
-Here are described the methods used to retrieve \textit{block} transition information and \textit{paths} information.
+The \gls{SSM} is a powerful visual tool \textit{per se}, highlighting relevant information that could be missed if looking at the raw time series. However, being the information on the \gls{SSM}, it should be possible to retrieve it automatically. As Figure \ref{fig:info_retrieval_topics}, here are explained how to extract three layers of information, namely (1) change points in a time series (\textit{block} transitions), (2) periodic segmentation of patterns (\textit{paths}) and (3) how similar are the \textit{subsequences} segmented by the previous methods (\textit{distance profiles}). In addition, we will also demonstrate how the \gls{SSM} can be used to search queries in a periodic time series.
 
-\subsection{Block Change Detection}
+\begin{figure}
+\centering
+\includegraphics[width=\linewidth]{information_retrieval_topics.pdf}
+\caption{Information retrieval topics explained in this section.}
+\label{fig:info_retrieval_topics}
+\end{figure}
+
+
+\subsection{Novelty Search}
 
 The search for \textit{novelty} is inspired by a method used in musical structure analysis and presented by \textit{Foote et al.} \cite{foote2000}. The process involves searching for transitions between \textit{blocks} using a moving checkerboard square matrix. The result is a 1 dimensional function designated \textit{novelty function} - \textit{nova}.
 \par
@@ -128,9 +135,7 @@ Each section of the kernel has the same size, \textit{L}, being the total kernel
         K_N(i,j)  = \sgn(a_i) \cdot \sgn(b_j)
 \end{equation}
 
-being $a, b \in [-L:L]$ and "\sgn" representing the sign function, which indicates the sign of the value (1, 0 or -1).
-\par
-A radially symmetric Gaussian function is used to smooth the Kernel, with the following equation \cite{Mueller15_FMP_SPRINGER, MuellerZ19_FMP_ISMIR}:
+being $a, b \in [-L:L]$ and "\sgn" representing the sign function, which indicates the sign of the value (1, 0 or -1). A radially symmetric Gaussian function is used to smooth the Kernel, with the following equation \cite{Mueller15_FMP_SPRINGER, MuellerZ19_FMP_ISMIR}:
 
 \begin{equation}
     \phi(p,u) = \exp(-\frac{1}{2L\sigma^2}(p^2 + u^2))
@@ -148,9 +153,7 @@ The \textit{nova} is calculated by correlating the kernel with the diagonal of t
     nova(m) = \sum^{2L+1}_{i,j=0} K_{G}(a_i,b_j)SSM(m+a_i, m+b_j)
 \end{equation}
 
-, being the sample of the novelty function $m \in [0-N]$ and $a, b \in [-L:L]$.
-\par
-The change point events are represented by local maxima (peaks) in \textit{nova}, which can be detected by standard peak finding strategies.
+being the sample of the novelty function $m \in [0-N]$ and $a, b \in [-L:L]$. The change point events are represented by local maxima (peaks) in \textit{nova}, which can be detected by standard peak finding strategies.
 
 \subsection{Periodic Search}
 
@@ -162,13 +165,43 @@ sf(x) = \sum_{i=0}^{m}{SSM_{ix}}
 
 \noindent where \textit{i} is the column position for the sum, $sf_{j}$ the sample of the function at position \textit{j} and \textit{m} the size of one of the dimensions of the \gls{SSM}, which is equal to the feature-series size. As segments with similar morphology will be similarly described by the extracted features, the columns will have a similar representation, hence a similar value on the \textit{sf}. In cases where the time series is periodic, the similarity function will enhance this behavior by having valleys at the moment the \textit{path} starts. The identification of events related with the periodicity of a time series is then possible by searching for local minima (valleys) on the similarity function.  
 
+\subsection{Similarity Profiles}
+
+The main elements, \textit{blocks} and \textit{paths}, are essential sources of information for the segmentation of the time series. Besides these, the \gls{SSM} also provides the pairwise similarity values between all \textit{subsequences} of the time series. This is an important measure that gives an understanding of how close together are each \textit{subsequence} and can be used to cluster them. In order to use the similarity values of the \gls{SSM} to compare \textit{subsequences} we compute \textit{similarity profiles}.
+\par
+The comparison between \textit{subsequences} could be made by directly using the values of the matrix in the segment delimited by both \textit{subsequences}. Although this would be a legitimate process, we find that a stronger measure is to compare how much each of the two \textit{subsequences} are similar/different to all the other \textit{subsequences} of the time series. For this, \textit{similarity profiles} ($P_s(c)$) are computed as the average similarity values of a section of the \gls{SSM} delimited by the \textit{subsequence} being profiled, with size $w$,  and all the other \textit{subsequences} of the time series, with size $m$:
+
+
+\begin{equation}
+P_s(c) = \frac{\Sigma_{i=0}^w SSM(i, c)}{w}
+\end{equation}
+
+The \textit{similarity profile} is computed column-wise, being each column $c$ the average similarity value between the reference \textit{subsequence} and the \textit{subsequence} corresponding to $c$. The reasoning is that similar \textit{subsequences} should have closer \textit{similarity profiles}. Since the profiles have the same size, these can then be compared with the \textit{euclidean distance} and clustered based on these distance values. This process is specially valuable to cluster the segments previously extracted with the \textit{nova} and \textit{similarity} functions.
+
+\begin{figure}
+\centering
+\includegraphics[width=\linewidth]{profiles.pdf}
+\caption{Profiles computed for each segment of the example signal used in Figure \ref{fig:ssm_description}.}
+\end{figure}
+
+A general example of applying this process to the segmented time series based on the \textit{nova} function is showed in Figure \ref{fig:profiles}. Each segment category (A, B and C) extracted from the \gls{SSM} of Figure \ref{fig:ssm_description} is computed into a profile ($P_A$, $P_B$ and $P_C$) by averaging column-wise. These \textit{similarity profiles}show how similar the segment is with all the other \textit{subsequences} of the time series. All segments A will have a similar $P_A$, while being very different from profiles $P_B$ and $P_C$. 
+
+\subsection{Query Search}
+
+Another relevant application of the \gls{SSM} is to make query search based on examples. The process follows the traditional methods of template-based search methods explained in Chapter \ref{sec:query_based_search), but instead of doing the process directly on the time series, it is performed on the \gls{SSM}. The search procedure works by sliding the smaller column window (the example selected on the time series) along the \textit{SSM}, one sample at a time. The distance, $D$, between the example and the segment it slides over is calculated through the sum of absolute differences:
+
+\begin{equation}
+    D(i) = \sum_{i=0}^{i=m}{\sqrt{(SSM(i) - SSM_t)^2}}
+\end{equation}
+
+\noindent where $SSM(i)$ is the segment of the \textit{SSM} over which the example, $SSM_t$, slides at moment $i$, up to the size of the \gls{SSM}. The resulting distance function has minimums at the position where the example is matched.
+
+
 \section{Experimental Evaluation in Selected Use-cases}
 
 After explaining the process to represent the time series into a feature-based similarity matrix and the methods used to retrieve information from it, we present selected use-cases from multiple domains to exemplify its universal usage.
 
 \subsection{Use-Case 1 - Human Activity}
-
-The example presented in Figure \ref{fig:event_search_demonstration} shows the usage of the \gls{SSM} on a record of Dataset 2. 
 
 \begin{figure}
     \centering
@@ -177,7 +210,7 @@ The example presented in Figure \ref{fig:event_search_demonstration} shows the u
     \label{fig:use_case1}
 \end{figure}
 
-In this example, the method was applied to all the 3-axis of the accelerometer data. All are showed and described with the sequence of activities as captioned in Figure \ref{fig:use_case1}.
+The example presented in Figure \ref{fig:event_search_demonstration} shows the usage of the \gls{SSM} on a record of Dataset 2. In this example, the method was applied to all the 3-axis of the accelerometer data. All are showed and described with the sequence of activities as captioned in Figure \ref{fig:use_case1}.
 \par
 The \gls{SSM} was computed using a window size of 250 samples, and an overlap of 95 \%. Blue indicate segments with higher similarity. Along the diagonal, these blocks are visible and change point events are estimated as the transition between these, highlighted by the \textit{nova} function. The kernel used for this detection had a size of 45 samples.
 \par
@@ -213,9 +246,7 @@ The \gls{SSM} of Figure \ref{fig:example2_3}.a also shows which segments are sim
     \label{fig:example2_3}
 \end{figure}
 
-
 The same happens on the \gls{ECG} signal from Figure \ref{fig:example2_3}.right. It displays a condition called pulsus paradoxus.... Again, the reader can notice that the change point is hardly perceivable by human eye, but the proposed strategy is able to clearly show the difference in both regimes.
-
 
 \subsection{Use-case 3 - Multidimensional}
 
@@ -234,19 +265,19 @@ The record is a multi-dimensional time series that measures room occupancy based
 
 \section{Time Series Profiling}
 
-The aforementioned examples show how the proposed method can be used as a strong and reliable visual tool. It is possible to see how a time series is structured, how similar are segments and if these are periodic or not. The information available is quite relevant to support the labeling process of the analyst, but it also can be used to automatically summarize a time series. 
+The aforementioned examples show how the proposed method can be used as a strong and reliable visual tool. It is possible to see how a time series is structured, how similar are segments and if these are periodic or not. The information available is quite relevant to support the labeling process of the analyst, but it also can be used to summarize a time series and give a meaningful report about it. 
 \par
-Following the presented work, we studied how to use it for a meaningful summary of time series. This process is inspired by methodologies that exist in other scenarios for data summarization techniques with statistical analysis, such as the available methods from the \textit{pandas python library}: \textit{pandas.profile()} and \textit{pandas.describe()}. These methods are able to provide a summarization of the dataset that is given as input. A similar method is not known for time series. First, we should understand what is meaningful and relevant to represent as a summary.
+Following the presented work, we studied how to use it for a meaningful summary of time series. This process is inspired by methodologies that exist in other scenarios for data summarization techniques with statistical analysis, such as the available methods from the \textit{pandas python library}: \textit{pandas.profile()} and \textit{pandas.describe()}. These methods are able to provide a summarization of a dataset (typically of categorical data) that is given as input. A similar method is not known for time series. In order to develop such a method, we should first understand what is meaningful and relevant to represent as a summary.
 
 \subsection{Elements with Relevance}
 
 In this section, we have been discussing which elements are relevant in time series, mostly associated with \textit{events}. From \textit{events} we can segment homogeneous \textit{subsequences}, recurrent or periodic patterns and anomalies. The relationship between these segments is possible analyzing their similarity. In addition, a characterization of the segments is possible with a statistical analysis. In that sense, the relevant elements to summarize in a time series are (1) \textit{homogeneous segments}, (2) \textit{periodic patterns}, (3) \textit{recurrent patterns}, (4) \textit{anomalies}, (5) association based on similarity and (6) statistical characterization. Several examples from other domains can be used as inspiration in how to join all these elements in a compact, expressive and intuitive way.
 
-\subsection{Minimalist Design}
+\subsection{Compact Design}
 
 Strategies that are typically used to present information in a compact way are found in several domains. In text analysis, for instance, the relationship between repeating sequences is illustrated with arc diagrams \cite{bitmap, arcplots}. These show where repeating sequences occur in a very concise way. This has a range of applications that include, for example text and DNA sequence analysis.
 
-\begin{figure}[b]
+\begin{figure}
     \centering
     \begin{subfigure}{0.5\linewidth}
     \centering
@@ -263,14 +294,42 @@ Strategies that are typically used to present information in a compact way are f
     \caption{A - Diagram for string association. This image is taken from the works from \cite{arcplots}; B - Circular plot by OmicCircos. Several layers (Circular tracks) identify genome position, expression heatmaps, correlation between expression and CNV, among other features. The image is taken from the works from \textit{Ying Hu, et al.} \cite{genomics}.}
 \end{figure}
 
-One domain that has a particular relevance in data visualization is genomics. Graphical genome maps are found to concatenate a significant amount of information in a very compact way. Genome features and sequence characteristics are assessed with this visual strategy. An example can be found on Figure \ref{fig:genomic}. This visualization strategy can provide increasing circular layers of information. Although we are used to look at time series from left to right, a circular representation can have benefits to concatenate the information we want to include.
+One domain that has interesting examples in data visualization is \textit{genomics}. Graphical genome maps are found to concatenate a significant amount of information in a very compact way. Genome features and sequence characteristics are assessed with this visual strategy. An example can be found on Figure \ref{fig:genomic}. This type of visualization inspired the summarization approach proposed for time series.
 \par
-In the musical domain, strategies have also been developed that summarize audio time series with segmentation techniques. One of the strategies that is common to be used involves detecting novelty instances on a similarity matrix representation of the audio signal, called \textit{Self-Similarity Matrix} (SSM). This data structure provides a significant range of information that can be used to retrieve structural information, such as block and periodic structures \cite{fmp1, fmp2, audiolabs1, audiolabs2}. This method will inspire our visualization strategy, which will be explained further.
+This visualization strategy has several elements that can be used to transform the \gls{SSM} into a compact form of filtered information. The elements are (1) multi-layered colored \textit{segments}, (2) \textit{chords} that connect to nearest neighbor \textit{segments} and (3) circular signals on top of segments. The transformation into this compact representation can be performed with the explained analysis methods above.
 
-\subsection{Summarize Time Series}
+\subsection{A step by step example}
 
+\begin{figure}
+\centering
+\includegraphics[width=\linewidth]{summarize_steps.pdf}
+\label{fig:summarize_steps}
+\end{figure}
 
+The steps are indicated in Figure \ref{fig:summarize_steps} for the \gls{ABP} signal example. After computing the \gls{SSM}, it is firstly analyzed to segment the signal based on the \textit{nova} function. These segments are then compared based on the \textit{similarity profiles}. Additional layers can be created by performing an iterative and multi-scale segmentation. With this process, the time series is segmented (\textit{novelty layer}), subsegmented (\textit{subsegment layer}), each segment is connected to the nearest neighbor segment (\textit{nearest neighbor chords}) and the colors for each segment is given based on their similarity to the first segment. Figures \ref{fig:summarize_step1}, \ref{fig:summarize_step2} and \ref{fig:summarize_step3} show the step-by-step process to summarize the time series by analyzing the \gls{SSM}. 
 
+\begin{figure}
+\centering
+\includegraphics[width=0.85\linewidth]{summarize_step1.pdf}
+\label{fig:summarize_step1}
+\end{figure}
 
+The \textit{nova} function segments the time series into seven segments. The reader can notice that segments A, C, E and G are similar and separated by segments B, C and F, represented by a failure in the connection of the sensor. From this first segmentation, the \textit{novelty layer} is created, indicating how structured is the signal, as presented in Figure \ref{fig:summarize_step1}.
 
+\begin{figure}[b]
+\centering
+\includegraphics[width=\linewidth]{summarize_step2.pdf}
+\label{fig:summarize_step2}
+\end{figure}
 
+Further, the segments are compared with the \textit{similarity profiles} of each segment. Figure \ref{fig:summarize_step2} illustrates as example the rows of the \gls{SSM} delimited by segment A and the column-wise average into $P_A$. The same process is applied to each segment. From this Figure, the reader may notice that the profiles $P_A$, $P_C$, $P_E$ and $P_G$ are more similar, while profiles $P_B$ and $P_D$ are more similar as well. The pairwise distance is computed between profiles, which can then be used to extract the nearest neighbor of each segment, as well as transform the distance values between segments into color. 
+\par
+The pairwise distance between profiles is also used to illustrate how the segments are ordered and clustered by the dendogram of Figure \ref{fig:summarize_step2}. The dendogram shows that there are three main clusters, being cluster one represented by segments A, C, E and G; the second cluster has segment F and the third cluster groups segments B and D. It is important to note that typical distance measures, such as the \gls{ED} or \gls{DTW}, would not be able to directly sort these segments correctly. Using \textit{similarity profiles} is more robust and invariant to the size and time distortions. 
+
+\begin{figure}
+\centering
+\includegraphics[width=0.75\linewidth]{summarize_step3.pdf}
+\label{fig:summarize_step3}
+\end{figure}
+
+Finally, the process to summarize the time series can be iterative by adding \textit{subsegment layers}. These layers can be added by performing the \textit{novelty search} on the previously segmented time series with a smaller time scale, or segmenting the time series based on periodicity. In this case, the signal is periodic, therefore Figure \ref{fig:summarize_step3} illustrates the \textit{periodic search}, where periods are segmented by the minima of the $s_f$. 

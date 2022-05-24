@@ -49,30 +49,6 @@ E. Iverson believed that, although mathematical notation is not universal and un
 \par
 One of the fundamental characteristics of this tool is the provision of graphic symbols for the execution of functions and operations, which are meant to express the thought of the user in solving a problem. The tool presented in this work is inspired by this reasoning and uses graphical symbols in the pre-processing and symbolic connotation steps. With this, the proposed tool profits of E. Iverson ideas to be intuitive, simple to use yet complex enough to reach the desired end, being a powerful tool of thought for query search in time series. 
 
-
-
-
-
-
-\section{Towards Interpretable Time Series Classification with SSTS}
-
-Extend the usage of the symbolic mechanism. Having text 
-
-\subsection{Using SSTS to translate Time Series}
-
-\subsection{Vectorization of Time Series Documents}
-
-\subsection{Towards Interpretable Results}
-
-
-\section{Towards Natural Language for Pattern Search}
-
-\subsection{Mapping Features to Words}
-
-\subsection{Linguistic Operators}
-
-\subsection{Natural Language Query for Time Series}
-
 The proposed method, conceptually developed based on text mining techniques, abstracts how a time series can be structured in a linguistic representation, similar to how the human would describe a time series with words. In order to introduce the reader with this abstraction and representation, we explain how we use \textit{SSTS} to make this abstraction.
 \par
 The transformation from the numerical domain to the textual domain is made using \textit{SSTS} \cite{ssts}. This method uses three steps to perform a query search on the time series and finding the corresponding pattern. The steps include (1) the pre-processing; (2) the symbolic connotation and (3) the search:
@@ -91,3 +67,108 @@ An example of the detection of shapes with the help of \textit{SSTS} in a set of
     \caption{(Top) Using SSTS to detect the rising stage of a time series. Each step of the process is written described as follows: (1) pre-processing: \textit{Sm} is the function \textit{Smooth} with a window size of 25 samples; (2) connotation: \textit{D1}, indicates the first derivate, from which each sample is converted to \textit{z} - Flat, \textit{p} - rising and \textit{n} falling; (3) search - regular expression \textit{p+} searches for all sequences with 1 or more \textit{p} characters. (Bottom) Example of sentence generation. Using the other search queries (\textit{p+, n+, z+}), we can find the derivative patterns and convert it into ordered words.}
     \label{fig:SSTS_example}
 \end{figure}
+
+
+\section{Towards Interpretable Time Series Classification with SSTS}
+
+Extend the usage of the symbolic mechanism. Having text 
+
+\subsection{Using SSTS to translate Time Series}
+
+\subsection{Vectorization of Time Series Documents}
+
+\subsection{Towards Interpretable Results}
+
+
+\section{Towards Natural Language for Pattern Search}
+
+Automobiles are increasingly monitoring every aspect of the driver’s behavior. Such data can be used for many direct and explicit purposes, such as optimizing fuel consumption or enhancing safety systems. However, there are also many potential indirect and offline uses of this data. The data may be of interest to engineers optimizing driver’s comfort, study the behavior of automated vehicles, to insurance companies fine-tuning insurance rates, to accident investigators trying to understand the cause of an accident, etc. [8,10–12,14,19]. It is commonly understood that individuals with domain experience can often “read” such telemetry. For example, in academic and industrial labs it is common to hear engineers annotate such data “This y-axis bump is where he hit the pothole, and then the sharp decline here in the x-axis is where he begins to apply the brakes” [22]. However, this ability to interpret such data does not help in searching such data collections. Simply manually panning through the data does not scale beyond minutes of data, and we may wish to search massive data archives.
+
+\subsection{Mapping Features to Words}
+
+We define a word feature vector W as a mapping of feature F with a specific word. With feature, we intend to describe either a property, such as the mean or standard deviation, but also a distance measure to pre-defined examples. In linguistic terms, this word feature vector is an adjective of the subsequence. Every subsequence Ti,m from each time series T is characterized by the selected set of words,  being created a set of word feature vectors for each time series, further normalized between 0 and 1. The word feature vector has the size of T minus the subsequence length: n-m+1, and the feature value indicates how relevant is the word in the subsequence. Figure 3 shows an example of the word feature vectors for up (Fup)and down (Fdown).
+
+\textbf{SHOW FIGURE}
+
+To allow interactive search, the word feature vectors are pre-computed in an offline indexing stage. In addition to this, we also extract three dimensions of the same word feature vector with different window lengths, based on m: W1→ m; W2→ \frac{m}{2}; W3→\frac{m}{4}; with the intent of matching ordered sequences of words inside a subsequence with the grouped followed by operator, as will be explained further. It is important to note that the ratio of the window used for the dimension W2 and W3 might have to be fine-tuned for the domain, as there might not be a “one window ratio fits all”. However, empirically we observed that the exact value of this ratio is not critical to the success of search.
+
+For each W is assigned a word w. We use English words to make the process more intuitive, such as noise, up and peak. We recognize that the intuitive meaning of such words can vary from user to user depending on their domain, their experience and on the current context. Either way, words can be mapped to features that are domain specific or word feature vectors can be given a domain specific vocable, providing a more appropriate mathematical thinking behind what is its meaning. In addition, we are aware that multiple words can be given the same meaning and for this reason, we associate several synonyms to each word. We also note that our proposed mechanism can benefit from the current advances in Natural Language Processing (NLP). For instance, synonyms could automatically be associated with the closest word listed in our vocabulary with word embeddings. We defer such considerations to future work.
+
+We define an initial subset of features that are mapped to words. When defining one word feature vector it would often come with a negation pair.
+
+Definition 5 (Negation Pair): A negation pair (!W) represents the exact opposite of a defined word feature vector (W) following the rule:
+
+\begin{equation}
+!W = 1-W
+\end{equation}
+
+
+This indicates that when one increases the other one has to decrease proportionally. Examples of such word feature vectors are symmetric and asymmetric, or complex and simple. 
+
+Note that some words might be the opposite of each other, but do not follow this rule, or even seem to be the opposite of each other, but are not. For instance, up and down are opposite of each other, but do not follow Equation 1. While one exists, the other can not, but it does not mean that when one is small, the other has to be high, since the subsequence might just be flat. Another case is the word peak. Intuitively, we would think that valley is the opposite of peak, but the consideration of !peak = valley is false. 
+
+In this work, we use the negation of a word feature vector for cases where there is no negation pair. This negation is realized using an operator.
+
+
+
+As previously noted, a set of features is used to extract several properties of all subsequences of a time series and attribute a semantic meaning to each one of them by mapping it to a specific word. It is our assumption that a subsequence can be mapped to a set of words that an analyst would use to describe it. Depending on the domain or vocabulary of the analyst, the set of words might have to be different and adjusted. Eventually, the dictionary can be expanded to other types of features and words. In any case, we want to demonstrate that this current set of words and operators can solve many transportation query search problems.
+The initial subset of features is listed and described below. We divide the list of features in groups: local, global, and special. 
+
+●	Local Features
+○	up (down): The slope estimation of a linear adjustment (y= ax + b) to the subsequence, being up (down) = a, if aup>0 (adown <0) or up (down) = 0, if aup<=0 (adown >=0).
+○	complex (simple): A complexity-invariant distance measure of the subsequence (simple = 1 - complex) [2].
+○	noise (smooth): The residual error when modeled by a moving average (smooth = 1 - noise). 
+○	symmetric (asymmetric): The MASS distance to the subsequence’s horizontally flipped self. 
+○	peak (valley): The logarithmic MASS distance to the template of a peak (valley), modulated by a gaussian function.
+○	stepup (stepdown): The logarithmic MASS distance to the template of a step-up(down) function;
+○	plateauup (plateaudown): The logarithmic MASS distance to the template of a plateau-up(down) function;
+○	uvalley (vvalley): The logarithmic MASS distance to the template of a U-shaped (V-shaped) valley function.
+
+●	Global Features
+○	top (bottom): The moving average of the time series (bottom = 1 - top);
+○	high (low): The difference between the maximum and minimum value of a subsequence (low = 1 - high);
+○	middle: The inverse of the distance to the average of the signal for each subsequence;
+○	uncommon (common): The matrix profile of the time series (common = 1 - uncommon).
+
+●	Special Feature
+○	shape: The MASS distance profile of the time series with a query given by the user as an example. A word must be given as well, so that the shape can be integrated into the query language.    
+
+Most of the word feature vectors are illustrated in Figure 4, with subsequences (in gray) from transportation telemetry data. 
+
+
+
+\subsection{Linguistic Operators}
+
+Definition 6 (Operator): The same way we use word and sentence connectors in our language to create contrast or attribute a temporal sequence, in our proposed system we use operators. An operator is a metacharacter or a word that can be used to diversify the way word feature vectors are handled, either in the way the information is extracted or how these are combined.  It contributes to a more versatile and expressive usage of this language. Currently, we have a simple list of four operators: negation (!), wild card (*), followed by, and grouped followed by (e.g., [W1 W2 … Ww This list can obviously be expanded and customized, but we want to demonstrate that with a minimal set of operators, most of the problems we present are solvable. 
+
+Web search engines have many operators at the user’s disposal, but since a list of words is usually powerful enough to retrieve and correctly sort most of the desired results, very few (or none!) are often used. We believe that this is the case for this application as well but acknowledge that simple operators can make the query more natural and come in handy to perform conjunctions between features and multiple dimensions, such as temporal logic or negation. These operators are especially useful to close the gap between the query and human discourse, contributing to a more expressive mechanism when using the proposed language. Currently, four operators are available. Below is a list and description of each of them, starting with the negation operator (represented by the symbol  ! ).
+•	Negation Operator  - !W : As mentioned above, most words come as an opposite pair, but some do not follow Equation 1. In these cases, or when the word has no direct opposite, it can be useful to penalize the presence of the word in a subsequence. This operator does that by applying Equation 1 to the word feature vector, W. 
+When describing time series, we inevitably use temporal logic in explaining the sequence of shapes we perceive. 
+
+The next operator is followed by.
+ 
+
+Figure 4 – Examples of matches for most word feature vectors defined above, with subsequences from telemetry datasets. In gray are presented the subsequences that were used to generate the word feature vectors.
+	A followed by B: This operator rewards a subsequence represented by A followed by one subsequence that has a high score for B, within a distance of size m. A and B can be single words, multiple words or even queries for different dimensions of the time series.
+
+With this operator, we look ahead of a subsequence in the time series. However, in some cases, it might be useful to describe the sequence inside the limits of the window we defined. For these we have a special case of followed by, which is the grouped followed by ([ ]). 
+	Grouped followed by ([W1 W2 … WN]): Instead of looking ahead in the time series, we look inside the subsequence to reward an ordered sequence of words. In this special case, the subsequence is segmented into N sub-windows, with size int(\frac{N}{m}), and the corresponding word is scored within this sub-window. For this, we use the other 2 dimensions of the word feature vectors (W2 and W3). If N<=3, W2 is used, while if N>3, W3 is used.
+Often, within a subsequence, the differentiating property occurs on the first half, last third or another sub-window of the subsequence, while the remaining sub-window(s) is(are) not relevant. We therefore introduce the wildcard (*) operator.
+
+•	Wildcard - * - The sub-window where * is used is valued equally for all subsequences.
+As with vocabulary, the reader could imagine expanding our dictionary of operators, but even with a limited set of them, we are able to successfully solve all the proposed search tasks, which cover dozens of examples. 
+After presenting the set of elements that can be used in QuoTS to query a pattern of interest, we are ready to explain how the query is turned into a score function and finally to a selection of the k-most relevant subsequences. 
+
+
+
+\subsection{Natural Language Query for Time Series}
+
+
+All words are stored in a vocabulary file, associated with a thesaurus file for synonym checks. When the user loads a signal to work on, all word feature vectors are extracted based on a specific window size and stored in memory. For each word, three sets of word feature vectors are stored (W1, W2 and W3) based on the original window size.  In case of having a MTS, all three sets of word feature vectors are extracted for each dimension. Having this set of information pre-computed helps make the search run at interactive speeds, even for large data collections. 
+When all data is pre-computed, QuoTS is ready to accept queries by the user. The query field accepts any word available in the vocabulary and thesaurus. When any of the words are not present in our vocabulary, we alert the user which is the closest word available, based on edit distance. The query can accept operators and works for multidimensional querying. These are relevant elements that are used as a reference to parse the query into individual scoring elements. This parsing process is made by looking into: (1) which dimension(s) of the time series is (are) included; (2) which operators are used; and (3) the single written words. The first two define how the score is calculated, that is, how word feature vectors are combined, as well as which dimensions of the word feature vectors are used. For instance, when including multiple signals, the query parses which word(s) corresponds to which signal, to search for the correct index of word feature vectors in the pre-computed data. When the followed by operator is used, the query is parsed in which word(s) comes before and after it (this is applicable either if the operator is used for intra-signal or inter-signal search). Another element is the grouped followed by operator, which is parsed by identifying square brackets in the query.
+When each of these elements are parsed, we end up with a single word or sequences of words, which are combined by summing their corresponding word feature vectors (this corresponds to an implicit OR). It is important to note that the score is calculated by adding together normalized scores for each parsed segment of the query. The reasoning is that each segment of the query should be weighted the same (e.g., if using the query noise [up down], as up and down are combined, the range of this segment is [0-2], while noise is [0-1]. Therefore, [up down] is normalized between [0-1] before being added to noise).  Finally, a score is given to each subsequence. The top k-subsequence are highlighted on the signal and sorted from highest to lowest. This process implies that trivial matches are not considered. As an example, if we want to search matches for the query s1: [up down] s2: flat, we parse it by signal, first computing the score function for s1 and s2 individually. Then, the score function of s1 will be normalized between [0-1] to then be added to the scoring function of s2.
+
+
+
+
+
