@@ -40,11 +40,17 @@
 
 \usepackage{graphicx} %package for image display
 
+\usepackage{backnaur} %package for backus naur text rules
+
+\newfontfamily\symb{Symbola} %Package to use special symbols
+
 \usepackage{booktabs}
 
 \usepackage{multirow}
 
 \usepackage{multicol}
+
+\usepackage{tabularx}
 
 \usepackage{subcaption}
 \usepackage{array}
@@ -57,9 +63,18 @@
 \definecolor{myred}{RGB}{231, 95, 74}
 \definecolor{mygreen}{RGB}{1, 163, 165}
 
+\definecolor{myblue2}{RGB}{47, 62, 101}
+\definecolor{myorange}{RGB}{255, 217, 40}
+\definecolor{mygreen2}{RGB}{31, 177, 177}
+\definecolor{mypurple}{RGB}{203, 81, 171}
+
 \newcolumntype{A}{p{0.05\textwidth}}
 \newcolumntype{B}{p{0.6\textwidth}}
 \newcolumntype{C}{p{0.225\textwidth}}
+\newcolumntype{L}[1]{>{\raggedright\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
+\newcolumntype{M}[1]{>{\centering\arraybackslash}m{#1}}
+\newcolumntype{?}{!{\vrule width 1pt}}
+\newcolumntype{/}{!{\vrule width 0.5pt}}
 
 % \usepackage{indentfirst}       % Indent first list after a (sub)section title
 

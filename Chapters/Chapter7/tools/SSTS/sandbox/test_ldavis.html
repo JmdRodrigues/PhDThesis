@@ -1,0 +1,41 @@
+
+<link rel="stylesheet" type="text/css" href="https://cdn.rawgit.com/bmabey/pyLDAvis/files/ldavis.v1.0.0.css">
+
+
+<div id="ldavis_el1274819434614089682665698570"></div>
+<script type="text/javascript">
+
+var ldavis_el1274819434614089682665698570_data = {"mdsDat": {"x": [-0.07038943810938596, 0.24390598217336196, -0.1735165440639762], "y": [0.01793216936313879, -0.0044302657706991894, -0.013501903592439564], "topics": [1, 2, 3], "cluster": [1, 1, 1], "Freq": [49.364967346191406, 27.134090423583984, 23.50093650817871]}, "tinfo": {"Category": ["Default", "Default", "Default", "Default", "Topic1", "Topic1", "Topic1", "Topic1", "Topic2", "Topic2", "Topic2", "Topic2", "Topic3", "Topic3", "Topic3", "Topic3"], "Freq": [18.0, 18.0, 17.0, 19.0, 12.104164123535156, 11.072478294372559, 9.009106636047363, 3.8506789207458496, 10.796311378479004, 8.992210388183594, 0.009682003408670425, 0.009682003408670425, 6.083293437957764, 6.083293437957764, 4.979420185089111, 0.009675102308392525], "Term": ["qUqD", "QUqU", "qUQU", "qDqU", "QUqU", "qUQU", "qUqD", "qDqU", "qDqU", "qUqD", "qUQU", "QUqU", "qUQU", "QUqU", "qDqU", "qUqD"], "Total": [18.0, 18.0, 17.0, 19.0, 18.197139739990234, 17.16545295715332, 18.0109920501709, 19.62640953063965, 19.62640953063965, 18.0109920501709, 17.16545295715332, 18.197139739990234, 17.16545295715332, 18.197139739990234, 19.62640953063965, 18.0109920501709], "loglift": [4.0, 3.0, 2.0, 1.0, 0.29820001125335693, 0.26750001311302185, 0.013199999928474426, -0.9226999878883362, 0.7067000269889832, 0.6097999811172485, -6.176000118255615, -6.234399795532227, 0.4108000099658966, 0.352400004863739, 0.07660000026226044, -6.081099987030029], "logprob": [4.0, 3.0, 2.0, 1.0, -1.090999960899353, -1.1800999641418457, -1.386299967765808, -2.236299991607666, -0.6068999767303467, -0.7896999716758728, -7.623600006103516, -7.623600006103516, -1.0368000268936157, -1.0368000268936157, -1.2369999885559082, -7.480500221252441]}, "token.table": {"Topic": [1, 3, 1, 2, 3, 1, 3, 1, 2], "Freq": [0.659444272518158, 0.329722136259079, 0.2038070112466812, 0.5604692697525024, 0.2547587752342224, 0.6408219933509827, 0.34953927993774414, 0.4996948540210724, 0.4996948540210724], "Term": ["QUqU", "QUqU", "qDqU", "qDqU", "qDqU", "qUQU", "qUQU", "qUqD", "qUqD"]}, "R": 4, "lambda.step": 0.01, "plot.opts": {"xlab": "PC1", "ylab": "PC2"}, "topic.order": [2, 1, 3]};
+
+function LDAvis_load_lib(url, callback){
+  var s = document.createElement('script');
+  s.src = url;
+  s.async = true;
+  s.onreadystatechange = s.onload = callback;
+  s.onerror = function(){console.warn("failed to load library " + url);};
+  document.getElementsByTagName("head")[0].appendChild(s);
+}
+
+if(typeof(LDAvis) !== "undefined"){
+   // already loaded: just create the visualization
+   !function(LDAvis){
+       new LDAvis("#" + "ldavis_el1274819434614089682665698570", ldavis_el1274819434614089682665698570_data);
+   }(LDAvis);
+}else if(typeof define === "function" && define.amd){
+   // require.js is available: use it to load d3/LDAvis
+   require.config({paths: {d3: "https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min"}});
+   require(["d3"], function(d3){
+      window.d3 = d3;
+      LDAvis_load_lib("https://cdn.rawgit.com/bmabey/pyLDAvis/files/ldavis.v1.0.0.js", function(){
+        new LDAvis("#" + "ldavis_el1274819434614089682665698570", ldavis_el1274819434614089682665698570_data);
+      });
+    });
+}else{
+    // require.js not available: dynamically load d3 & LDAvis
+    LDAvis_load_lib("https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js", function(){
+         LDAvis_load_lib("https://cdn.rawgit.com/bmabey/pyLDAvis/files/ldavis.v1.0.0.js", function(){
+                 new LDAvis("#" + "ldavis_el1274819434614089682665698570", ldavis_el1274819434614089682665698570_data);
+            })
+         });
+}
+</script>

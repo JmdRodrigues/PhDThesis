@@ -128,7 +128,7 @@ An example is showed in Figure \ref{fig:paa}. The resulting signal has reduced n
 \subsection{Symbolic Aggregate Approximation}
 \label{subsec:sax}
 
-From this method, a new representation technique was born, transforming the signal from the numerical to the symbolic domain. It is called Symbolic Aggregate approXimation (SAX). This method applies PAA to a z-normalized time series and indexes a letter to each sample of the simplified signal based on the distribution of its amplitude values. The signal's amplitude values are separated in bins with equal probability. The number of bins is equal to the size of the \textit{alphabet} chosen. Figure \ref{fig:sax} shows an example of the signal transformed into a string with 3 letters in its alphabet. Such as the DFT, SAX opens doors to analyze time series in a completely different manner, profiting from the much acquired knowledge in text mining.
+From this method, a new representation technique was born, transforming the signal from the numerical to the symbolic domain. It is called Symbolic Aggregate approXimation (SAX). This method applies PAA to a z-normalized time series and indexes a \textit{character} to each sample of the simplified signal based on the distribution of its amplitude values. The signal's amplitude values are separated in bins with equal probability. The number of bins is equal to the size of the \textit{alphabet} chosen. Figure \ref{fig:sax} shows an example of the signal transformed into a string with 3 letters in its alphabet. Such as the DFT, SAX opens doors to analyze time series in a completely different manner, profiting from the much acquired knowledge in text mining.
 
 DEFINE A SAX OR SYMBOLIC TIME SERIES HERE
 
@@ -274,19 +274,22 @@ The representation of a time series into the symbolic domain makes possible the 
 \subsection{Time Series Textual Abstraction}
 \label{subsec:text_abstraction}
 
-In \textit{SAX}, the signal is transformed into a sequence of symbols. For this, each sample of the \textit{PAA} representation is converted into a character, which can then form \textit{words} and \textit{sentences}. Other symbolic representation techniques exist on the literature and this work proposes a novel symbolic representation. In that sense, it is relevant to give the general background that makes this association between the original time series, a symbolic time series and text notation. 
+In \textit{SAX}, the signal is transformed into a sequence of symbols. For this, each sample of the \textit{PAA} representation is converted into a character, which can then form \textit{words} and \textit{sentences}. Other symbolic representation techniques exist on the literature and this work proposes a novel symbolic representation. In that sense, it is relevant to give the general background that makes this association between the original time series, a symbolic time series and text notation. Note that this is an introductory explanation that will be further contextualized when needed throughout this thesis on the corresponding sections.
 
-\item \textbf{Definition 8 - Character - c} A \textit{character} is an unit symbolic element that represents a sample or \textit{subsequence} of a time series. Sequences of characters form \textit{words}.
+\item \textbf{Definition 8 - Character - Char} A \textit{character} is an unit symbolic element that represents a sample or \textit{subsequence} of a time series. Each sample of a time series is transformed into a \textit{character} to form a \textit{symbolic time series}. Sequences of characters form \textit{words}.
 
-\item \textbf{Definition 9 - Word - w} A \textit{word} is the concatenation of a sequence of \textit{characters}, giving a textual representation of a \textit{subsequence}. Putting \textit{words} together forms a \textit{sentence}.
+\item \textbf{Definition 9 - Symbolic Time Series - ST} A \textit{symbolic time series} is a sequence of \textit{characters} ordered in time with length $n \in \mathbb{N}$: $ST = (st_1, st_2, ..., st_n)$. A specific sequence of \textit{characters} of a $ST$ can form a \textit{word}.
 
-\item \textbf{Definition 10 - Sentence - } A \textit{sentence} represents a group of \textit{subsequences}. It is formed by joining sequences of symbolic \textit{words}.
+\item \textbf{Definition 9 - Word - W} A \textit{word} is the concatenation of a sequence of \textit{characters}, giving a textual representation of a \textit{subsequence}. Putting \textit{words} together forms a \textit{sentence}.
 
-\item \textbf{Definition 11 - Document - d} The set of \textit{sentences} in a time series are called a \textit{document}. It represents the entire time series.
 
-\item \textbf{Definition 12 - Corpus} The \textit{corpus} is a collection of text material (group of documents). It represents the higher level of textual information. This collection is typically annotated and used for machine learning tasks. In this case, a corpus will be represented by the set of documents that describe a time series dataset.
+\item \textbf{Definition 10 - Sentence - S} A \textit{sentence} represents a group of \textit{subsequences}. It is formed by joining sequences of symbolic \textit{words}.
 
-\item \textbf{Definition 13 - Vocabulary} The \textit{vocabulary} comprehends the set of all different words present in all time series.
+\item \textbf{Definition 11 - Document - D} The set of \textit{sentences} in a time series are called a \textit{document}. It represents the entire time series.
+
+\item \textbf{Definition 12 - Corpus - GD} The \textit{corpus} is a collection of text material (group of documents). It represents the higher level of textual information. This collection is typically annotated and used for machine learning tasks. In this case, a corpus will be represented by the set of documents that describe a time series dataset.
+
+\item \textbf{Definition 13 - Vocabulary - V} The \textit{vocabulary} comprehends the set of all different words present in all time series.
 
 \subsection{Text Features}
 \label{subsec:text_features}
@@ -316,6 +319,7 @@ The BoW is commonly used to vectorize the textual representation of each time se
 \textit{L} is the total number of documents ($L = |D|$). The final equation of the \textit{tfidf} model is the following:
 
 \begin{equation}
+\label{eq:tfidf}
     tfidf(t, d, D) = tf(t, d) \cdot idf(t, D) 
 \end{equation}
 
