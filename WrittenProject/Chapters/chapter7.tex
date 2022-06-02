@@ -61,7 +61,7 @@ In the example of Figure \ref{fig:ssts_intro}, the pre-processing step uses the 
 	\caption{List of common \gls{SSTS} pre-processing operators. As input parameters, \textit{s} is the signal, \textit{fc} is the cut-off frequency and \textit{win\_size} is the size of the window used (number of samples). The linear filters (HP, BP and LP) have a default order of 2}
 	~\\~
 	\label{tab:preprocess}
-	\begin{tabular}{lcL{0.7\linewidth}}
+	\begin{tabular}{lcP}
         \toprule[0.5mm]
 		Name & Input Parameters & Description\\
         \midrule[0.3mm]
@@ -115,7 +115,8 @@ The set of connotation methods can be defined by the user and added as needed. A
    \setlength{\tabcolsep}{3pt}
    \renewcommand{\arraystretch}{1.5}
    \begin{tabular}{
-   c M{0.1\linewidth} M{0.2\linewidth} L{0.6\linewidth}} \toprule[0.5mm]
+   c M{0.1\linewidth} M{0.2\linewidth} D} 
+   \toprule[0.5mm]
 		Name & Input Parameters & Group of Symbols & Description\\ \midrule[0.3mm]
 		 A & (\textit{s}, \textit{thr}) & ["1","0"] & Amplitude comparison, If $t_i$ > \textit{thr}*($t_{max} - t_{min}$), $t_i$ is "1", else $t_i$ is "0"\\ 
          
@@ -341,115 +342,269 @@ As the reader can notice, the \gls{ED} mismatched signals from class 1 with sign
 
 \subsection{Towards Interpretable Results}
 
-Having demonstrated that it is possible to create a distance measure between time series with pure text, we highlight an advantage of working on the text domain, which is interpretability of the data. This advantage is taken because of the weighting factor attributed to each \textit{word} or \textit{n-gram} from the \gls{TFIDF} model. As explained by Pavel Senin \textit{et. al}, the weights can be used as a weighting vector for each word extracted, highlight the corresponding shape on the original signal and measuring its importance for the classification process \cite{sax_vsm}.
+Having demonstrated that it is possible to create a distance measure between time series with pure text, we highlight an advantage of working on the text domain, which is \textit{interpretability} of the data. By \textit{interpretability}, we mean that it is possible to extract meaning in what differentiate classes of signals. This advantage is taken because of the weighting factor attributed to each \textit{word} or \textit{n-gram} from the \gls{TFIDF} model. As explained by Pavel Senin \textit{et. al}, the weights can be used as a weighting vector for each word extracted, highlight the corresponding shape on the original signal and measuring its importance for the classification process \cite{sax_vsm}.
 
 \begin{figure}
     \centering
     \includegraphics[width=\linewidth]{interpretable_scheme_explain.pdf}
     \caption{}
-    \label{fig:distribution_dendogram}
+    \label{fig:interpretable_step}
 \end{figure}
 
-(IN THE FIGURE, SHOW THE PROCESS BY SEARCHING IN EACH TIME SERIES)
 
-With this strategy we build a distribution of \textit{word} occurrences, which can be represented as an histogram that is a patch of a signal. The shape of histograms, shows very well how different two classes can be. This difference in distribution, as well as in relevance (with \gls{TFIDF}) is an interpretable result based on the description of the data, from which we can say: \textit{"class A is different than class B, because..."}.
+The process to highlight the areas of the signal that are more relevant and able to explain the difference between classes is illustrated on Figure \ref{fig:interpretable_step}. From the \gls{BOW} model, the \gls{TFIDF} model is computed, following equations \ref{eq:tf}, \ref{eq:idf} and \ref{eq:tfidf}. From this representation, each \textit{time series} is represented as a vector of weights for each \textit{word}. These weights can be used to highlight the area of the signal represented by the corresponding \textit{word}. Therefore, the process is to search back the areas of the signal that match the \textit{word} or \textit{n-gram} ($w_i$) as an \gls{SSTS} query, while keeping the corresponding \textit{weight} ($h_{ij}$), for word $i$ from time series document $j$, on the indexes of the match, with indexes $a$ and $b$:
+
+\begin{equation}
+(a,b) = ssts(t_j, w_i)
+\end{equation}
+
+In the end, the  weighted vectors are summed, returning a final vector with the weighted contributions of all \textit{words}:
+
+\begin{equation}
+WTS_i(a, b) = WTS_i(a, b) + h_{ji}
+\end{equation}
+
+On Figure \ref{fig:interpretable_step}, the exemplified signal has a higher relevance on the \texttt{valley}, being the most characteristic element of that time series.
 
 
-This representation highlights the differences between classes and, as explained by Pavel Senin \textit{et. al}, can be used as a weighting vector for each word extracted and its importance for the classification \cite{sax_vsm}. In Figure \ref{fig:interp_data}, we show an illustrative example of the conversion of a BoW into a \textit{TF-IDF} matrix, and how the cumulative sum of weights onto the corresponding matches on the signal, are able to provide a human readable output, in addition to the text representation of the signal. 
+\subsection{Experimental Evaluation}
+
+We wanted to answer two main research questions: (1) can we solve time series classification tasks based on its textual representation following traditional \textit{NLP} methods and (2) could we use the words that describe time series as a readable explanation of the data and the differences between classes. For this purpose, we applied the proposed method on the \textit{UCR} classification benchmark. We highlight several relevant use-cases and the overall results achieved.
+
+\subsubsection{Classification Performance}
+
+We first want to demonstrate with simple and intuitive examples how the representation can help retrieve a better understanding of why a signal is different than the other.
 \par
-\textit{\textbf{Show an image with the distribution of words between classes with BoW and TFIDF to show the difference. Show as well how the weights can be used to represent one class over the other...}} 
+As showed in Figure \ref{fig:teaser}, we can generate a textual description of the data that helps highlighting the areas of the signals that are more relevant. This is made by the weights of the TF-IDF vector representation of the signal, which indicate the words (or n-grams) that are better represented for each class. In this case, by only using the \textit{derivative} connotation and a \textit{2-gram}, we are able to generate sentences for each class, namely: \textit{flat rise fall flat rise flat}; \textit{flat fall flat rise flat}; \textit{flat rise flat rise fall rise flat} and \textit{flat rise flat}. If using the frequency of single words, we would not easily distinguish all signals (accuracy of 85\%), but using a \textit{2-gram}, we can more easily describe the dynamics (accuracy of 99\%), such as \textit{rise fall}, which only occur in class 1 and 3. 
+\par
+These signals have a simple dynamics, which can easily be described by means of the first derivative. However, most of the signals on the UCR benchmark are more complex. In that sense, the results presented for all the datasets are made with the same 44 available queries (and not just \textit{rise, fall} and \textit{flat}. Parameters, such as smoothing window, derivative thresholds and the n-grams were optimized with a brute force method. We performed the classification with several strategies and combinations, namely: BoW with Baysian Classifier (BoW+NB), BoW with Support Vector Machine (BoW+SVM), TF-IDF + NB and TF-IDF + SVM. The summary of the performance is presented in Figure \ref{fig:cd_diagram}.
+\begin{figure}
+    \centering
+    \includegraphics[width=\linewidth]{cd_diagram.png}
+    \caption{Critical distance diagram for the methods that rely in a textual representation of the time series (BoW and TF-IDF) and euclidean distance.}
+    \label{fig:cd_diagram}
+\end{figure}
+
+As can be seen, the strategies that rely on a SVM classifier are more robust and the TF-IDF, not being indicated to be used with baysian classifiers, works well with SVM classifiers, being the strongest method studied. We then compared it in more detail with the 1-NN ED classifier, as presented in Figure \ref{fig:comparison_1}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.85\linewidth]{comparetfidf_ed.png}
+    \caption{Classification accuracies for the Bag of Synthatic Patterns in comparison with the euclidean distance combined with 1-NN classifier (1-NN ED).}
+    \label{fig:comparison_1}
+\end{figure}
+
+The average accuracy for all datasets is 79\% for the proposed method with 72 wins, and 71\% for the 1-NN ED, with 35 wins. Special cases are highlighted on Figure \ref{fig:comparison_1}. These indicate that the proposed method works poorly in problems with a high number of classes (Phoneme-39, Adiac-37, PigAirwayPressure-52, etc...), although some exceptions are found, such as in PigArtPressure. Both \textit{Haptics} and \textit{InlineSkate} are badly classified in general by state of the art methods. Binary problems that rely in shapes well described with the derivative properties, such as ShapeletSim, BirdChicken, BeetleFly and Trace, are typically better classified.\par
+With these results, we can clearly see the surprising ability of this strategy in classification tasks for most of the datasets tested against 1-NN ED. 
+
+\subsubsection{Readable Time Series}
+
+In addition to testing the ability of the proposed strategy for classification purposes, we also wanted to show how we can retrieve meaningful results from the textual representation of each time series. In that sense, we provide several use-cases where we show areas of the signals highlighted by the textual patterns highly weighted on the TF-IDF matrix.
+
+\subsubsection{Up-Middle-Down (UMD) and Begin-Middle-End (BME)}
+
+We start by presented an example from simulated signals that have characteristic shapes, such as \textit{peaks}, \textit{plateaus} or \textit{valleys}. For the first dataset (\textit{UMD}), the order is not important, but rather if having a peak (Up) or a valley (Down). While for the second (\textit{BME)}, what matters is the order of these structures (peak/valley $\rightarrow$ plateau or plateau $\rightarrow$ peak/valley). In both cases, the proposed method works very well (100\% accuracy) because the description of shapes is made with derivative queries, and the order of the structures can be kept with the usage of n-grams (BME case). The resulting visualization of the time series with the weight of each word/n-gram used is shown in Figure \ref{fig:UMD_BME}.
+\begin{figure}
+    \centering
+    \includegraphics[width=0.8\linewidth]{UMD_BME.png}
+    \caption{UMD and BME datasets. }
+    \label{fig:UMD_BME}
+\end{figure}
+
+The areas of interest are related with the concept of the datasets. In \textit{UMD}, only the structures are relevant, while in \textit{BME}, the order is relevant, therefore what is highlighted is mostly the transition between structures: peak $\rightarrow$ plateau and plateay $\rightarrow$ peak.
+
+\subsubsection{Two Patterns}
+
+Another simulated dataset shows two structures in the middle of noisy segments. These are characterized by a specific slope direction (1) down-down, (2) up-down, (3) down-up and (4) up-up. This is another perfect example for our problem, where a description such as \textit{Rise Fall} or \textit{Fall Rise}, will be relevant, and easily integrated into the model. The higher weighted patterns show therefore the segments of higher relevance in Figure \ref{fig:twoPatterns}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\linewidth]{twoPatterns.png}
+    \caption{TwoPatterns dataset. Significant shapes are highlighted by the method, with accuracy of 100\%, computed with a 5-gram.}
+    \label{fig:twoPatterns}
+\end{figure}
+
+Another example of significant shapes easily described with derivative descriptors comes from the \textit{ShapeletSim} dataset. It has a specific shape (triangle, sine, step, spike, etc...) in the middle of white noise. The resulting highlights are visible in these segments. 
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\linewidth]{triangle_shapelet.png}
+    \caption{ShapeletSim dataset. Significant shape highlighted by the method, with accuracy of 100\%, computed with 1-gram.}
+    \label{fig:shapeletSim}
+\end{figure}
+
+Some of the most relevant keywords to distinguish it from the other class are: \textit{low Peak}, \textit{high rise} and \textit{high fall}. 
+
+\subsubsection{GunPoint}
+This dataset has 2 classes for a hand motion exercise without a gun (pointing) and with a fake gun (gun draw). The difference in both classes is visible because the gun draw motion has small rising and falling slopes, while pointing does not. The method highlights both high and low rising/falling subsequences, as seen in Figure \ref{fig:GunPoint}.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.85\linewidth]{gunpoint.png}
+    \caption{Gunpoint dataset. Significant shape highlighted by the method, with accuracy of 99\%, computed with a 2-gram.}
+    \label{fig:GunPoint}
+\end{figure}
+ Some of the top-10 keywords are \textit{small fall} before a \textit{high rise} and \textit{small rise}.
+
+
+This methods was tested on the popular UCR Classification archive. 
+
+
+
+
+%\par
+%\textit{\textbf{Show an image with the distribution of words between classes with BoW and TFIDF to show the difference. Show as well how the weights can be used to represent one class over the other...}} 
 
 
 
 \section{Towards Natural Language for Pattern Search}
 
-Automobiles are increasingly monitoring every aspect of the driver’s behavior. Such data can be used for many direct and explicit purposes, such as optimizing fuel consumption or enhancing safety systems. However, there are also many potential indirect and offline uses of this data. The data may be of interest to engineers optimizing driver’s comfort, study the behavior of automated vehicles, to insurance companies fine-tuning insurance rates, to accident investigators trying to understand the cause of an accident, etc. [8,10–12,14,19]. It is commonly understood that individuals with domain experience can often “read” such telemetry. For example, in academic and industrial labs it is common to hear engineers annotate such data “This y-axis bump is where he hit the pothole, and then the sharp decline here in the x-axis is where he begins to apply the brakes” [22]. However, this ability to interpret such data does not help in searching such data collections. Simply manually panning through the data does not scale beyond minutes of data, and we may wish to search massive data archives.
+The fact that an analyst is able to search with \gls{regex} on time series makes the process more flexible and expressive and is innovative in the sense that text patterns can be written to search for specific shapes on a time series. Nevertheless, this process requires that the analyst has some background knowledge on \gls{regex}, which is fine for a computer scientist, but might be harder for an analyst outside of the computer science domain. In order to contribute for the democratization of pattern search on time series, we propose another method for pattern search, but in this case, it is based on natural language and linguistic operators, from a feature-based representation of the signal instead of a symbolic representation of it. The process to find a pattern on a time series is very similar to how a user searches for \textit{web-pages} on the \textit{Google Search Toolbar}, using \textit{keywords} and \textit{operators}.
+
+\subsection{"Googling" Time Series Patterns}
+
+When a user opens \textit{Google} and searches for a specific \textit{webpage}, he/she will write a set of keywords that can match the \textit{webpage} he/she is searching. The results of this process are a list of pages ranked based on how well it matched the \textit{keywords} used. The reader will agree that it often matches well what the user had in mind. Of course, \textit{Google} might not solely rely on the \textit{keywords}, also including geolocation, browser history, etc... on the search process. However, let us take into account this simple \textit{keyword} based search process and apply it to pattern search on time series.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.85\linewidth]{quots_query.pdf}
+    \caption{Using our proposed query language, we can create short, intuitive natural language queries to rank the 100 exemplars in Trace, separating our sought class from the remaining data. Here \texttt{*} is \textit{anything}, \texttt{!} is \textit{not}, and \textit{square brackets} are a grouping operator (more details in Section 3).}
+    \label{fig:query_cold_start}
+\end{figure}
+
+As we mentioned above, patterns can be described with \textit{words}, which is done because we associate these \textit{words} with specific properties or the presence of specific shapes on the pattern. In that sense, we propose to create a search paradigm that relies on words represented by features extracted from the signal. Informally, if a user wishes to find examples of a particular behavior, he/she can simply \textit{Google it}, by describing the data he/she expects to see, given that behavior. For example, we considered the four-class Trace dataset, which has been studied in more than 1,000 papers. As Figure \ref{fig:trace_quots_example} shows, it is possible to use our system to create queries that can separate each of the four classes from the rest of the data. This separation is possible simply by describing with \textit{words} the presence/absence of structures. Further we will explain in detail how the process is done, which are the operators that we designed and how queries can be written. Still, for now, we will explain the meaning of each query of this example. For instance, signals from class 1 (\includegraphics[height=2.5ex, width=3.5ex, valign=m]{trace1.png}) match well with query \texttt{[peak *]}, which translates into \textit{has a peak on the first half and anything on the second half}. The method sorts the signals based on this query and gives a very low score for all signals that do not have a peak on the first half of the signal. The same happens for the other queries, used to sort the other classes. A similar result is achieved with the inverse query \texttt{[* peak}, which means \textit{anything on the first half and a peak on the second half}, as well as the  query \texttt{!valley [* !peak]}, which translates into \textit{has not a valley and has no peak on the second half}.
+
+\begin{figure}
+\centering
+\includegraphics[width=\linewidth]{quots_steps.pdf}
+\label{fig:quots_steps}
+\caption{}
+\end{figure}
+
+The overall steps of the process are illustrated on Figure \ref{fig:quots_steps}. In order to perform the search with natural language and operators, we represent the time series into a set of features series. The features are extracted with a \textit{moving window}, with total overlap. The process is made three times, with decreasing window sizes. Each feature is associated with a \textit{word} ($W$) that should give a good intuition about the property it represents (e.g. \texttt{up} or \texttt{rising} should be clear to be indicative of the signal being rising). This feature set is the weight of the \textit{word} for each \textit{subsequence} of the signal. Such that when the \textit{words} are written, the features are summed according to the operators used. Then, the search returns the \textit{k-top} \textit{subsequence} matches for the query used.
+\par
+Concretely, with this method, we will demonstrate that the proposed natural language representation is expressive enough to discriminate specific behaviors on a time series and that it moves towards a democratized time series analysis process, where analysts from other scientific domains, not familiar with programming languages, can also perform high-level pattern search.
 
 \subsection{Mapping Features to Words}
 
-We define a word feature vector W as a mapping of feature F with a specific word. With feature, we intend to describe either a property, such as the mean or standard deviation, but also a distance measure to pre-defined examples. In linguistic terms, this word feature vector is an adjective of the subsequence. Every subsequence Ti,m from each time series T is characterized by the selected set of words,  being created a set of word feature vectors for each time series, further normalized between 0 and 1. The word feature vector has the size of T minus the subsequence length: n-m+1, and the feature value indicates how relevant is the word in the subsequence. Figure 3 shows an example of the word feature vectors for up (Fup)and down (Fdown).
+We define a \textit{word feature vector} $W$ as a mapping of a feature series $F_i$ with a specific \textit{word} $W_i$. With feature, we intend to describe either a property, such as the mean or standard deviation, but also a distance measure to pre-defined examples. In linguistic terms, this \textit{word feature vector} is an adjective of the \textit{subsequence}. Every \textit{subsequence} $t_{i,m}$ from each time series $T$ is characterized by the selected set of \textit{words},  being created a set of \textit{word feature vectors} for each time series, further normalized between 0 and 1. The \textit{word feature vector} has the size of $T$ and the feature series values indicate how relevant is the \textit{word} in the \textit{subsequence}. Figure 3 shows an example of the word feature vectors for \textcolor{myblue4}{up (Fup)} and \textcolor{myblue3}{down (Fdown)}.
 
-\textbf{SHOW FIGURE}
+\begin{figure}[!h]
+\centering
+\includegraphics[width=\linewidth]{word_feature_vector.pdf}
+\label{fig:wfv_example}
+\caption{}
+\end{figure}
 
-To allow interactive search, the word feature vectors are pre-computed in an offline indexing stage. In addition to this, we also extract three dimensions of the same word feature vector with different window lengths, based on m: W1→ m; W2→ \frac{m}{2}; W3→\frac{m}{4}; with the intent of matching ordered sequences of words inside a subsequence with the grouped followed by operator, as will be explained further. It is important to note that the ratio of the window used for the dimension W2 and W3 might have to be fine-tuned for the domain, as there might not be a “one window ratio fits all”. However, empirically we observed that the exact value of this ratio is not critical to the success of search.
 
-For each W is assigned a word w. We use English words to make the process more intuitive, such as noise, up and peak. We recognize that the intuitive meaning of such words can vary from user to user depending on their domain, their experience and on the current context. Either way, words can be mapped to features that are domain specific or word feature vectors can be given a domain specific vocable, providing a more appropriate mathematical thinking behind what is its meaning. In addition, we are aware that multiple words can be given the same meaning and for this reason, we associate several synonyms to each word. We also note that our proposed mechanism can benefit from the current advances in Natural Language Processing (NLP). For instance, synonyms could automatically be associated with the closest word listed in our vocabulary with word embeddings. We defer such considerations to future work.
+To allow interactive search, the \textit{word feature vectors} are pre-computed in an offline indexing stage. In addition to this, we also extract three dimensions of the same word feature vector with different window lengths, based on $w$: $W_1 \rightarrow w$; $W_2 \rightarrow \frac{w}{2}$; $W_3 \rightarrow \frac{w}{4}$; with the intent of matching ordered sequences of words inside a subsequence with the grouped followed by operator, as will be explained further. It is important to note that the ratio of the window used for the dimension $W_2$ and $W_3$ might have to be fine-tuned for the domain, as there might not be a “one window ratio fits all”. However, empirically we observed that the exact value of this ratio is not critical to the success of the search.
 
-We define an initial subset of features that are mapped to words. When defining one word feature vector it would often come with a negation pair.
-
-Definition 5 (Negation Pair): A negation pair (!W) represents the exact opposite of a defined word feature vector (W) following the rule:
+For each $W$ is assigned a \textit{word}. We use English words to make the process more intuitive, such as \texttt{noise}, \texttt{up} and \texttt{peak}. We recognize that the intuitive meaning of such words can vary from user to user depending on their domain, their experience and on the current context. Either way, words can be mapped to features that are domain specific or word feature vectors can be given a domain specific vocable, providing a more appropriate mathematical thinking behind what is its meaning. In addition, we are aware that multiple words can be given the same meaning and for this reason, we associate several synonyms to each word.
+\par
+We define an initial subset of features that are mapped to words. When defining one \textit{word feature vector} it would often come with a negation pair. A negation pair (!W) represents the exact opposite of a defined \textit{word feature vector} ($W$) following the rule:
 
 \begin{equation}
+\label{eq:neg_pair}
 !W = 1-W
 \end{equation}
 
 
-This indicates that when one increases the other one has to decrease proportionally. Examples of such word feature vectors are symmetric and asymmetric, or complex and simple. 
+This indicates that when one increases the other one has to decrease proportionally. Examples of such \textit{word feature vectors} are \texttt{symmetric} and \texttt{asymmetric}, or \texttt{complex} and \texttt{simple}. Note that some words might be the opposite of each other, but do not follow this rule, or even seem to be the opposite of each other, but are not. For instance, \texttt{up} and \texttt{down} are opposite of each other, but do not follow Equation \ref{eq:neg_pair}. While one exists, the other can not, but it does not mean that when one is small, the other has to be high, since the \textit{subsequence} might just be \texttt{flat}. Another case is the word \texttt{peak}. Intuitively, we would think that \texttt{valley} is the opposite of \texttt{peak}, but the consideration of \texttt{!peak = valley} (not being peak means it is a valley) is false. In this work, we use the negation of a word feature vector for cases where there is no negation pair. This negation is realized using an operator (See Table \ref{tab:operators}).
+\par
+As previously noted, a set of features is used to extract several properties of all \textit{subsequences} of a time series and attribute a semantic meaning to each one of them by mapping it to a specific \textit{word}. It is our assumption that a \textit{subsequence} can be mapped to a set of \textit{words} that an analyst would use to describe it. Depending on the domain or \textit{vocabulary} of the analyst, the set of words might have to be different and adjusted. Eventually, the \textit{dictionary} can be expanded to other types of \textit{features} and \textit{words}. In any case, we want to demonstrate that this current set of words and operators can solve many search problems with expressive queries.
 
-Note that some words might be the opposite of each other, but do not follow this rule, or even seem to be the opposite of each other, but are not. For instance, up and down are opposite of each other, but do not follow Equation 1. While one exists, the other can not, but it does not mean that when one is small, the other has to be high, since the subsequence might just be flat. Another case is the word peak. Intuitively, we would think that valley is the opposite of peak, but the consideration of !peak = valley is false. 
-
-In this work, we use the negation of a word feature vector for cases where there is no negation pair. This negation is realized using an operator.
-
-
-
-As previously noted, a set of features is used to extract several properties of all subsequences of a time series and attribute a semantic meaning to each one of them by mapping it to a specific word. It is our assumption that a subsequence can be mapped to a set of words that an analyst would use to describe it. Depending on the domain or vocabulary of the analyst, the set of words might have to be different and adjusted. Eventually, the dictionary can be expanded to other types of features and words. In any case, we want to demonstrate that this current set of words and operators can solve many transportation query search problems.
-The initial subset of features is listed and described below. We divide the list of features in groups: local, global, and special. 
-
-●	Local Features
-○	up (down): The slope estimation of a linear adjustment (y= ax + b) to the subsequence, being up (down) = a, if aup>0 (adown <0) or up (down) = 0, if aup<=0 (adown >=0).
-○	complex (simple): A complexity-invariant distance measure of the subsequence (simple = 1 - complex) [2].
-○	noise (smooth): The residual error when modeled by a moving average (smooth = 1 - noise). 
-○	symmetric (asymmetric): The MASS distance to the subsequence’s horizontally flipped self. 
-○	peak (valley): The logarithmic MASS distance to the template of a peak (valley), modulated by a gaussian function.
-○	stepup (stepdown): The logarithmic MASS distance to the template of a step-up(down) function;
-○	plateauup (plateaudown): The logarithmic MASS distance to the template of a plateau-up(down) function;
-○	uvalley (vvalley): The logarithmic MASS distance to the template of a U-shaped (V-shaped) valley function.
-
-●	Global Features
-○	top (bottom): The moving average of the time series (bottom = 1 - top);
-○	high (low): The difference between the maximum and minimum value of a subsequence (low = 1 - high);
-○	middle: The inverse of the distance to the average of the signal for each subsequence;
-○	uncommon (common): The matrix profile of the time series (common = 1 - uncommon).
-
-●	Special Feature
-○	shape: The MASS distance profile of the time series with a query given by the user as an example. A word must be given as well, so that the shape can be integrated into the query language.    
-
-Most of the word feature vectors are illustrated in Figure 4, with subsequences (in gray) from transportation telemetry data. 
-
+\begin{table}
+\begin{center}
+\caption{List of all word feature vectors with examples. Here, $i \in [0,n]$, $n $ is the signal's size, $a$ is the beginning of the moving window, starting at $a=i-\frac{w}{2}$, and $w$ is the moving window size.}.
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{L{0.2\linewidth}P M{0.15\linewidth}} 
+\toprule[1.5pt]
+Word & Description & Example\\
+\toprule
+\textbf{\texttt{\textcolor{myblue4}{Up}} (\textcolor{myblue3}{Down})} & The slope estimation of a linear adjustment ($y= ax + b$) to the \textit{subsequence}, being \texttt{up (down)} $= a$, if $a_{\texttt{up}}$>0 ($a_{\texttt{down}}$ <0) or \texttt{up (down)} $= 0$, if $a_{\texttt{up}}$<=0 ($a_{\texttt{down}}$ >=0) & \includegraphics[height=10ex, valign=m]{thumbnail_up_down.pdf}\\
+\hline
+\textbf{\texttt{\textcolor{myblue4}{Flat}}} & The inverse of the sum of absolute differences between the \textit{subsequence} and its average: \texttt{!flat(i)} $= \Sigma_{j=a}^{a+w} |t(j) - \overline{t(a,a+w)}|$. & \includegraphics[height=10ex, valign=m]{thumbnail_flat.pdf}\\
+\hline
+\textbf{\texttt{\textcolor{myblue4}{Noise} (\textcolor{myblue3}{Smooth})}} & The residual error when modeled by a moving average ($ma$). \texttt{noise(i)} $=  \Sigma_{j=a}^{a+w} |t_j - ma_j|$. (\texttt{smooth} = \texttt{!noise}). & \includegraphics[height=10ex, valign=m]{thumbnail_noise.pdf}\\
+\hline
+\textbf{\texttt{\textcolor{myblue4}{Complex} (\textcolor{myblue3}{Simple})}} & The complexity-invariant distance measure of the \textit{subsequence} of \ref{eq:complexity}. (\texttt{simple = !complex}) & \includegraphics[height=10ex, valign=m]{thumbnail_complex.pdf}\\
+\hline
+\textbf{\texttt{\textcolor{myblue4}{Symmetric} (\textcolor{myblue3}{Asymmetric})}} & The normalized \gls{ED} (\ref{eq:norm_ed}) to the \textit{subsequence}’s horizontally flipped self. & \includegraphics[height=10ex, valign=m]{thumbnail_symmetric.pdf}\\
+\hline
+\textbf{\texttt{\textcolor{myblue4}{Peak} (\textcolor{myblue3}{Valley})}} & The logarithmic normalized \gls{ED} (\ref{eq:norm_ed}) to the template of a peak (valley), modulated by a gaussian function. & \includegraphics[height=10ex, valign=m]{thumbnail_valley_peak.pdf}\\
+\hline
+\textbf{\texttt{\textcolor{myblue4}{StepUp} (\textcolor{myblue3}{StepDown})}} & The logarithmic normalized \gls{ED} (\ref{eq:norm_ed}) to the template of a step-up(down) function. & \includegraphics[height=10ex, valign=m]{thumbnail_step_up_down.pdf}\\
+\hline
+\textbf{\texttt{\textcolor{myblue4}{PlateauUp} (\textcolor{myblue3}{PlateauDown})}} & The logarithmic normalized \gls{ED} (\ref{eq:norm_ed})to the template of a plateau-up(down) function & \includegraphics[height=10ex, valign=m]{thumbnail_plateau_up_down.pdf}\\
+\hline
+\textbf{\texttt{\textcolor{myblue4}{Top} (\textcolor{myblue3}{Bottom})}} & The moving average of the time series: $ma(i) = \frac{1}{w}\Sigma_{j=a}^{a+w} t(j)$. (\texttt{bottom = !top}) & \includegraphics[height=10ex, valign=m]
+{thumbnail_top_bottom.pdf}\\
+\hline
+\textbf{\texttt{\textcolor{myblue4}{High} (\textcolor{myblue3}{Low})}} & The difference between the maximum and minimum value of a \textit{subsequence}: \texttt{high(i)} $= max(t(a,a+w)) - min(t(a,a+w))$. (\texttt{low = !high}) & \includegraphics[height=10ex, valign=m]{thumbnail_high_low.pdf}\\
+\hline
+\textbf{\textit{Shape}} & The normalized \gls{ED} profile of the time series with a query (e.g. in orange) given by the user as an example. A word must be given as well and integrated on the query language. & \includegraphics[height=10ex, valign=m]{thumbnail_shape.pdf}\\
+\bottomrule[1.5pt]
+\end{tabular}
+\label{tab:ssts_queries}
+\end{center}
+\end{table}
 
 
 \subsection{Linguistic Operators}
 
-Definition 6 (Operator): The same way we use word and sentence connectors in our language to create contrast or attribute a temporal sequence, in our proposed system we use operators. An operator is a metacharacter or a word that can be used to diversify the way word feature vectors are handled, either in the way the information is extracted or how these are combined.  It contributes to a more versatile and expressive usage of this language. Currently, we have a simple list of four operators: negation (!), wild card (*), followed by, and grouped followed by (e.g., [W1 W2 … Ww This list can obviously be expanded and customized, but we want to demonstrate that with a minimal set of operators, most of the problems we present are solvable. 
+The same way we use word and sentence connectors in our language to create contrast or attribute a temporal sequence, in our proposed system we use \textit{operators}. An operator is a metacharacter or a word that can be used to diversify the way word feature vectors are handled, either in the way the information is extracted or how these are combined.  It contributes to a more versatile and expressive usage of this language. Currently, we have a simple list of four operators: \textit{negation} (\texttt{!}), \textit{wild card }(\texttt{*}), \texttt{followed by}, and \texttt{grouped followed by} (e.g., [$W_1 W_2 … W_w$]. This list can obviously be expanded and customized, but we want to demonstrate that with a minimal set of operators, most of the problems we present are solvable. 
 
-Web search engines have many operators at the user’s disposal, but since a list of words is usually powerful enough to retrieve and correctly sort most of the desired results, very few (or none!) are often used. We believe that this is the case for this application as well but acknowledge that simple operators can make the query more natural and come in handy to perform conjunctions between features and multiple dimensions, such as temporal logic or negation. These operators are especially useful to close the gap between the query and human discourse, contributing to a more expressive mechanism when using the proposed language. Currently, four operators are available. Below is a list and description of each of them, starting with the negation operator (represented by the symbol  ! ).
-•	Negation Operator  - !W : As mentioned above, most words come as an opposite pair, but some do not follow Equation 1. In these cases, or when the word has no direct opposite, it can be useful to penalize the presence of the word in a subsequence. This operator does that by applying Equation 1 to the word feature vector, W. 
-When describing time series, we inevitably use temporal logic in explaining the sequence of shapes we perceive. 
+Web search engines have many operators at the user’s disposal, but since a list of words is usually powerful enough to retrieve and correctly sort most of the desired results, very few (or none!) are often used. We believe that this is the case for this application as well but acknowledge that simple operators can make the query more natural and come in handy to perform conjunctions between features and multiple dimensions, such as \textit{temporal logic} or \textit{negation}. For instance, we often rely on \textit{temporal logic} to express the presence of a shape in regards to another: \texttt{the peak that comes after the valley}, or even use the absence of a property: \texttt{it does not have a peak}. We also typically express the order at which structures occur on a time series: \texttt{up and then down}. These operators are especially useful to close the gap between the query and human discourse, contributing to a more expressive mechanism when using the proposed language. Currently, four operators are available. Below is a list and description of each of them, starting with the negation operator.
+\par
+\begin{itemize}
 
-The next operator is followed by.
+\item \textbf{Negation Operator  - \texttt{!W}} : As mentioned above, most words come as an opposite pair, but some do not follow Equation \ref{eq:neg_pair}. In these cases, or when the word has no direct opposite, it can be useful to penalize the presence of the word in a \textit{subsequence}. This operator does that by applying Equation \ref{eq:neg_pair} to the word feature vector, $W$. 
+
+When describing time series, we inevitably use temporal logic in explaining the sequence of shapes we perceive. The next operator is \texttt{followed by}.
  
+\item \textbf{\texttt{A followed by B}}: This operator rewards a \textit{subsequence} represented by A followed by one \textit{subsequence} that has a high score for B, within a distance of size $w$. A and B can be single words, multiple words or even queries for different dimensions of the time series.
 
-Figure 4 – Examples of matches for most word feature vectors defined above, with subsequences from telemetry datasets. In gray are presented the subsequences that were used to generate the word feature vectors.
-	A followed by B: This operator rewards a subsequence represented by A followed by one subsequence that has a high score for B, within a distance of size m. A and B can be single words, multiple words or even queries for different dimensions of the time series.
+With this operator, we look ahead of a \textit{subsequence} in the time series. However, in some cases, it might be useful to describe the sequence inside the limits of the window we defined. For these we have a special case of \texttt{followed by}, which is the \texttt{grouped followed by}, represented by square-brackets ([ ]). 
 
-With this operator, we look ahead of a subsequence in the time series. However, in some cases, it might be useful to describe the sequence inside the limits of the window we defined. For these we have a special case of followed by, which is the grouped followed by ([ ]). 
-	Grouped followed by ([W1 W2 … WN]): Instead of looking ahead in the time series, we look inside the subsequence to reward an ordered sequence of words. In this special case, the subsequence is segmented into N sub-windows, with size int(\frac{N}{m}), and the corresponding word is scored within this sub-window. For this, we use the other 2 dimensions of the word feature vectors (W2 and W3). If N<=3, W2 is used, while if N>3, W3 is used.
-Often, within a subsequence, the differentiating property occurs on the first half, last third or another sub-window of the subsequence, while the remaining sub-window(s) is(are) not relevant. We therefore introduce the wildcard (*) operator.
+\item	\textbf{Grouped \texttt{followed by} - [$W_1 W_2 … W_N$]}: Instead of looking ahead in the time series, we look inside the \textit{subsequence} to reward an ordered sequence of words. In this special case, the \textit{subsequence} is segmented into $N$ sub-windows, with size integer of $\frac{N}{m}$, and the corresponding \textit{word} is scored within this sub-window. For this, we use the other two dimensions of the word feature vectors ($W_2$ and $W_3$). If $N<=3$, $W_2$ is used, while if $N>3$, $W_3$ is used.
 
-•	Wildcard - * - The sub-window where * is used is valued equally for all subsequences.
-As with vocabulary, the reader could imagine expanding our dictionary of operators, but even with a limited set of them, we are able to successfully solve all the proposed search tasks, which cover dozens of examples. 
-After presenting the set of elements that can be used in QuoTS to query a pattern of interest, we are ready to explain how the query is turned into a score function and finally to a selection of the k-most relevant subsequences. 
+Often, within a \textit{subsequence}, the differentiating property occurs on the first half, last third or another sub-window of the \textit{subsequence}, while the remaining sub-window(s) is(are) not relevant. We therefore introduce the wildcard (\texttt{*}) operator.
 
+\item \textbf{Wildcard - *:} The sub-window where * is used is valued equally for all \textit{subsequences}.
+\end{itemize}
 
+As with vocabulary, the reader could imagine expanding our dictionary of operators, but even with a limited set of them, we are able to successfully solve all the proposed search tasks, which cover dozens of examples. After presenting the set of elements that can be used in the proposed method to query a pattern of interest, we are ready to explain how the query is turned into a score function and finally how the selection of the \textit{k}-most relevant \textit{subsequences} is done. 
 
 \subsection{Natural Language Query for Time Series}
 
+As illustrated on Figure \ref{fig:quots_steps}, the user inputs a query with all the \textit{words} and \textit{operators} available. The query is parsed to calculate a matching score ($S$) that indicates which \textit{subsequences} are better represented by the query. The score is calculated based on the word features vectors extracted from the time series that are \textit{called} by the query.
+\par
+As mentioned, considering the possibility of using the \texttt{grouped followed by} operator, each feature is extracted three times with a different window size. For each word, three sets of word feature vectors are stored ($W_1, W_2 and W_3$) based on the original window size ($w, \frac{w}{2} and \frac{w}{3}$). These word feature vectors are stored together in a \textit{dataframe} and called based on the \textit{word} written by the user. It is important to mention that all words are stored in a vocabulary file, associated with a \textit{thesaurus} file for synonym checks.
+\par
+If the signal is multidimensional, all three sets of \textit{word feature vectors} are extracted for each dimension. Having this set of information pre-computed helps make the search run at interactive speeds, even for large data collections. When all data is pre-computed, \gls{quots} is ready to accept queries by the user. 
+\par
+The query field accepts any word available in the vocabulary and \textit{thesaurus}. When any of the words are not present in our vocabulary, we alert the user which is the closest word available, based on \textit{edit distance}. The query can accept operators and works for multidimensional querying. These are relevant elements that are used as a reference to parse the query into individual scoring elements. This parsing process is made by looking into: (1) which dimension(s) of the time series is (are) included; (2) which operators are used; and (3) the single written words. The first two define how the score is calculated, that is, how word feature vectors are combined, as well as which dimensions of the word feature vectors are used. For instance, when including multiple signals, the query parses which word(s) corresponds to which signal, to search for the correct index of word feature vectors in the pre-computed \textit{dataframe}. To identify the signal, the following regular expression is used to find all signal names \textit{\textbackslash w+:} (\textit{one or more characters ending with ":"}).
+\par
+When the \texttt{followed by} operator is used, the query is parsed in the \textit{elements} that come before and after it (this is applicable either if the operator is used for intra-signal or inter-signal search). For this, the following \gls{regex} is used to separate the \textit{words} before and after the operator: \textit{\textbackslash w+ followed by \textbackslash w+} (\textit(word or words before followed by and word or words after it). What is meant by \textit{elements} is either \textit{words} (intra-signal) or two different signal dimensions (inter-signal). Another temporal operator is the \texttt{grouped followed by}, which is parsed by identifying square brackets in the query with the following \gls{regex} \textit{\textbackslash[.+?\textbackslash]} (\textit{anything inside square brackets}). The content of the square brackets is then combined (see Figure \ref{fig:parser2}).
+\par
+When any of these elements are parsed, we end up with a single word or sequence of words, which are combined by summing their corresponding \textit{word feature vectors} (this corresponds to an implicit OR). Figures \ref{fig:parser1} and \ref{fig:parser2} give a visual aid to understand the parsing process for each case.
 
-All words are stored in a vocabulary file, associated with a thesaurus file for synonym checks. When the user loads a signal to work on, all word feature vectors are extracted based on a specific window size and stored in memory. For each word, three sets of word feature vectors are stored (W1, W2 and W3) based on the original window size.  In case of having a MTS, all three sets of word feature vectors are extracted for each dimension. Having this set of information pre-computed helps make the search run at interactive speeds, even for large data collections. 
-When all data is pre-computed, QuoTS is ready to accept queries by the user. The query field accepts any word available in the vocabulary and thesaurus. When any of the words are not present in our vocabulary, we alert the user which is the closest word available, based on edit distance. The query can accept operators and works for multidimensional querying. These are relevant elements that are used as a reference to parse the query into individual scoring elements. This parsing process is made by looking into: (1) which dimension(s) of the time series is (are) included; (2) which operators are used; and (3) the single written words. The first two define how the score is calculated, that is, how word feature vectors are combined, as well as which dimensions of the word feature vectors are used. For instance, when including multiple signals, the query parses which word(s) corresponds to which signal, to search for the correct index of word feature vectors in the pre-computed data. When the followed by operator is used, the query is parsed in which word(s) comes before and after it (this is applicable either if the operator is used for intra-signal or inter-signal search). Another element is the grouped followed by operator, which is parsed by identifying square brackets in the query.
-When each of these elements are parsed, we end up with a single word or sequences of words, which are combined by summing their corresponding word feature vectors (this corresponds to an implicit OR). It is important to note that the score is calculated by adding together normalized scores for each parsed segment of the query. The reasoning is that each segment of the query should be weighted the same (e.g., if using the query noise [up down], as up and down are combined, the range of this segment is [0-2], while noise is [0-1]. Therefore, [up down] is normalized between [0-1] before being added to noise).  Finally, a score is given to each subsequence. The top k-subsequence are highlighted on the signal and sorted from highest to lowest. This process implies that trivial matches are not considered. As an example, if we want to search matches for the query s1: [up down] s2: flat, we parse it by signal, first computing the score function for s1 and s2 individually. Then, the score function of s1 will be normalized between [0-1] to then be added to the scoring function of s2.
+\begin{figure}
+\centering
+\includegraphics[width=\linewidth]{parser1.pdf}
+\label{fig:parser1}
+\caption{•}
+\end{figure}
 
+The simplest case for a query would be a sequence of \textit{words}. In this case, each \textit{word feature vector} ,  associated to the corresponding \textit{word}, is a score ($S$) function and are summed together to give the final score. In case a multidimensional signal is used, the user can write a multidimensional query, identifying a specific query ($Q$) for each dimension ($s_1, s_2,...s_k$). For this, each query $Q$ corresponding to a signal $s$ are treated individually by the standard parser ($P$ on Figure \ref{fig:parser1}), resulting in a scoring function ($S$) for each signal used on the query. Before summing all scoring functions, these have to be normalized ($N$ on Figure \ref{fig:parser1}) to have equal weight. It is important to note that $Q$ can be a query with \textit{words} or the \texttt{grouped followed by} operator.
 
+\begin{figure}
+\centering
+\includegraphics[width=\linewidth]{parser2.pdf}
+\label{fig:parser2}
+\caption{•}
+\end{figure}
 
-
-
+The temporal operators are parsed by the \gls{regex}, as mentioned above. From the \texttt{grouped followed by} operator, only \textit{words} can be used and are combined with a temporal delay that depends on the number of \textit{words} inside the brackets. The brackets represent the limits of the \textit{window} that is used to extract the \textit{word feature vectors}. In that sense, when using two \textit{words} inside the brackets, it is expected that the first half of the signal has the first word, and the second half the second word. This is extended to additional words inside the brackets. In order to combine the \textit{word feature vectors} of the \textit{words} used inside the brackets, we delay each \textit{word feature vector} based on the number of \textit{words} and corresponding position inside the brackets, such that \textit{words} after the first one are delayed $\frac{(i-1)w}{p}$ samples, being $i$ the position inside the brackets, $p$ the total number of \textit{words} inside the brackets and $w$ the window size. The delayed vectors are added together. For example, if using the query \texttt{[up down]} and features were extracted by a window with size of 100 samples, the \textit{word feature vector} for the word \texttt{down} is delayed 50 samples and added to the \texttt{up} \textit{word feature vector}. When used in combination with individual \textit{words}, the scoring function resulting from this operator is normalized between [0-1]. The reasoning is that each segment of the query should be weighted the same (e.g., if using the query \texttt{noise [up down]}, as \texttt{up} and \texttt{down} are combined, the range of this segment is [0-2], while \texttt{noise} is [0-1]. Therefore, \texttt{[up down]} is normalized between [0-1] before being added to \texttt{noise}). A similar process is performed with the \texttt{followed by} operator. The scoring function for the query previous to the operator is added to the scoring function of the query next to the operator, but delayed by one window size ($w$).
+\par
+Finally, depending on the \textit{words} and operators used, the resulting scoring function is used to search for the \textit{k}-top \textit{subsequences}. This is made by searching in \textit{k}-iterations the maximum value of the scoring function. During this iteration process, trivial matches are not considered. A trivial match is a high valued sample of the scoring function that is a neighbor of the maximum value found. To avoid these matches, all samples of the scoring function around a \textit{k}-top match on the scoring function ([$argmax(S)-\frac{w}{2}, argmax(S)+\frac{w}{2}$]) are converted to $0$. The matched \textit{subsequences} are highlighted on the signal and sorted by their match score.

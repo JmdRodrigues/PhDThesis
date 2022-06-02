@@ -407,7 +407,7 @@ def BOWDistributionSignal(sig, sig_doc, cv_model, color_i, name):
     ax_sig.plot(sig)
 
     ax_objs = fig.add_subplot(gs[0, 1])
-    ax_objs.bar(np.arange(0, len(sig_vec.values[0])), sig_vec.values[0], alpha=0.25, align="center", color=color_i)
+    ax_objs.bar(np.arange(0, len(sig_vec.values[0])), sig_vec.values[0], alpha=0.8, align="center", color=color_i)
     ax_objs.fill_between(np.arange(0, len(sig_vec.values[0])),
                                  smooth(sig_vec.values[0], sm_d), alpha=0.3, color=color_i,
                                  edgecolor=color_i)
