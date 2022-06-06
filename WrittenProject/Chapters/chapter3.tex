@@ -101,21 +101,21 @@ One of the first and most well known techniques suggested for time series transf
 \subsection{Feature-based Representation}
 \label{subsec:features}
 
-Frequency properties are very relevant to characterize a time series, but others can also be used to get a full characterization of the signal. The process of feature extraction is also a transformation method commonly employed. It is performed by a moving window from which features are extracted. For each feature, $f$, a feature series is computed.
+\begin{figure}[!h]
+\centering
+\includegraphics[width=\linewidth]{features.pdf}
+\label{fig:feature_intro}
+\caption{Moving window used to extract features with total overlap. The mean and standard deviation are extracted from the signal.}
+\end{figure}
 
+
+Frequency properties are very relevant to characterize a time series, but others can also be used to get a full characterization of the signal. The process of feature extraction is also a transformation method commonly employed. It is performed by a moving window from which features are extracted. For each feature, $f$, a feature series is computed.
 
 \item \textbf{Definition 5 - Feature Series (F):} A \textit{feature series}, \textit{F}, is a feature representation of a time series with size $m$ that depends on the overlap size $o \in \mathbb{N}$ of the sliding process, making the size of the resulting feature series $m = \frac{n}{w-o}$. Considering the existence of a MT, the \textit{feature series} becomes a \textit{multi feature series} of stacked \textit{feature series}, with size $f_{k,m}$.
     
 When extracting more than one feature, these are grouped into a \textit{feature matrix}.
     
 \item \textbf{Definition 6 - Feature Matrix ($F_M$):} A \textit{feature matrix}, $F_M$, is the set of $r$ features extracted for \textit{k} time series, with size $r \times (k\times M)$.
-    
-\begin{figure}
-\centering
-\includegraphics[width=\linewidth]{features.pdf}
-\label{fig:feature_intro}
-\caption{Moving window used to extract features with total overlap. The mean and standard deviation are extracted from the signal.}
-\end{figure}
     
 On Figure \ref{fig:feature_intro} is showed a time series from which the average (movmean) and standard deviation (movstd) are computed with a moving widow of size \textit{w}=100.   
 
@@ -131,7 +131,7 @@ Another common used transformation method to simplify a time series and reduce i
 An example is showed in Figure \ref{fig:paa}, where a \gls{ABP} is converted to \gls{PAA} with sizes 2 and 20, respectively.
 
     
-\begin{figure}
+\begin{figure}[!h]
 \centering
 \includegraphics[width=\linewidth]{paa_bvp.pdf}
 \label{fig:paa_intro}
@@ -170,7 +170,7 @@ $C = c_1, c_2, ..., c_i, ..., c_n$\\
 The distance between these two time series under the ED is:
 
 \begin{equation}
-ED(Q,C) = \sqrt{\Sigma^n_i=1 (q_i - c_i)^2}
+ED(Q,C) = \sqrt{\Sigma^n_{i=1} (q_i - c_i)^2}
 \end{equation}
 
 which represents the square root of the sum of the squared amplitude differences between the samples of each signal. Although the distance measure is simple to compute, it is highly susceptible to typical distortions on time series. When using ED, these distortions must be removed, otherwise, other methods, invariant to these distortions, should be used. Examples of distortions are the amplitude and offset distortion, phase distortion, and local scaling ("warping") distortion. The first can be compensated by the z-normalized ED:
@@ -260,7 +260,7 @@ being $||\vec{f_A}||$ and $||\vec{f_B}||$ the euclidean norm of each feature vec
 \section{Applying Distance Measures}
 \label{sec:dist_measures}
 
-Measuring distances between any time series gives the ability to compare them. It is the fundamental instrument for most time series data mining tasks. With a distance measure, we are able to compare groups of time series for classification purposes or compare \textit{subsequences} with a query template and find if it occurs in the time series. Another relevant application of distance measures is its usefulness to retrieve relevant structural information of a time series by comparing each f its \textit{subsequences} to all other \textit{subsequences}. In this subsection, relevant methods applied with the help of the presented distance measures are explained to retrieve information from a time series. We will start with distance/similarity matrices.
+Measuring distances between any time series gives the ability to compare them. It is the fundamental instrument for most time series data mining tasks. With a distance measure, we are able to compare groups of time series for classification purposes or compare \textit{subsequences} with a query template and find if it occurs in the time series. Another relevant application of distance measures is its usefulness to retrieve relevant structural information of a time series by comparing each of its \textit{subsequences} to all other \textit{subsequences}. In this subsection, relevant methods applied with the help of the presented distance measures are explained to retrieve information from a time series. We will start with distance/similarity matrices.
 
 \subsection{Self-Distance Matrices}
 \label{subsec:dist_matrix}
@@ -277,8 +277,7 @@ being $d$ a distance measure between elements $x_i,x_j \in X$ for $i,j \in [1:N]
 \par
 Areas with lower distance are highlighted as \textit{homogeneous} structures. These give an indication of \textit{homogeneity} and \textit{novelty}. \textit{Homogeneity} because a \textit{block} along the diagonal means that the time series has a constant behavior during the segment delimited by the \textit{block}. \textit{Novelty} because when $S$ has multiple \textit{blocks} along the diagonal, it shows that the time series shifted its behavior/regime. The moment there is a transition between \textit{blocks} is a potential segmentation point.
 \par
-When the time series has repeating \textit{subsequences}, \textit{paths} show up on $S$. The reason for it can be illustrated with the mentioned DTW measure. With DTW, the z-normalized euclidean distance matrix between two time series is computed and the optimal path is used as the final cumulative distance. This \textit{path} is a perfect diagonal if the time series are exactly the same, but can be slightly distorted if these are slightly different. The same type of \textit{paths} appear in $S$ indicating a low distance between two different \textit{subsequences} of the time series.
-
+When the time series has repeating \textit{subsequences}, \textit{paths} show up on $S$. The reason for it can be illustrated with the mentioned \gls{dtw} measure. With \gls{dtw}, the z-normalized euclidean distance matrix between two time series is computed and the optimal path is computed as the final cumulative distance. This \textit{path} is a perfect diagonal if the time series are exactly the same, but can be slightly distorted if these are slightly different. The same type of \textit{paths} appear in $S$ indicating a low distance between two different \textit{subsequences} of the time series.
 
 \subsection{Matrix Profile}
 \label{subsec:matrixprofile}
@@ -296,6 +295,11 @@ The presented distances can also be used to retrieve a distance profile from a \
 
 \textbf{In this thesis, we will propose other methods to perform query-based searches on a time series. Instead of using a \textit{subsequence} template, we will be using text patterns. REVER}
 
+\subsection{Classification}
+
+- show dendogram
+- explain 1-euclidean nn
+
 \section{Text Mining on Time Series}
 \label{sec:text_time}
 
@@ -306,28 +310,27 @@ The representation of a time series into the symbolic domain makes possible the 
 
 In \textit{SAX}, the signal is transformed into a sequence of symbols. For this, each sample of the \textit{PAA} representation is converted into a character, which can then form \textit{words} and \textit{sentences}. Other symbolic representation techniques exist on the literature and this work proposes a novel symbolic representation. In that sense, it is relevant to give the general background that makes this association between the original time series, a symbolic time series and text notation. Note that this is an introductory explanation that will be further contextualized when needed throughout this thesis on the corresponding sections.
 
-\item \textbf{Definition 8 - Character - Char} A \textit{character} is an unit symbolic element that represents a sample or \textit{subsequence} of a time series. Each sample of a time series is transformed into a \textit{character} to form a \textit{symbolic time series}. Sequences of characters form \textit{words}.
+\item \textbf{Definition 8 - Character (Char):} A \textit{character} is an unit symbolic element that represents a sample or \textit{subsequence} of a time series. Each sample of a time series is transformed into a \textit{character} to form a \textit{symbolic time series}. Sequences of characters form \textit{words}.
 
-\item \textbf{Definition 9 - Symbolic Time Series - ST} A \textit{symbolic time series} is a sequence of \textit{characters} ordered in time with length $n \in \mathbb{N}$: $ST = (st_1, st_2, ..., st_n)$. A specific sequence of \textit{characters} of a $ST$ can form a \textit{word}.
+\item \textbf{Definition 9 - Symbolic Time Series (ST):} A \textit{symbolic time series} is a sequence of \textit{characters} ordered in time with length $n \in \mathbb{N}$: $ST = (st_1, st_2, ..., st_n)$. A specific sequence of \textit{characters} of a $ST$ can form a \textit{word}.
 
-\item \textbf{Definition 9 - Word - W} A \textit{word} is the concatenation of a sequence of \textit{characters}, giving a textual representation of a \textit{subsequence}. Putting \textit{words} together forms a \textit{sentence}.
+\item \textbf{Definition 9 - Word (W):} A \textit{word} is the concatenation of a sequence of \textit{characters}, giving a textual representation of a \textit{subsequence}. Putting \textit{words} together forms a \textit{sentence}.
 
 
-\item \textbf{Definition 10 - Sentence - S} A \textit{sentence} represents a group of \textit{subsequences}. It is formed by joining sequences of symbolic \textit{words}.
+\item \textbf{Definition 10 - Sentence (S):} A \textit{sentence} represents a group of \textit{subsequences}. It is formed by joining sequences of symbolic \textit{words}.
 
-\item \textbf{Definition 11 - Document - D} The set of \textit{sentences} in a time series are called a \textit{document}. It represents the entire time series.
+\item \textbf{Definition 11 - Document (D):} The set of \textit{sentences} in a time series are called a \textit{document}. It represents the entire time series.
 
-\item \textbf{Definition 12 - Corpus - GD} The \textit{corpus} is a collection of text material (group of documents). It represents the higher level of textual information. This collection is typically annotated and used for machine learning tasks. In this case, a corpus will be represented by the set of documents that describe a time series dataset.
+\item \textbf{Definition 12 - Corpus (GD):} The \textit{corpus} is a collection of text material (group of documents). It represents the higher level of textual information. This collection is typically annotated and used for machine learning tasks. In this case, a corpus will be represented by the set of documents that describe a time series dataset.
 
-\item \textbf{Definition 13 - Vocabulary - V} The \textit{vocabulary} comprehends the set of all different words present in all time series.
+\item \textbf{Definition 13 - Vocabulary (V):} The \textit{vocabulary} comprehends the set of all different words present in all time series.
 
 \subsection{Text Features}
 \label{subsec:text_features}
 
-From the textual representation, text mining methods can now be applied. Here are introduced traditional methods applied for feature extraction of text data, namely the Bag of Words (BoW) and  Term Frequency-Inverse Document Frequency (TF-IDF).
-\par
+From the textual representation, text mining methods can now be applied. Here are introduced traditional methods applied for feature extraction of text data, namely the \gls{bow} and  \gls{tfidf}.
 
-\item \textbf{Definition 14 - } A BoW is a feature matrix representation of a corpus, being the feature the number of occurrences of each \textit{term}, called the term-frequency (\textit{tf}):
+\item \textbf{Definition 14 - Bag of Words (Bow):} A BoW is a feature matrix representation of a corpus, being the feature the number of occurrences of each \textit{term}, called the term-frequency (\textit{tf}):
 \begin{equation}
 \label{eq:tf}
     bow(t,d) = tf_{t, d} = \frac{f_{t,d}}{\sum\limits_{t'\in d} f_{t',d}}, 
@@ -335,13 +338,12 @@ From the textual representation, text mining methods can now be applied. Here ar
 
 being \textit{t} the term that exists in a document, \textit{d} the document and \textit{t'} the term that belongs to document \textit{d}. Here $t$ can be a single \textit{word} or an \textit{n-grams}.
 
-\item \textbf{Definition 15} \textit{N-grams} are a span of followed \textit{words} that are counted in the BoW/TF-idf. An example of \textit{2-gram} from Figure \ref{fig:sax} would be...
-This method resembles a \textit{moving window} on time series, but for text. It makes the BoW/TF-idf model more robust since it makes it rely in more than single \textit{word} statistics. Regarding time series, this method is relevant because it takes into account time dependencies between \textit{words}, which reflects the time dependency seen in time series between \textit{subsequences}.
+\item \textbf{Definition 15} - N-grams: It is a span of followed \textit{words} that are counted in the \gls{bow}/\gls{tfidf}. Possible \textit{2-gram} from Figure \ref{fig:sax} would be \texttt{aa}, \texttt{ca} or \texttt{ac}. This strategy resembles a \textit{moving window} on time series, but for text. It makes the \gls{bow}/\gls{tfidf} model more robust since it makes it rely in more than single \textit{word} statistics. Regarding time series, this method is relevant because it takes into account time dependencies between \textit{words}, which reflects the time dependency seen in time series between \textit{subsequences}.
 
 
-The BoW is commonly used to vectorize the textual representation of each time series, but there is common knowledge in the text mining community that if a \textit{term} occurs in all \textit{documents} it is less relevant. To counteract this limitation, the TF-idf matrix is used.
+The \gls{bow} is commonly used to vectorize the textual representation of each symbolic time series, but there is common knowledge in the text mining community that if a \textit{term} occurs in all \textit{documents} it is less relevant. To counteract this limitation, the \gls{tfidf} matrix is used.
 
-\item \textbf{Definition 15 - TF-idf} The \textit{Tf-idf} matrix increases the relevance of $t$ by means of the $t_f$, while reducing its importance in proportion to the number of \textit{documents}, $d$ that contain the term $t$. The model is defined by being a ratio between the $t_f$ and the \textit{inverse document frequency} (idf), which is calculated as follows:
+\item \textbf{Definition 15 - Term Frequency Inverse Document Frequency (TF-idf):} The \textit{Tf-idf} matrix increases the relevance of $t$ by means of the $t_f$, while reducing its importance in proportion to the number of \textit{documents}, $d$ that contain the term $t$. The model is defined by being a ratio between the $t_f$ and the \textit{inverse document frequency} (idf), which is calculated as follows:
 
 \begin{equation}
 \label{eq:idf}
@@ -355,26 +357,19 @@ The BoW is commonly used to vectorize the textual representation of each time se
     tfidf(t, d, D) = tf(t, d) \cdot idf(t, D) 
 \end{equation}
 
-Both \textit{bow} and \textit{tfidf} are matrices that have a vector representation of each \textit{document}, where each element of the vector is the relevance of the \textit{term}. That means that the cosine distance can be used to compute the difference between \textit{documents}.
+Both \textit{bow} and \gls{tfidf} are matrices that have a vector representation of each \textit{document}, where each element of the vector is the relevance of the \textit{term}. That means that the cosine distance can be used to compute the difference between \textit{documents}.
 \par
-Due to the probabilistic nature of the \textit{bow} and the fact that it contains discrete features, it is suitable to use in naive bayes classifiers. In the other end, the \textit{tfidf} is typically used with linear suport vector machine (SVM) classifiers.
-
-\subsection{Text Distance}
-
-\subsubsection{Edit Distance}
+Due to the probabilistic nature of the \gls{bow} and the fact that it contains discrete features, it is suitable to use in naive bayes classifiers. In the other end, the \gls{tfidf} is typically used with linear support vector machine (SVM) classifiers.
 
 \subsection{Text Pattern Search}
 
-
-
-
-When writing or reading a document, we often have to use the \textit{cntrl+F} key to search for specific words or expressions. This option let us search for direct matches, characters that belong to a word or expression, or even, use regular expressions (REGEX).
+When writing or reading a document, we often have to use the \textit{cntrl+F} key to search for specific words or expressions. This option let us search for direct matches, characters that belong to a word or expression, or even, use \gls{regex}.
 \par
-The last method is a parsing technique that is convenient to write text patterns, being more flexible that direct matches. It is based on regular languages, following a specific set of rules, and contains a set of meta-characters.
+The last method is a parsing technique that is convenient to write text patterns, being more flexible than direct matches. It is based on regular languages, following a specific set of rules, and contains a set of meta-characters.
 \par
-In order to understand the way that regular expressions work, some of the most used characters and REGEX primitives are presented as follows \citep{regex2}:
+In order to understand the way that regular expressions work, some of the most used characters and \gls{regex} primitives are presented as follows \cite{regex2}:
 
-\begin{table}
+\begin{table}[!h]
 \centering
 \renewcommand{\arraystretch}{1.25}
 \begin{tabular}{ABC}
@@ -404,12 +399,18 @@ In order to understand the way that regular expressions work, some of the most u
 \end{tabular}
 \end{table}
 
+\subsection{Keyword Extraction}
+
+https://www.analyticsvidhya.com/blog/2018/11/introduction-text-summarization-textrank-python/
+
 
 \section{Performance and Validation Measures}
 
 In this thesis are mainly discussed three time series data mining domains, namely classification, segmentation and event detection. In order to perform a validation of the work developed, standard procedures are already available. In this section are explained which procedure are typically used to evaluate the performance of algorithms used in these domains.
 
 \subsection{Classification Problems}
+
+(FALTA A ACCURACY)
 
 One of the most common strategies to evaluate algorithms from the machine learning field are \textit{precision} (P), \textit{recall} (R) and \textit{f1-score} (F1). These measures are calculated based on \textit{true positives} (TP), \textit{false positives} (FP) and \textit{false negatives} (FN). Understanding what these metrics represent depend on the problem. These measures are used in this thesis to evaluate the performance of classification and event detection algorithms.
 \begin{equation}
@@ -471,7 +472,7 @@ Regarding event detection problems, the process involves finding the sample that
     
 \end{itemize}
 
-Additionally, the distance of the TP events from the ground-truth events can be calculated with several distance-based metrics, namely the mean-absolute-error (MAE), the mean-squared-error (MSE) and the mean-signed-error (MsE):
+Additionally, the distance of the \textit{TP} events from the ground-truth events can be calculated with several distance-based metrics, namely the mean-absolute-error (MAE), the mean-squared-error (MSE) and the mean-signed-error (MsE):
 
 \begin{equation}
     MAE = \sum^{k}_{i=1} \frac{|g_{i} - e_{i}|}{k}
@@ -488,6 +489,8 @@ Additionally, the distance of the TP events from the ground-truth events can be 
 The precision measure is relevant to indicate if the method is able to only estimate events that belong to the ground-truth category, while the recall measure is an important indication of how many ground-truth events are missed in the estimation of the method. Both measures are combined in the F1-measure.
 \par
 The distance-based metrics evaluate how far are the TP from the corresponding ground-truth events (MAE and MSE) and which is the direction of estimation of events (if before or after the ground-truth events - ME).
+\par
+
 
 \subsection{Comparing Algorithms}
 

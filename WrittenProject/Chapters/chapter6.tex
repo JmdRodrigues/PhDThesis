@@ -1,4 +1,4 @@
-%!TEX root = ../template.tex
+	%!TEX root = ../template.tex
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% chapter4.tex
 %% NOVA thesis document file
@@ -212,7 +212,7 @@ After explaining the process to represent the time series into a feature-based s
 
 The example presented in Figure \ref{fig:event_search_demonstration} shows the usage of the \gls{SSM} on a record of Dataset 2. In this example, the method was applied to all the 3-axis of the accelerometer data. All are showed and described with the sequence of activities as captioned in Figure \ref{fig:use_case1}.
 \par
-The \gls{SSM} was computed using a window size of 250 samples, and an overlap of 95 \%. Blue indicate segments with higher similarity. Along the diagonal, these blocks are visible and change point events are estimated as the transition between these, highlighted by the \textit{nova} function. The kernel used for this detection had a size of 45 samples.
+The \gls{SSM} was computed using a window size of 250 samples, and an overlap of 95 \%. The color \textit{blue} indicates segments with higher similarity. Along the diagonal, these blocks are visible and the events are estimated as the transition between these, highlighted by the \textit{nova} function. The kernel used for this detection had a size of 45 samples.
 \par
 In this example, we can identify that the detected change point events match with the activity transitions. Although all transitions are visible on the novelty function, the ones that correspond to transitions between similar segments of activities are harder to find, namely the transitions between walking activities. This is plausible since the properties of these segments are similar and the morphological difference is not as significant as when shifting between dissimilar activities (e.g. between \textit{Laying} and \textit{Walking}).
 \par

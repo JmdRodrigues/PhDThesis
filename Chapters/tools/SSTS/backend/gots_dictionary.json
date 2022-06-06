@@ -1,0 +1,36 @@
+{
+  "pre_processing": {
+            "HP": "highpass",
+            "BP": "bandpass",
+            "LP": "lowpass",
+            "S": "smooth",
+            "∥": "abs",
+            "M": "stat_white",
+            "RM": "RemLowPass",
+            "PAA": "PAA"
+  },
+
+  "connotation": {
+            "A": "AmpC",
+            "AQ": "AmpQuantiles",
+            "D1": "DiffC",
+            "D1D": "DiffD",
+            "ADa": "AmpChangeAbsolute",
+            "ADd": "AmpChangeDif",
+            "D2": "Diff2C",
+            "AD": "RiseAmp",
+            "L": "D1_linearity",
+            "C": "Concavity_segments2",
+            "S": "Speed",
+            "Sa": "SlopeAbsolute",
+            "Sd": "SlopeDif",
+            "AUC": "FeatAUC",
+            "Slope": "FeatSlope",
+            "Skew": "FeatSkew",
+            "Var": "FeatVar",
+            "SAD": "FeatSAD",
+            "STD": "FeatSTD",
+            "ETP": "FeatETP",
+            "Lin": "Diff2Linearity"
+  }
+}

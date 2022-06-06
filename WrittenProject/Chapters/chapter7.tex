@@ -321,11 +321,6 @@ After converting the time series into \textit{documents}, the text is analyzed t
 The \gls{BoW} model can be used in several ways. Following guidelines from the text mining domain, it can be used for unsupervised tasks as well as supervised ones, for topic modelling and keyword extraction. The \gls{BOW} model can also be trained with Naive Bayes Classifiers, Support Vector Machine or Linear Regressors \cite{scikit-learn}. In addition, the \gls{BoW} model feature matrix can be converted into the \gls{TFIDF} feature matrix, which can then be trained with the same classifiers. In this work, we explored several of these combinations to understand which can give better results.
 \par
 As was pointed out in Chapter \ref{cha:theory], one of the reported issues of the \gls{BoW} model is evaluating the relevance of a word based on its frequency in all documents, while not considering that words that occur in all documents might be less relevant. Therefore, we decided to use the \gls{TF-IDF} model, which increases the relevance of a word by means of its raw occurrences, while reducing its importance in proportion to the number of \textit{documents} that contain that word. The model is defined by being a ratio between the \textit{tf} and the \textit{inverse document frequency (idf)} (equation \ref{eq:tfidf}).
-
-(SHOW VECTOR THAT COMPARES TWO DISTRIBUTIONS BASED ON BOW AND TFIDF TO JUSTIFY WHY WE CHOSE TFIDF)
-
-(ALSO SHOW THE EFFECT OF NGRAM)
-
 \par
 Both the \gls{BOW} and \gls{TFIDF} models give a weight to each \textit{word} for each \textit{document}. This means that each time series document is vectorized into a distribution of weights for each \textit{word}, according to its presence on the time series document and, in case of the \gls{TFIDF} model, all the other time series documents. The difference between the distribution of each time series document can be used as a distance measure to compare them. In Figure \ref{fig:distribution_dendogram} is showed the distribution of \textit{word's} weights for four different time series documents of the \textit{Trace} dataset, based on a \gls{TFIDF} model. The x-axis of each distribution is the \textit{word} or \textit{n-gram} and the y-axis, the corresponding weight for a time series document.
 \par
@@ -367,93 +362,7 @@ WTS_i(a, b) = WTS_i(a, b) + h_{ji}
 On Figure \ref{fig:interpretable_step}, the exemplified signal has a higher relevance on the \texttt{valley}, being the most characteristic element of that time series.
 
 
-\subsection{Experimental Evaluation}
-
-We wanted to answer two main research questions: (1) can we solve time series classification tasks based on its textual representation following traditional \textit{NLP} methods and (2) could we use the words that describe time series as a readable explanation of the data and the differences between classes. For this purpose, we applied the proposed method on the \textit{UCR} classification benchmark. We highlight several relevant use-cases and the overall results achieved.
-
-\subsubsection{Classification Performance}
-
-We first want to demonstrate with simple and intuitive examples how the representation can help retrieve a better understanding of why a signal is different than the other.
-\par
-As showed in Figure \ref{fig:teaser}, we can generate a textual description of the data that helps highlighting the areas of the signals that are more relevant. This is made by the weights of the TF-IDF vector representation of the signal, which indicate the words (or n-grams) that are better represented for each class. In this case, by only using the \textit{derivative} connotation and a \textit{2-gram}, we are able to generate sentences for each class, namely: \textit{flat rise fall flat rise flat}; \textit{flat fall flat rise flat}; \textit{flat rise flat rise fall rise flat} and \textit{flat rise flat}. If using the frequency of single words, we would not easily distinguish all signals (accuracy of 85\%), but using a \textit{2-gram}, we can more easily describe the dynamics (accuracy of 99\%), such as \textit{rise fall}, which only occur in class 1 and 3. 
-\par
-These signals have a simple dynamics, which can easily be described by means of the first derivative. However, most of the signals on the UCR benchmark are more complex. In that sense, the results presented for all the datasets are made with the same 44 available queries (and not just \textit{rise, fall} and \textit{flat}. Parameters, such as smoothing window, derivative thresholds and the n-grams were optimized with a brute force method. We performed the classification with several strategies and combinations, namely: BoW with Baysian Classifier (BoW+NB), BoW with Support Vector Machine (BoW+SVM), TF-IDF + NB and TF-IDF + SVM. The summary of the performance is presented in Figure \ref{fig:cd_diagram}.
-\begin{figure}
-    \centering
-    \includegraphics[width=\linewidth]{cd_diagram.png}
-    \caption{Critical distance diagram for the methods that rely in a textual representation of the time series (BoW and TF-IDF) and euclidean distance.}
-    \label{fig:cd_diagram}
-\end{figure}
-
-As can be seen, the strategies that rely on a SVM classifier are more robust and the TF-IDF, not being indicated to be used with baysian classifiers, works well with SVM classifiers, being the strongest method studied. We then compared it in more detail with the 1-NN ED classifier, as presented in Figure \ref{fig:comparison_1}
-
-\begin{figure}[h]
-    \centering
-    \includegraphics[width=0.85\linewidth]{comparetfidf_ed.png}
-    \caption{Classification accuracies for the Bag of Synthatic Patterns in comparison with the euclidean distance combined with 1-NN classifier (1-NN ED).}
-    \label{fig:comparison_1}
-\end{figure}
-
-The average accuracy for all datasets is 79\% for the proposed method with 72 wins, and 71\% for the 1-NN ED, with 35 wins. Special cases are highlighted on Figure \ref{fig:comparison_1}. These indicate that the proposed method works poorly in problems with a high number of classes (Phoneme-39, Adiac-37, PigAirwayPressure-52, etc...), although some exceptions are found, such as in PigArtPressure. Both \textit{Haptics} and \textit{InlineSkate} are badly classified in general by state of the art methods. Binary problems that rely in shapes well described with the derivative properties, such as ShapeletSim, BirdChicken, BeetleFly and Trace, are typically better classified.\par
-With these results, we can clearly see the surprising ability of this strategy in classification tasks for most of the datasets tested against 1-NN ED. 
-
-\subsubsection{Readable Time Series}
-
-In addition to testing the ability of the proposed strategy for classification purposes, we also wanted to show how we can retrieve meaningful results from the textual representation of each time series. In that sense, we provide several use-cases where we show areas of the signals highlighted by the textual patterns highly weighted on the TF-IDF matrix.
-
-\subsubsection{Up-Middle-Down (UMD) and Begin-Middle-End (BME)}
-
-We start by presented an example from simulated signals that have characteristic shapes, such as \textit{peaks}, \textit{plateaus} or \textit{valleys}. For the first dataset (\textit{UMD}), the order is not important, but rather if having a peak (Up) or a valley (Down). While for the second (\textit{BME)}, what matters is the order of these structures (peak/valley $\rightarrow$ plateau or plateau $\rightarrow$ peak/valley). In both cases, the proposed method works very well (100\% accuracy) because the description of shapes is made with derivative queries, and the order of the structures can be kept with the usage of n-grams (BME case). The resulting visualization of the time series with the weight of each word/n-gram used is shown in Figure \ref{fig:UMD_BME}.
-\begin{figure}
-    \centering
-    \includegraphics[width=0.8\linewidth]{UMD_BME.png}
-    \caption{UMD and BME datasets. }
-    \label{fig:UMD_BME}
-\end{figure}
-
-The areas of interest are related with the concept of the datasets. In \textit{UMD}, only the structures are relevant, while in \textit{BME}, the order is relevant, therefore what is highlighted is mostly the transition between structures: peak $\rightarrow$ plateau and plateay $\rightarrow$ peak.
-
-\subsubsection{Two Patterns}
-
-Another simulated dataset shows two structures in the middle of noisy segments. These are characterized by a specific slope direction (1) down-down, (2) up-down, (3) down-up and (4) up-up. This is another perfect example for our problem, where a description such as \textit{Rise Fall} or \textit{Fall Rise}, will be relevant, and easily integrated into the model. The higher weighted patterns show therefore the segments of higher relevance in Figure \ref{fig:twoPatterns}
-
-\begin{figure}
-    \centering
-    \includegraphics[width=\linewidth]{twoPatterns.png}
-    \caption{TwoPatterns dataset. Significant shapes are highlighted by the method, with accuracy of 100\%, computed with a 5-gram.}
-    \label{fig:twoPatterns}
-\end{figure}
-
-Another example of significant shapes easily described with derivative descriptors comes from the \textit{ShapeletSim} dataset. It has a specific shape (triangle, sine, step, spike, etc...) in the middle of white noise. The resulting highlights are visible in these segments. 
-
-\begin{figure}
-    \centering
-    \includegraphics[width=\linewidth]{triangle_shapelet.png}
-    \caption{ShapeletSim dataset. Significant shape highlighted by the method, with accuracy of 100\%, computed with 1-gram.}
-    \label{fig:shapeletSim}
-\end{figure}
-
-Some of the most relevant keywords to distinguish it from the other class are: \textit{low Peak}, \textit{high rise} and \textit{high fall}. 
-
-\subsubsection{GunPoint}
-This dataset has 2 classes for a hand motion exercise without a gun (pointing) and with a fake gun (gun draw). The difference in both classes is visible because the gun draw motion has small rising and falling slopes, while pointing does not. The method highlights both high and low rising/falling subsequences, as seen in Figure \ref{fig:GunPoint}.
-
-\begin{figure}
-    \centering
-    \includegraphics[width=0.85\linewidth]{gunpoint.png}
-    \caption{Gunpoint dataset. Significant shape highlighted by the method, with accuracy of 99\%, computed with a 2-gram.}
-    \label{fig:GunPoint}
-\end{figure}
- Some of the top-10 keywords are \textit{small fall} before a \textit{high rise} and \textit{small rise}.
-
-
-This methods was tested on the popular UCR Classification archive. 
-
-
-
-
-%\par
-%\textit{\textbf{Show an image with the distribution of words between classes with BoW and TFIDF to show the difference. Show as well how the weights can be used to represent one class over the other...}} 
+\subsection{Experimental Evaluation on Selected Use-cases}
 
 
 
