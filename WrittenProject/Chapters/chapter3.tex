@@ -19,22 +19,19 @@ The content of this thesis is diverse and covers several different topics. There
 The information gathered by sensors are physical quantities that vary with time. These are called \textit{time series} and are the main topic of this work.
 
 
-    \item \textbf{Definition 1 - Time Series (T):} A time series is a sequence of real values ordered in time with length $n \in \mathbb{N}$: $T = (t_1, t_2, ..., t_n)$.
-    Several domains of data rely in the acquisition of multiple time series from multiple axis of the same sensor (e.g. the 3-axis accelerometer) or from multiple sources (e.g. IMU as a fusion of three different sensors), creating a \textit{multi-dimensional time series}.
+\textbf{Definition 1 - Time Series (T):} A time series is a sequence of real values ordered in time with length $n \in \mathbb{N}$: $T = (t_1, t_2, ..., t_n)$.
+    Several domains of data rely in the acquisition of multiple time series from multiple axis of the same sensor (e.g. the 3-axis accelerometer) or from multiple sources (e.g. IMU as a fusion of three different sensors), creating a \textit{multi-dimensional time series}.\\
     
-    \item \textbf{Definition 2 - Multi-Dimensional T (MT):} A \textit{MT} is a set of $k \in \mathbb{N}$ time series belonging to the same acquisition: $\{T_1, T_2, ..., T_k\}$.
+\textbf{Definition 2 - Multi-Dimensional T (MT):} A \textit{MT} is a set of $k \in \mathbb{N}$ time series belonging to the same acquisition: $\{T_1, T_2, ..., T_k\}$. Segments of interest are often searched inside a \textit{time series}. A segment is called a \textit{subsequence}:\\
+    
+\textbf{Definition 3 - Subsequence (sT):} A \textit{subsequence} is a segment of the time series with size $w \in \mathbb{N}$ and starting from a given position \textit{i} and ending at position \textit{i+w} from the \textit{T} or \textit{MT}. A \textit{subsequence} is delimited by two instants in time. This sample that segments a \textit{subsequence} can be considered an \textit{event}.\\
+    
+\textbf{Definition 4 - Event (E):} Following the definitions of \cite{event_def1, event_def2}, which state that "\textit{an event is a dynamic phenomenon whose behavior changes enough over time to be considered a qualitatively significant change}" and "characterized by an interval of measurements that differs significantly from some underlying baseline", we consider that an \textit{event} is an instant in time \textit{e} that indicates the presence of a relevant occurrence in the time series. Multiple \textit{events} segment the time series into several \textit{subsequences} of different lengths. Therefore, \textit{event} detection is often considered time series segmentation \cite{cpd_alan}.
+    
+A common strategy used in time series data mining to find relevant \textit{subsequences} or \textit{events} is  the moving window.\\
 
-Segments of interest are often searched inside a \textit{time series}. A segment is called a \textit{subsequence}:
-    
-    \item \textbf{Definition 3 - Subsequence (sT):} A \textit{subsequence} is a segment of the time series with size $w \in \mathbb{N}$ and starting from a given position \textit{i} and ending at position \textit{i+w} from the \textit{T} or \textit{MT}. A \textit{subsequence} is delimited by two instants in time. This sample that segments a \textit{subsequence} can be considered an \textit{event}.   
-    
-    \item \textbf{Definition 4 - Event (E):} Following the definitions of \cite{event_def1, event_def2}, which state that "\textit{an event is a dynamic phenomenon whose behavior changes enough over time to be considered a qualitatively significant change}" and "characterized by an interval of measurements that differs significantly from some underlying baseline", we consider that an \textit{event} is an instant in time \textit{e} that indicates the presence of a relevant occurrence in the time series. Multiple \textit{events} segment the time series into several \textit{subsequences} of different lengths. Therefore, \textit{event} detection is often considered time series segmentation \cite{cpd_alan}.
-    
-A common strategy used in time series data mining to find relevant \textit{subsequences} or \textit{events} is  the moving window. 
+\textbf{Definition 5 - Moving Window (MW):} A \textit{moving window} is a process of sliding along a time series $T$ to apply a specific method on each \textit{subsequence} it hovers. The window has, such as the \textit{subsequence} a predefined size $w \in \mathbb{N}$, which starts at a given position \textit{i} and ends at position \textit{i+w}. The process is iterative and can be made overlapping windows or not. The next window will start at \textit{i+o}, being \textit{o} the overlapping size.\\
 
-    \item \textbf{Definition 5 - Moving Window (MW):} A \textit{moving window} is a process of sliding along a time series $T$ to apply a specific method on each \textit{subsequence} it hovers. The window has, such as the \textit{subsequence} a predefined size $w \in \mathbb{N}$, which starts at a given position \textit{i} and ends at position \textit{i+w}. The process is iterative and can be made overlapping windows or not. The next window will start at \textit{i+o}, being \textit{o} the overlapping size.
-
-    
 With a \textit{MW}, each \textit{subsequence} can be filtered, features can be extracted or distances can be measured. We will show several utilities of this technique further when introducing methods used to pre-process a raw time series and standard distance measures.
 \par
 Depending on the context and which conditions the data is gathered, the raw information can contain disturbances or should be transformed into another dimension to extract what matters. The set of tasks taken to prepare the \textit{time series} to enhance information retrieval is called \textit{pre-processing}. The pre-processing steps we will discuss involve filtering, normalization and transformation.
@@ -58,7 +55,7 @@ Another often used method that has the purpose of reducing the presence of noise
 \subsection{Wandering Baseline}
 \label{subsec:w_baseline}
 
-Another type of disturbance on the data that is usually removed is a wandering baseline. An example typically occurs in ECG signals, where the respiration creates a wandering baseline on the signal. This type of disturbance has a very low frequency compared to the meaningful information on the data and can be removed by subtracting a \textit{smoothed} version of the original data, or applying a high pass filter.
+Another type of disturbance on the data that is usually removed is a wandering baseline. An example typically occurs in \gls{ecg} signals, where the respiration creates a wandering baseline on the signal. This type of disturbance has a very low frequency compared to the meaningful information on the data and can be removed by subtracting a \textit{smoothed} version of the original data, or applying a high pass filter.
 
 \section{Normalization} 
 \label{sec:normalize}
@@ -95,7 +92,13 @@ In information retrieval, data has often to be re-scaled, simplified, approximat
 \subsection{Spectral Transformation}
 \label{subsec:spec_transform}
 
-One of the first and most well known techniques suggested for time series transformation was the Discrete Fourier Transform (DFT) \citep{fourier}. The idea behind this concept is that any signal, of any complexity, is a decomposition of a finite number of sine waves. Each wave is represented by a complex number, known as the Fourier coefficient, transforming the signal from the time domain to the frequency domain \cite{fourier2}. This transformation allows to see the signal in a different manner, highlighting which frequencies concentrate more or less energy. It unveils the presence of specific types of noise or artifacts, or periodic shapes. Figure \ref{fig:fourier} shows the transformation of a signal into the frequency domain.
+One of the first and most well known techniques suggested for time series transformation was the Discrete Fourier Transform (DFT) \cite{fourier}. The idea behind this concept is that any signal, of any complexity, is a decomposition of a finite number of sine waves. Each wave is represented by a complex number, known as the Fourier coefficient, transforming the signal from the time domain to the frequency domain \cite{fourier2}. This transformation allows to see the signal in a different manner, highlighting which frequencies concentrate more or less energy. It unveils the presence of specific types of noise or artifacts, or periodic shapes. Figure \ref{fig:fourier} shows the transformation of a signal into the frequency domain.
+\begin{figure}
+    \centering
+    \includegraphics{}
+    \caption{Caption}
+    \label{fig:fourier}
+\end{figure}
 
 
 \subsection{Feature-based Representation}
@@ -104,51 +107,51 @@ One of the first and most well known techniques suggested for time series transf
 \begin{figure}[!h]
 \centering
 \includegraphics[width=\linewidth]{features.pdf}
-\label{fig:feature_intro}
 \caption{Moving window used to extract features with total overlap. The mean and standard deviation are extracted from the signal.}
+\label{fig:feature_intro}
 \end{figure}
 
 
 Frequency properties are very relevant to characterize a time series, but others can also be used to get a full characterization of the signal. The process of feature extraction is also a transformation method commonly employed. It is performed by a moving window from which features are extracted. For each feature, $f$, a feature series is computed.
 
-\item \textbf{Definition 5 - Feature Series (F):} A \textit{feature series}, \textit{F}, is a feature representation of a time series with size $m$ that depends on the overlap size $o \in \mathbb{N}$ of the sliding process, making the size of the resulting feature series $m = \frac{n}{w-o}$. Considering the existence of a MT, the \textit{feature series} becomes a \textit{multi feature series} of stacked \textit{feature series}, with size $f_{k,m}$.
+\textbf{Definition 6 - Feature Series (F):} A \textit{feature series}, \textit{F}, is a feature representation of a time series with size $m$ that depends on the overlap size $o \in \mathbb{N}$ of the sliding process, making the size of the resulting feature series $m = \frac{n}{w-o}$. Considering the existence of a MT, the \textit{feature series} becomes a \textit{multi feature series} of stacked \textit{feature series}, with size $f_{k,m}$.
     
 When extracting more than one feature, these are grouped into a \textit{feature matrix}.
     
-\item \textbf{Definition 6 - Feature Matrix ($F_M$):} A \textit{feature matrix}, $F_M$, is the set of $r$ features extracted for \textit{k} time series, with size $r \times (k\times M)$.
+\textbf{Definition 7 - Feature Matrix ($F_M$):} A \textit{feature matrix}, $F_M$, is the set of $r$ features extracted for \textit{k} time series, with size $r \times (k\times M)$.
     
 On Figure \ref{fig:feature_intro} is showed a time series from which the average (movmean) and standard deviation (movstd) are computed with a moving widow of size \textit{w}=100.   
 
 \subsection{Piecewise Aggregate Approximation}
 \label{subsec:paa}
 
-Another common used transformation method to simplify a time series and reduce its dimension is the piecewise aggregate approximation(PAA) \cite{paa}. The new representation space will have size $1 < N \leq n$, in which $N$ is a factor of the original size $n$. The searches to keep the average of the \textit{N} equi-sized subsequences in which the original signal with length \textit{n} is segmented, which results in $\overline{T} = \overline{t_1}, \overline{t_2}, ...,\overline{t_N}$, such that \cite{paa}
+Another common used transformation method to simplify a time series and reduce its dimension is the \gls{paa}) \cite{paa}. The new representation space will have size $1 < N \leq n$, in which $N$ is a factor of the original size $n$. The searches to keep the average of the \textit{N} equi-sized subsequences in which the original signal with length \textit{n} is segmented, which results in $\overline{T} = \overline{t_1}, \overline{t_2}, ...,\overline{t_N}$, such that \cite{paa}
 
 \begin{equation}
 \overline{t_i} = \frac{N}{n} \sum^{\frac{n}{N}i}_{j=\frac{n}{N}(i-1)+1} t_j
 \end{equation}
 
-An example is showed in Figure \ref{fig:paa}, where a \gls{ABP} is converted to \gls{PAA} with sizes 2 and 20, respectively.
+An example is showed in Figure \ref{fig:paa}, where a \gls{abp} is converted to \gls{paa} with sizes 2 and 20, respectively.
 
     
 \begin{figure}[!h]
 \centering
 \includegraphics[width=\linewidth]{paa_bvp.pdf}
-\label{fig:paa_intro}
-\caption{PAA representation of a \gls{ABP} signal, with window sizes of 2 and 20, repsectively.}
+\caption{\gls{paa} representation of a \gls{abp} signal, with window sizes of 2 and 20, repsectively.}
+\label{fig:paa}
 \end{figure}
     
 
 \subsection{Symbolic Aggregate Approximation}
 \label{subsec:sax}
 
-From this method, a new representation technique was born, transforming the signal from the numerical to the symbolic domain. It is called Symbolic Aggregate approXimation (SAX). This method applies PAA to a z-normalized time series and indexes a \textit{character} to each sample of the simplified signal based on the distribution of its amplitude values. The signal's amplitude values are separated in bins with equal probability. The number of bins is equal to the size of the \textit{alphabet} chosen. Figure \ref{fig:sax} shows an example of the signal transformed into a string with 3 letters in its alphabet. Such as the DFT, SAX opens doors to analyze time series in a completely different manner, profiting from the much acquired knowledge in text mining.
+From this method, a new representation technique was born, transforming the signal from the numerical to the symbolic domain. It is called Symbolic Aggregate approXimation (SAX) \cite{sax}. This method applies PAA to a z-normalized time series and indexes a \textit{character} to each sample of the simplified signal based on the distribution of its amplitude values. The signal's amplitude values are separated in bins with equal probability. The number of bins is equal to the size of the \textit{alphabet} chosen. Figure \ref{fig:sax} shows an example of the signal transformed into a string with 3 letters in its alphabet. Such as the DFT, SAX opens doors to analyze time series in a completely different manner, profiting from the much acquired knowledge in text mining.
 
 \begin{figure}
 \centering
 \includegraphics[width=\linewidth]{sax_test.pdf}
-\label{fig:paa_intro}
 \caption{SAX representation of a power consumption signal from a Dutch Company, with window bin size of 3.}
+\label{fig:sax}
 \end{figure}
 
 In this thesis we will use feature vectors for several purposes. We also propose a novel symbolic representation technique for time series that is used for expressive pattern search and classification. In order to perform search or classification, we have to be able to calculate the difference/similarity between two time series or \textit{subsequences}.
@@ -192,7 +195,7 @@ The DTW distance measures the alignment between two time series. Let us consider
 $Q = q_1, q_2, ..., q_i, ..., q_n$\\
 $C = c_1, c_2, ..., c_j, ..., c_m$\\
 \\
-The alignment is measured by means of a distance matrix with size $n$-by-$m$, where the $(i^{th},j^{th})$ cell of the matrix contains the $d(q_i, c_j)$ between the two points $q_i$ and $c_j$, being $d=(q_i - c_j)^2$ \cite{dtw}. Figure \ref{fig:dtw} shows an example of a distance matrix between two time series. The matrix fully describes the difference between the two time series and maps where these align. The mapping is made by a warping path, $W$, that represent the set of matrix cells that minimize the warping cost, also defined as the cumulative distance of these cells \cite{dtw}
+The alignment is measured by means of a distance matrix with size $n$-by-$m$, where the $(i^{th},j^{th})$ cell of the matrix contains the $d(q_i, c_j)$ between the two points $q_i$ and $c_j$, being $d=(q_i - c_j)^2$ \cite{dtw}. Figure \ref{fig:dtw_intro} shows an example of a distance matrix between two time series. The matrix fully describes the difference between the two time series and maps where these align. The mapping is made by a warping path, $W$, that represent the set of matrix cells that minimize the warping cost, also defined as the cumulative distance of these cells \cite{dtw}
 
 \begin{equation}
 W = w_1, w_2, ..., w_k, ..., w_K; \quad \quad max(m,n) \leq K < m+n+1
@@ -210,13 +213,13 @@ The cumulative distance $\gamma(i,j)$ is calculated as $d(q_i,c_j)$ of the curre
 
 When two time series with the same length have a linear warping path, such that $w_k=(i,j)_k, i=j=k$, we have a special case of the ED. DTW has a time and space complexity of $O(nm)$ while the ED has linear complexity ($O(n)$).
 \par
-Figure \ref{fig:dtw_intro} shows an example of applying the \gls{ED} and \gls{dtw} on two different PQRS complexes from different \gls{ECG}s. 
+Figure \ref{fig:dtw_intro} shows an example of applying the \gls{ed} and \gls{dtw} on two different PQRS complexes from different \gls{ecg}s. 
 
 \begin{figure}
 \centering
 \includegraphics[width=\linewidth]{dtw.pdf}
+\caption{DTW and ED distances on two different \gls{ecg} signals.}
 \label{fig:dtw_intro}
-\caption{DTW and ED distances on two different ECG signals.}
 \end{figure}
 
 \subsection{Complexity Invariant Distance}
@@ -225,7 +228,7 @@ Figure \ref{fig:dtw_intro} shows an example of applying the \gls{ED} and \gls{dt
 A different type of distance measure is also used to cope with complexity invariance. This distance uses a complexity correction factor ($CF$) with an existing distance measure, such as ED \cite{complexity}:
 
 \begin{equation}
-CD(Q,C) = ED(Q,C)\timesCF(Q,C)
+CD(Q,C) = ED(Q,C)\times CF(Q,C)
 \end{equation}
 
 The $CF$ is defined as \cite{complexity}:
@@ -248,7 +251,7 @@ These distance measures are performed on the original representation domain of t
 
 As mentioned, a feature series $F$ can be computed from the original time series to represent it based on a specific feature. If the size of the \textit{moving window} is equal to the size of the time series, than $F$ is represented by a single value. Otherwise, each \textit{subsequence} highlighted by the \textit{moving window} is characterized by the feature and the $F$ is computed as an array. When multiple features are extracted, each \textit{subsequence} is characterized by a set of features, creating a feature vector $\vec{f}$ with $r$ feature values. Vector based distance measures can be used with these feature vectors to compare different time series or \textit{subsequences}. There are several vector-based distance measures, including the already mentioned euclidean distance or the manhattan distance, but we will only describe the cosine similarity/distance.
 \par
-The cosine similarity is a measure of the angle between two vectors determining if these are pointing in the same direction. Consider two feature vectors $\vec{f_A}}$ and $\vec{f_B}$. Their cosine similarity is computed as their normalized dot product \cite{cosine}
+The cosine similarity is a measure of the angle between two vectors determining if these are pointing in the same direction. Consider two feature vectors $\vec{f_A}$ and $\vec{f_B}$. Their cosine similarity is computed as their normalized dot product \cite{cosine}
 
 \begin{equation}
 CS = \frac{\vec{f_A} \cdot \vec{f_B}}{||\vec{f_A}|| ||\vec{f_B}||}
@@ -260,7 +263,18 @@ being $||\vec{f_A}||$ and $||\vec{f_B}||$ the euclidean norm of each feature vec
 \section{Applying Distance Measures}
 \label{sec:dist_measures}
 
-Measuring distances between any time series gives the ability to compare them. It is the fundamental instrument for most time series data mining tasks. With a distance measure, we are able to compare groups of time series for classification purposes or compare \textit{subsequences} with a query template and find if it occurs in the time series. Another relevant application of distance measures is its usefulness to retrieve relevant structural information of a time series by comparing each of its \textit{subsequences} to all other \textit{subsequences}. In this subsection, relevant methods applied with the help of the presented distance measures are explained to retrieve information from a time series. We will start with distance/similarity matrices.
+Measuring distances between any time series gives the ability to compare them. It is the fundamental instrument for most time series data mining tasks. With a distance measure, we are able to compare groups of time series for classification purposes or compare \textit{subsequences} with a query template and find if it occurs in the time series. Another relevant application of distance measures is its usefulness to retrieve relevant structural information of a time series by comparing each of its \textit{subsequences} to all other \textit{subsequences}. In this subsection, relevant methods applied with the help of the presented distance measures are explained to retrieve information from a time series. We will start with distance/similarity profiles.
+
+\subsection{Distance Profile}
+\label{subsec:matrixprofile}
+
+As mentioned from the previous subsection, measuring all the distance pairs of a time series provides the ability to retrieve relevant structural information. Recently, a strategy was proposed to compute a one dimensional distance profile for a time series based on a z-normalized euclidean distance matrix. By keeping the \textit{nearest neighbor} of each \textit{subsequence}, we retrieve the \textit{matrix profile}. The result gives the minimal distance pair of each \textit{subsequence}, meaning that minimum values are \textit{motifs} and maximum values are \textit{discords}.
+
+\textbf{Definition 8 - Nearest Neighbor (NN):} The nearest neighbor is the \textit{subsequence} with lowest distance from the \textit{subsequence} being compared with all the other \textit{subsequences}. The nearest neighbors form a pair.\\
+
+\textbf{Definition 9 - Motif (mtf):} The NN pair that has the lowest distance forms a motif. That means that on the entire time series, these two \textit{subsequences} are the closest ones. The opposite is a \textit{discord}.\\
+
+\textbf{Definition 10 - Discord (drd):} The NN pair that has the highest distance forms a \textit{discord}. That means that on the entire time series, these two \textit{subsequences} are the furthest apart.\\
 
 \subsection{Self-Distance Matrices}
 \label{subsec:dist_matrix}
@@ -273,17 +287,11 @@ Let $X$ be a sequence with size $N$ that can be a time series or a representatio
 S(i,j)= d(x_i, x_j) 
 \end{equation}
 
-being $d$ a distance measure between elements $x_i,x_j \in X$ for $i,j \in [1:N]$. $S(i,j)$ represents a cell of $S$ that contains the distance value. When $i=j$ the distance should be zero, therefore the diagonal of $S$ has the lower values. Besides the main diagonal, other relevant structures can be found in $S$. These include \textit{homogeneous blocks} and \textit{paths} \cite{fmp, muller}. 
+being $d$ a distance measure between elements $x_i,x_j \in X$ for $i,j \in [1:N]$. $S(i,j)$ represents a cell of $S$ that contains the distance value. When $i=j$ the distance should be zero, therefore the diagonal of $S$ has the lower values. Besides the main diagonal, other relevant structures can be found in $S$. These include \textit{homogeneous blocks} and \textit{paths} \cite{fmp1, fmp2}. 
 \par
 Areas with lower distance are highlighted as \textit{homogeneous} structures. These give an indication of \textit{homogeneity} and \textit{novelty}. \textit{Homogeneity} because a \textit{block} along the diagonal means that the time series has a constant behavior during the segment delimited by the \textit{block}. \textit{Novelty} because when $S$ has multiple \textit{blocks} along the diagonal, it shows that the time series shifted its behavior/regime. The moment there is a transition between \textit{blocks} is a potential segmentation point.
 \par
 When the time series has repeating \textit{subsequences}, \textit{paths} show up on $S$. The reason for it can be illustrated with the mentioned \gls{dtw} measure. With \gls{dtw}, the z-normalized euclidean distance matrix between two time series is computed and the optimal path is computed as the final cumulative distance. This \textit{path} is a perfect diagonal if the time series are exactly the same, but can be slightly distorted if these are slightly different. The same type of \textit{paths} appear in $S$ indicating a low distance between two different \textit{subsequences} of the time series.
-
-\subsection{Matrix Profile}
-\label{subsec:matrixprofile}
-
-As mentioned from the previous subsection, measuring all the distance pairs of a time series provides the ability to retrieve relevant structural information. Recently, a strategy was proposed to compute a one dimensional distance profile for a time series based on a z-normalized euclidean distance matrix. By keeping the \textit{nearest neighbor} of each \textit{subsequence}, we retrieve the \textit{matrix profile}. The result gives the minimal distance pair of each \textit{subsequence}, meaning that minimum values are \textit{motifs} and maximum values are \textit{discords}.
-\par
 
 
 \subsection{Template-based Search}
@@ -310,40 +318,40 @@ The representation of a time series into the symbolic domain makes possible the 
 
 In \textit{SAX}, the signal is transformed into a sequence of symbols. For this, each sample of the \textit{PAA} representation is converted into a character, which can then form \textit{words} and \textit{sentences}. Other symbolic representation techniques exist on the literature and this work proposes a novel symbolic representation. In that sense, it is relevant to give the general background that makes this association between the original time series, a symbolic time series and text notation. Note that this is an introductory explanation that will be further contextualized when needed throughout this thesis on the corresponding sections.
 
-\item \textbf{Definition 8 - Character (Char):} A \textit{character} is an unit symbolic element that represents a sample or \textit{subsequence} of a time series. Each sample of a time series is transformed into a \textit{character} to form a \textit{symbolic time series}. Sequences of characters form \textit{words}.
+\textbf{Definition 8 - Character (Char):} A \textit{character} is an unit symbolic element that represents a sample or \textit{subsequence} of a time series. Each sample of a time series is transformed into a \textit{character} to form a \textit{symbolic time series}. Sequences of characters form \textit{words}.\\
 
-\item \textbf{Definition 9 - Symbolic Time Series (ST):} A \textit{symbolic time series} is a sequence of \textit{characters} ordered in time with length $n \in \mathbb{N}$: $ST = (st_1, st_2, ..., st_n)$. A specific sequence of \textit{characters} of a $ST$ can form a \textit{word}.
+\textbf{Definition 9 - Symbolic Time Series (ST):} A \textit{symbolic time series} is a sequence of \textit{characters} ordered in time with length $n \in \mathbb{N}$: $ST = (st_1, st_2, ..., st_n)$. A specific sequence of \textit{characters} of a $ST$ can form a \textit{word}.\\
 
-\item \textbf{Definition 9 - Word (W):} A \textit{word} is the concatenation of a sequence of \textit{characters}, giving a textual representation of a \textit{subsequence}. Putting \textit{words} together forms a \textit{sentence}.
+\textbf{Definition 9 - Word (W):} A \textit{word} is the concatenation of a sequence of \textit{characters}, giving a textual representation of a \textit{subsequence}. Putting \textit{words} together forms a \textit{sentence}.\\
 
 
-\item \textbf{Definition 10 - Sentence (S):} A \textit{sentence} represents a group of \textit{subsequences}. It is formed by joining sequences of symbolic \textit{words}.
+\textbf{Definition 10 - Sentence (S):} A \textit{sentence} represents a group of \textit{subsequences}. It is formed by joining sequences of symbolic \textit{words}.\\
 
-\item \textbf{Definition 11 - Document (D):} The set of \textit{sentences} in a time series are called a \textit{document}. It represents the entire time series.
+\textbf{Definition 11 - Document (D):} The set of \textit{sentences} in a time series are called a \textit{document}. It represents the entire time series.\\
 
-\item \textbf{Definition 12 - Corpus (GD):} The \textit{corpus} is a collection of text material (group of documents). It represents the higher level of textual information. This collection is typically annotated and used for machine learning tasks. In this case, a corpus will be represented by the set of documents that describe a time series dataset.
+\textbf{Definition 12 - Corpus (GD):} The \textit{corpus} is a collection of text material (group of documents). It represents the higher level of textual information. This collection is typically annotated and used for machine learning tasks. In this case, a corpus will be represented by the set of documents that describe a time series dataset.\\
 
-\item \textbf{Definition 13 - Vocabulary (V):} The \textit{vocabulary} comprehends the set of all different words present in all time series.
+\textbf{Definition 13 - Vocabulary (V):} The \textit{vocabulary} comprehends the set of all different words present in all time series.\\
 
 \subsection{Text Features}
 \label{subsec:text_features}
 
 From the textual representation, text mining methods can now be applied. Here are introduced traditional methods applied for feature extraction of text data, namely the \gls{bow} and  \gls{tfidf}.
 
-\item \textbf{Definition 14 - Bag of Words (Bow):} A BoW is a feature matrix representation of a corpus, being the feature the number of occurrences of each \textit{term}, called the term-frequency (\textit{tf}):
+\textbf{Definition 14 - Bag of Words (Bow):} A BoW is a feature matrix representation of a corpus, being the feature the number of occurrences of each \textit{term}, called the term-frequency (\textit{tf}):
 \begin{equation}
 \label{eq:tf}
     bow(t,d) = tf_{t, d} = \frac{f_{t,d}}{\sum\limits_{t'\in d} f_{t',d}}, 
 \end{equation}
 
-being \textit{t} the term that exists in a document, \textit{d} the document and \textit{t'} the term that belongs to document \textit{d}. Here $t$ can be a single \textit{word} or an \textit{n-grams}.
+being \textit{t} the term that exists in a document, \textit{d} the document and \textit{t'} the term that belongs to document \textit{d}. Here $t$ can be a single \textit{word} or an \textit{n-gram}.
 
-\item \textbf{Definition 15} - N-grams: It is a span of followed \textit{words} that are counted in the \gls{bow}/\gls{tfidf}. Possible \textit{2-gram} from Figure \ref{fig:sax} would be \texttt{aa}, \texttt{ca} or \texttt{ac}. This strategy resembles a \textit{moving window} on time series, but for text. It makes the \gls{bow}/\gls{tfidf} model more robust since it makes it rely in more than single \textit{word} statistics. Regarding time series, this method is relevant because it takes into account time dependencies between \textit{words}, which reflects the time dependency seen in time series between \textit{subsequences}.
+\textbf{Definition 15} - N-gram: It is a span of followed \textit{words} that are counted in the \gls{bow}/\gls{tfidf}. Possible \textit{2-gram} from Figure \ref{fig:sax} would be \texttt{aa}, \texttt{ca} or \texttt{ac}. This strategy resembles a \textit{moving window} with total overlap on time series, but for text. It makes the \gls{bow}/\gls{tfidf} model more robust since it makes it rely in more than single \textit{word} statistics. Regarding time series, this method is relevant because it takes into account time dependencies between \textit{words}, which reflects the time dependency seen in time series between \textit{subsequences}.\\
 
 
 The \gls{bow} is commonly used to vectorize the textual representation of each symbolic time series, but there is common knowledge in the text mining community that if a \textit{term} occurs in all \textit{documents} it is less relevant. To counteract this limitation, the \gls{tfidf} matrix is used.
 
-\item \textbf{Definition 15 - Term Frequency Inverse Document Frequency (TF-idf):} The \textit{Tf-idf} matrix increases the relevance of $t$ by means of the $t_f$, while reducing its importance in proportion to the number of \textit{documents}, $d$ that contain the term $t$. The model is defined by being a ratio between the $t_f$ and the \textit{inverse document frequency} (idf), which is calculated as follows:
+\textbf{Definition 15 - Term Frequency Inverse Document Frequency (TF-idf):} The \textit{Tf-idf} matrix increases the relevance of $t$ by means of the $t_f$, while reducing its importance in proportion to the number of \textit{documents}, $d$ that contain the term $t$. The model is defined by being a ratio between the $t_f$ and the \textit{inverse document frequency} (idf), which is calculated as follows:
 
 \begin{equation}
 \label{eq:idf}
@@ -369,7 +377,7 @@ The last method is a parsing technique that is convenient to write text patterns
 \par
 In order to understand the way that regular expressions work, some of the most used characters and \gls{regex} primitives are presented as follows \cite{regex2}:
 
-\begin{table}[!h]
+\begin{table}[!ht]
 \centering
 \renewcommand{\arraystretch}{1.25}
 \begin{tabular}{ABC}
@@ -382,21 +390,22 @@ In order to understand the way that regular expressions work, some of the most u
 
 \textbf{?} & The preceding item is optional and will be matched, at most, once & \textit{team?}$\rightarrow$ [tea, team]\\
 
-\textbf{.} & Matches any character & \textit{s.m} \rightarrow [ssm, sam, sim] \\
+\textbf{.} & Matches any character & \textit{s.m} $\rightarrow$ [ssm, sam, sim] \\
 
-\textbf{[]} & Matches anything inside the brackets & \textit{wom[ae]n} \rightarrow [women, woman] \\
+\textbf{[]} & Matches anything inside the brackets & \textit{wom[ae]n} $\rightarrow$ [women, woman] \\
 
 \textbf{|, \&} & Boolean operators - or, and & \textit{tr(i|a)p} $\rightarrow$ [trip, trap]\\
 
 \textbf{(?=<)} & Positive lookbehind - The string matches the item that is preceded by the pattern inside the lookbehind without making it part of the match & \textit{(?=<http://)} $\rightarrow$ any URL\\
 
-\textbf{(?<!)} & Negative lookbehind - The string matches the item that is not preceded by the pattern inside the lookbehind & \textit{?<!\d*}.+ $\rightarrow$ [\cancel{10th}, th]\\
+\textbf{(?<!)} & Negative lookbehind - The string matches the item that is not preceded by the pattern inside the lookbehind & \textit{?<!$\backslash$ d*}.+ $\rightarrow$ [\cancel{10th}, th]\\
 
-\textbf{(?=)} & Positive lookahead - The string matches the preceding item that is followed by the pattern inside the lookahead without making it part of the match & \textit{(?=www\backslash .)} $\rightarrow$ matches web protocol\\
+\textbf{(?=)} & Positive lookahead - The string matches the preceding item that is followed by the pattern inside the lookahead without making it part of the match & \textit{(?=www$\backslash$ .)} $\rightarrow$ matches web protocol\\
 
 \textbf{(?!)} & Negative lookahead - The string matches the preceding item that is not followed by the pattern inside the lookahead & a(?!b) $\rightarrow$ [\cancel{ab}, ac]\\
 \bottomrule
 \end{tabular}
+\caption{...}
 \end{table}
 
 \subsection{Keyword Extraction}
@@ -498,6 +507,7 @@ In classification problems, a good procedure is to compare the proposed algorith
 
 \begin{figure}
 \includegraphics[width=\linewidth]{performance_plots.pdf}
+\caption{...}
 \label{fig:performance_plots}
 \end{figure}
 

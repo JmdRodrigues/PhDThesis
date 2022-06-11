@@ -13,6 +13,7 @@
 
 Explain our sources of data to explore the methods developed in this work. Show why you chose this type of data and which purpose it has been used. 
 
+The data used in this work focused mainly in the usage of biosignals that can be associated with an occupational scenario. This is to provide strong evidence that the methods developed, although applicable to any kind of time series, can be used for occupational health data. From public databases we used \gls{ecg}, \gls{abp}, \gls{emg}, \gls{acc} and \gls{gyro}. It is important to mention that for the sake of performance evaluation and comparison, several benchmark databases were used with a broad type of time series.
 
 \section{Public Datasets}
 
@@ -21,7 +22,7 @@ Explain our sources of data to explore the methods developed in this work. Show 
 The University California Riverside (UCR) Time Series Archive was introduced in 2002 
 and is one of the most used benchmarks for time series data mining tasks, specially for classification.  The datasets are diverse in terms of data type, data domain, difficulty, number of classes and dimensionality\cite{ucr}.
 \par
-Several \textit{python} distributions make it available to download. In this thesis, all UCR archive datasets from the \textit{pyts} distribution were used for classification tasks. These represent 107 datasets from 18 different data types (\gls{audio}, \gls{device}, \gls{ecg}, \gls{eog}, \gls{eeg}, \gls{har}, etc...), which also are from many different domains, such as medical, financial, motion, entomology, etc...\cite{ucr}
+Several \textit{python} distributions make it available to download. In this thesis, all UCR archive datasets from the \textit{pyts} distribution were used for classification tasks. These represent 107 datasets from 18 different data types (audio, devices, \gls{ecg}, \gls{eog}, \gls{eeg}, \gls{har}, etc...), which also are from many different domains, such as medical, financial, motion, entomology, etc...\cite{ucr}
 \par
 The list of datasets can be found on the following link \cite{ucr_site}.
  
@@ -59,27 +60,28 @@ This dataset has EMG signals for recording patterns, by using a MYO Thalmic brac
     
 \subsection{Kaggle}
 
-\item \textbf{Dataset 1 - }\\
+\textbf{Dataset 1 - }\\
 The dataset comprises data from 15 subjects that were performing 7 activities while wearing a sole wearable accelerometer mounted on the chest. The data was acquired at a constant rate of 52 Hz. The categories of activities are: \textit{(1) Working at computer, (2) Standing Up, Walking and Going Up/Down stairs, (3) Standing, (4) Walking, (5) Going Up/Down Stairs, (6) Walking and Talking with Someone, (7) Talking while Standing}. Each sample of the data gathered has a corresponding label from the performed activity \cite{dataset1}.\\
 
 \textbf{Purpose:} This dataset was used in the context of novelty segmentation, to test the method in estimating transitions between the performed activities from the accelerometer data.
 
 \subsection{Physionet}
 
-\item \textbf{Dataset 6 - } The dataset comprehends 12 half-hour ECG recordings and 3 half-hour recordings of noise typical in ambulatory ECG recordings. The noise recordings were made using physically active volunteers and standard ECG recorders, leads, and electrodes. The three noise records were assembled from the recordings by selecting intervals that contained predominantly baseline wander (in record 'bw'), muscle (EMG) artifact (in record 'ma'), and electrode motion artifact (in record 'em'). Two clean ECG signals were selected and noise was added with different signal-to-noise ratios (SNR) \cite{dataset6, PhysioNet}.\\
+\textbf{Dataset 6 - } The dataset comprehends 12 half-hour \gls{ecg} recordings and 3 half-hour recordings of noise typical in ambulatory \gls{ecg} recordings. The noise recordings were made using physically active volunteers and standard \gls{ecg} recorders, leads, and electrodes. The three noise records were assembled from the recordings by selecting intervals that contained predominantly baseline wander (in record 'bw'), muscle (EMG) artifact (in record 'ma'), and electrode motion artifact (in record 'em'). Two clean \gls{ecg} signals were selected and noise was added with different signal-to-noise ratios (SNR) \cite{dataset6, PhysioNet}.\\
 
 \textbf{Purpose:} This dataset was used in the context of change point detection, to test the method in estimating transitions to and from noise sections of the signal.
     
-\item \textbf{Dataset 7 - } This dataset has short duration ECG signals, which were recorded from a healthy 25-year-old male performing different physical activities (standing, walking and single jump) to study the effect of motion artifacts on ECG signals and their sparsity. The dataset was acquired with a sampling rate of 500 Hz and 16 bit resolution. For this exercise, only the records with jump were used \cite{dataset7, PhysioNet}.\\
+\textbf{Dataset 7 - } This dataset has short duration \gls{ecg} signals, which were recorded from a healthy 25-year-old male performing different physical activities (standing, walking and single jump) to study the effect of motion artifacts on \gls{ecg} signals and their sparsity. The dataset was acquired with a sampling rate of 500 Hz and 16 bit resolution. For this exercise, only the records with jump were used \cite{dataset7, PhysioNet}.\\
 
 \textbf{Purpose:} This dataset was used in the context of change point detection, to test the method in estimating transitions to and from noise sections of the signal.
 
 
 \subsection{Alan Turing CPD Benchmark}
+\label{sec:dataset8}
 
 The Alan Turing Change Point Detection Benchmark is a recent dataset used to have a standard reference for change point segmentation tasks. The benchmark was created in 2020 and provides 42 datasets, being 42 univariate time series and 4 multi dimensional time series. It contains data from real scenarios that varies from finance, weather, society and medical:
 
-\item \textbf{Dataset 8 - Alan Turing CPD Benchmark}\\
+\textbf{Dataset 8 - Alan Turing CPD Benchmark}\\
 The dataset comprises several time series from real-world data. It was built from a project of the Alan Turing Insitute to have a repository for the evaluation of change point detection algorithms. The available benchmark page was used to get access to the datasets, and run the performance metrics developed. This way, the performance of the proposed method is compare with the performance of several existing methods \cite{cpd_alan}.\\
 
 \textbf{Purpose:} This dataset has ground-truth events for each time series. The performance of several existing methods is available and used to compare with the performance of the proposed method on the same time series.
@@ -92,13 +94,13 @@ For this thesis, there were allowed access to inertial acquisitions made in the 
 %intro
 
 %contexto de aquisição
-A set of multiple Biosensors were used, with various internal characteristics. Beginning with two \textit{8 channel PLUX hubs} a device which allows for the wireless acquisition of biosensors via Bluetooth, with them being part of the \textit{biosignals plux Research Kits}. From both \textit{plux hubs} there were used two 3-axial \gls{Acc} sensors, 4 sets of \gls{EMG} sensors and an electrogoniometer, with more details about these sensors being displayed in Table \ref{tab:plux_hubs}.
+A set of multiple Biosensors were used, with various internal characteristics. Beginning with two \textit{8 channel PLUX hubs} a device which allows for the wireless acquisition of biosensors via Bluetooth, with them being part of the \textit{biosignals plux Research Kits}. From both \textit{plux hubs} there were used two 3-axial \gls{acc} sensors, 4 sets of \gls{emg} sensors and an electrogoniometer, with more details about these sensors being displayed in Table \ref{tab:plux_hubs}.
 
 Adding to these sensors there were also used 4 other types of biosensors: one airborne microphone, one piezoelectric microphone, two 3-axial gyroscopes and one force sensor. From here, 18 activities were performed recursively, with all of these being listed in Table \ref{tab:hui_actvs}
 
 
 \begin{table}[ht]
-	\caption[\textit{Plux Hub} sensors descriptions, for the \gls{HAR} database]{\textit{Plux Hub} sensors descriptions, for the \gls{HAR} databases\cite{Liu2019}. The sensors are divided in half by a horizontal dash line with the first group of sensors using a single \textit{Plux Hub} device and the other sensors using the second device. The information provided by each sensor include also the positioning of the sensors as well as it's sampling frequency.}.
+	\caption[\textit{Plux Hub} sensors descriptions, for the \gls{har} database]{\textit{Plux Hub} sensors descriptions, for the \gls{har} databases\cite{Liu2019}. The sensors are divided in half by a horizontal dash line with the first group of sensors using a single \textit{Plux Hub} device and the other sensors using the second device. The information provided by each sensor include also the positioning of the sensors as well as it's sampling frequency.}.
 	\label{tab:plux_hubs}
 \centering
 \begin{tabular}{lll}
@@ -109,7 +111,7 @@ Adding to these sensors there were also used 4 other types of biosensors: one ai
     \midrule
 3 axial Upper Accelerometer & Thigh, proximal ventral & 100 Hz \\
 3 axial Lower Accelerometer & Shank, distal ventral & 100 Hz \\
-Eletrogoniometer & Knee of the right leg, lateral & 100 Hz \\ \hdashline
+Eletrogoniometer & Knee of the right leg, lateral & 100 Hz \\
 EMG1 & Musculus vastus medialis & 1000 Hz \\
 EMG2 & Musculus tibialis anterior & 1000 Hz \\
 EMG3 & Musculus biceps femoris & 1000 Hz \\
@@ -119,7 +121,7 @@ EMG4 & Musculus gastrocnemius & 1000 Hz \\
 \end{table}
 
 \begin{table}[ht]
-	\caption[Activities description, of the \gls{HAR} database]{Activities description, of the \gls{HAR} database\cite{Liu2019}. For each activity is displayed the number of repetitive occurrences each activity is performed as well as the total time length and the minimum and maximum length of each occurrence.}.
+	\caption[Activities description, of the \gls{har} database]{Activities description, of the \gls{har} database\cite{Liu2019}. For each activity is displayed the number of repetitive occurrences each activity is performed as well as the total time length and the minimum and maximum length of each occurrence.}.
 	\label{tab:hui_actvs}
 \centering
 \begin{tabular}{lllll}
@@ -165,50 +167,69 @@ This database was used to study how the algorithm could be used to detect period
 This database has greater importance in comparison with the previous ones, as it will serve to test if this methodology is indeed valid for processing data acquired from a work environment. With this said, two main requirements need to be presented. Firstly, the data should have been retrieved in a real-working setting (i.e. not in a laboratory controlled environment), and secondly, it had to be the result of a direct sensor acquisition system that could provide information about the motion of the various workers.
 %main requirements of the aquisition
 
-The data acquisition was made in a previous thesis project from \cite{Santos2019}, whose main objective was to calculate the ergonomic risk through  direct measuring data. 
-The technological setting was provided by a sensing framework named Internet of Things in Package (IoTiP), designed and provided by Fraunhofer AICOS. IoTiP is a system that intends to combine hardware, firmware and software components to promote the field "Internet of Things"\cite{FraunhoferAICOS}. For this work, the technology setting consisted on 4 9-\acrshort{DoF} \gls{IMU} sensors (composed internally by a triaxial \gls{Acc}, triaxial \gls{Gyro} and triaxial \gls{Mag}) and an Android wireless communication system. The last one was made through an application called Recorder, also developed by Fraunhofer AICOS.\cite{Santos2019}.
+The data acquisition was made in a previous thesis project from \cite{santos2019}, whose main objective was to calculate the ergonomic risk through  direct measuring data. 
+The technological setting was provided by a sensing framework named Internet of Things in Package (IoTiP), designed and provided by Fraunhofer AICOS. IoTiP is a system that intends to combine hardware, firmware and software components to promote the field "Internet of Things"\cite{FraunhoferAICOS}. For this work, the technology setting consisted on 4 9-\gls{dof} \gls{imu} sensors (composed internally by a triaxial \gls{acc}, triaxial \gls{gyro} and triaxial \gls{mag}) and an Android wireless communication system. The last one was made through an application called Recorder, also developed by Fraunhofer AICOS.\cite{santos2019}.
 %technology description
 %tentei não entrar em muito detalhe visto que isto está na tese da Sara, tentei abordar os topicos todos dela mas da forma mais resumida possivel.
 
 
-The acquisition was made in a Volkswagen Industrial assembly line where 12 manufacturing workers performed their work tasks while having attached 4 \gls{IMU} sensors in their bodies.
+The acquisition was made in a Volkswagen Industrial assembly line where 12 manufacturing workers performed their work tasks while having attached 4 \gls{imu} sensors in their bodies.
 %falar da interferencia dos sensors
-During the acquisition, the subjects performed various tasks in multiple workstations. Relevantly to this thesis, the database comprehends three different workstations from \textit{Bodyshop assembly line}, a section where cars' doors were assembled: 1) Liftgate workstation, where back doors are mounted; 2) Fender workstation, involving front door tasks and 3) Doors workstation, which demanded tasks on the front doors and in the cars' hood\cite{Santos2019}. The acquisitions made involved a total of 6 \gls{Opr} with each one performing at least 2 different \gls{Wkst}. The various acquisitions were simultaneously filmed and to synchronize the ground manual annotations of the data, in the beginning and end of the acquisition the subjects were asked to stay, firstly, in a neutral anatomic position and then perform a T pose (calibration position) as represented in Figure \ref{fig:t_pose}. There were also registered some details regarding the anthropomtetric characteristics of the various subjects, as displayed in Table \ref{tab:subj_char}.
+During the acquisition, the subjects performed various tasks in multiple workstations. Relevantly to this thesis, the database comprehends three different workstations from \textit{Bodyshop assembly line}, a section where cars' doors were assembled: 1) Liftgate workstation, where back doors are mounted; 2) Fender workstation, involving front door tasks and 3) Doors workstation, which demanded tasks on the front doors and in the cars' hood\cite{santos2019}. The acquisitions made involved a total of 6 operators with each one performing at least 2 different workstations. The various acquisitions were simultaneously filmed and to synchronize the ground manual annotations of the data, in the beginning and end of the acquisition the subjects were asked to stay, firstly, in a neutral anatomic position and then perform a T pose (calibration position) as represented
+
+% in Figure \ref{fig:t_pose}. 
+
+There were also registered some details regarding the anthropomtetric characteristics of the various subjects, as displayed in Table. 
+
+% \ref{tab:subj_char}.
 %aquisition setting
 
-The mentioned study was centered on the ergonomic assessment of the dominant arm. For this reason, the \gls{IMU}s  were attached in: 1) the posterior side of the hand, 2) posterior side of the forearm and 3) posterior side of the arm and a final one 4) placed in the anterior side of the thorax area. All of the devices were attached with elastic bands, in such a way that all had their Y-axis pointed up while in a neutral anatomical position, as illustrated in Figure \ref{fig:imu_schem}. The last device is unique as in its original work it allowed an assessment of the movement of the arm in relation to the entire body. Moreover, it is also different from the other since its \gls{IMU} sensor was incorporated in a smartphone. Smartphones can indeed work as \gls{IMU} devices, since these can sense the acceleration, angular momentum and magnetic field.
+The mentioned study was centered on the ergonomic assessment of the dominant arm. For this reason, the \gls{imu}s  were attached in: 1) the posterior side of the hand, 2) posterior side of the forearm and 3) posterior side of the arm and a final one 4) placed in the anterior side of the thorax area. All of the devices were attached with elastic bands, in such a way that all had their Y-axis pointed up while in a neutral anatomical position, as illustrated in Figure. 
+
+% \ref{fig:imu_schem}. 
+
+The last device is unique as in its original work it allowed an assessment of the movement of the arm in relation to the entire body. Moreover, it is also different from the other since its \gls{imu} sensor was incorporated in a smartphone. Smartphones can indeed work as \gls{imu} devices, since these can sense the acceleration, angular momentum and magnetic field.
 % With this units being designated by IMU 1, IMU 2, IMU 3 and IMU 4, respectively.
-Each one of these 4 \gls{IMU} devices had incorporated within them 3 triaxial sensors (\gls{Acc}, \gls{Gyro}, \gls{Mag}), with each producing a multivariate time series of 3 dimensions correspondent to the 3 coordinate orientations of x, y and z.
+Each one of these 4 \gls{imu} devices had incorporated within them 3 triaxial sensors (\gls{acc}, \gls{gyro}, \gls{mag}), with each producing a multivariate time series of 3 dimensions correspondent to the 3 coordinate orientations of x, y and z.
 
-\begin{figure}[ht]
-\begin{adjustwidth}{-1cm}{-1.2cm}
-\centering
-\begin{minipage}{.4\textwidth}
-    \includegraphics[width=1\linewidth]{Chapters/Figures/4_2_T pose.png}
-    \caption[T pose for synchronization]{T pose for synchronization of the various IMU devices.}
-    \label{fig:t_pose}
-\end{minipage}
-\begin{minipage}{.05\textwidth}
-\hspace*{0.5cm}\\
-\end{minipage}
-\begin{minipage}{.5\textwidth}
-    \includegraphics[width=1.1\linewidth]{Chapters/Figures/4_1_IMU placement squematic.pdf}
-    \caption[Schematic placements of IMU sensors]{Schematic placements of IMU sensors over the acquisition of \textit{Industrial} Database.}
-    \label{fig:imu_schem}
-\end{minipage}
-\end{adjustwidth}
-\end{figure}
+%\begin{figure}[ht]
+%\begin{adjustwidth}{-1cm}{-1.2cm}
+%\centering
+%\begin{minipage}{.4\textwidth}
+%    \includegraphics[width=1\linewidth]{Chapters/Figures/4_2_T pose.png}
+%    \caption[T pose for synchronization]{T pose for synchronization of the various IMU devices.}
+%    \label{fig:t_pose}
+%\end{minipage}
+%\begin{minipage}{.05\textwidth}
+%\hspace*{0.5cm}\\
+%\end{minipage}
+%\begin{minipage}{.5\textwidth}
+%    \includegraphics[width=1.1\linewidth]{Chapters/Figures/4_1_IMU placement squematic.pdf}
+%    \caption[Schematic placements of IMU sensors]{Schematic placements of IMU sensors over the acquisition of \textit{Industrial} Database.}
+%    \label{fig:imu_schem}
+%\end{minipage}
+%\end{adjustwidth}
+%\end{figure}
 
-The data is hierarchically divided, as showed in \ref{fig:db_schem}. The Database is firstly divided into 12 groups corresponding to 6 subjects with each working at two different workstations; followed by 4 other databases: Hand, Forearm, Arm and Torso; and then with all of these databases being further divided into 3 other Time Series: Accelerometer, Gyroscope. These time series are multivariate with 3 dimensions representing the 3 orientations of x, y and z of the sensors (Figure \ref{fig:db_schem}). The first level represents the various subject acquisitions made, the second level corresponds to the data retrieved from different \gls{IMU} devices and the third level represents the data retrieved from different sensor types. Considering this grouping method is relevant due to the data from different databases having different time properties as it will be seen in Section \ref{sec:pre_process}.
+The data is hierarchically divided, as showed in 
+% \ref{fig:db_schem}. 
+
+The Database is firstly divided into 12 groups corresponding to 6 subjects with each working at two different workstations; followed by 4 other databases: Hand, Forearm, Arm and Torso; and then with all of these databases being further divided into 3 other Time Series: \gls{acc}, \gls{gyro} and \gls{mag}. These time series are multivariate with 3 dimensions representing the 3 orientations of x, y and z of the sensors 
+
+% (Figure \ref{fig:db_schem}). 
+
+The first level represents the various subject acquisitions made, the second level corresponds to the data retrieved from different \gls{imu} devices and the third level represents the data retrieved from different sensor types. Considering this grouping method is relevant due to the data from different databases having different time properties as it will be seen in ....
+
+% Section \ref{sec:pre_process}.
 
 
 This database will help in studying the application of the algorithm to detect (1) Working Periods, (2) Periodic Working Cycles and (3) Search by example.
 
 Some important notes:
 \begin{enumerate}
-\item Despite the actual acquisition having three sensors \gls{Acc}, \gls{Gyro} and \gls{Mag}, only the \gls{Acc} and \gls{Gyro} sensors were considered for this study as this had the best behaviour, and the \gls{Mag} was acting in an erratic manner.
-\item The two workstation of \gls{Opr}2 were made during the same acquisition, resulting in a single time serie, where the subject performed two different types of active work motions.
-\item In \gls{Opr}2 \gls{Wkst}1\&2 the torso was not considered, due to malfunction.
+\item Despite the actual acquisition having three sensors \gls{acc}, \gls{gyro} and \gls{mag}, only the \gls{acc} and \gls{gyro} sensors were considered for this study as this had the best behaviour, and the \gls{mag} was acting in an erratic manner.
+\item The two workstation of operator 2 were made during the same acquisition, resulting in a single time series, where the subject performed two different types of active work motions.
+\item In operator 2 workstation 1\& 2 the torso was not considered, due to malfunction.
 \end{enumerate}
 
 

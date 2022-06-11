@@ -11,20 +11,20 @@
 \chapter{Language for Time Series Data Mining}
 \label{cha:text_}
 
-In ”Pattern Recognition: Human and Mechanical”, Satosi Watanabe defines a pattern as a vaguely defined entity that is the opposite of chaos, to which a name can be given \cite{watanabe}. The recognition of these entities immersed in chaos is well performed by the human brain by distinguishing or finding similarities in features that characterize a certain pattern, being an innate capability for decision making \cite{niesser}. This capacity is also revealed in the search for patterns in time series, as data scientists are able to visually understand where these patterns occur with previous training and express it linguistically. 
+In ”Pattern Recognition: Human and Mechanical”, Satosi Watanabe defines a pattern as a vaguely defined entity that is the opposite of chaos, to which a name can be given \cite{watanabe}. The recognition of these entities immersed in chaos is well performed by the human brain by distinguishing or finding similarities in features that characterize a certain pattern, being an innate capability for decision making. This capacity is also revealed in the search for patterns in time series, as data scientists are able to visually understand where these patterns occur with previous training and express it linguistically. 
 \par
 Human language is foremost a means of communication, in which the information is represented by sentences, composed by words that can be broken into sequences of symbols. Time series are, in their turn, carriers of information about a certain measure, as sequences of ordered real domain numerical data observed during a given temporal interval. For instance, analysts have a visual perception of the morphological behavior of time series and are able to describe it in such a way that another subject understands which portion of the time series he/she is referring to. As we mentioned in Chapter \ref{cha:intro}, a physician may say "\textit{I am searching for the T-wave, that represents the} \texttt{large peak}" (\includegraphics[height=3.5ex, valign=m]{large_peak_ecg.png}) or "\textit{I am searching for the QRS complex, that looks like a} \texttt{sharp peak followed by a sharp valley} (\includegraphics[height=3.5ex, valign=m]{high_peak_ecg.png})". From this textual description of patterns, the reader can associate words with specific properties, such as \texttt{peak} can be related with \textit{slope} and \texttt{high} related with \textit{amplitude}.
 \par
 The text mining domain already has several approaches to search for specific patterns based on text queries. The reader may already have used the command \textit{cntrl+f} to search for specific words, or used regular expressions to search for specific patterns of words in text documents. Most probably, the reader also uses the \textit{Google Search} toolbar with a simple list of keywords, sorting the list of documents according to these.
 \par
-In this chapter, we intend to present the reader with solutions that promote a higher flexibility, cognitive-speed and expressiveness in searching for patterns in time series as we typically do with text. Two main strategies were explored: (1) \gls{SSTS} and (2) \gls{QuoTS}. The first profits of a symbolic characterization of the signal, introducing a novel representation and the usage of \textit{regular expressions} to search for patterns on this representation. The second uses a feature based representation of the signal, being each feature attributed to one word, which can be used with additional \textit{operators} to search for the desired patterns with natural language. 
+In this chapter, we intend to present the reader with solutions that promote a higher flexibility, cognitive-speed and expressiveness in searching for patterns in time series as we typically do with text. Two main strategies were explored: (1) \gls{ssts} and (2) \gls{quots}. The first profits of a symbolic characterization of the signal, introducing a novel representation and the usage of \textit{regular expressions} to search for patterns on this representation. The second uses a feature based representation of the signal, being each feature attributed to one word, which can be used with additional \textit{operators} to search for the desired patterns with natural language. 
 \par
-The chapter will start by detailing how \gls{SSTS} works, showing its usage in several examples. In addition, a symbolic representation of the time series can also be used to differentiate classes of signals. Therefore, a proposed strategy towards interpretable time series classification with \gls{SSTS} is introduced and explained as well. This chapter ends with \gls{QuoTS} and how a user can \textit{"google"} patterns on time series with keywords.
+The chapter will start by detailing how \gls{ssts} works, showing its usage in several examples. In addition, a symbolic representation of the time series can also be used to differentiate classes of signals. Therefore, a proposed strategy towards interpretable time series classification with \gls{ssts} is introduced and explained as well. This chapter ends with \gls{quots} and how a user can \textit{"google"} patterns on time series with keywords.
 
 
 
 
-%In terms of morphology, many attributes can be extracted from the visual perception of the signal, such as rising and falling slopes, concavity, direction, amplitude thresholding, frequency, time and amplitude range of a slope, among others. For instance, we can identify positive peaks by finding a rising slope followed by a falling slope, which is precisely the mechanism developed in Horowitz \textit{et. al.} for peak detection in electrocardiography~\citep{Horowitz}.
+%In terms of morphology, many attributes can be extracted from the visual perception of the signal, such as rising and falling slopes, concavity, direction, amplitude thresholding, frequency, time and amplitude range of a slope, among others. For instance, we can identify positive peaks by finding a rising slope followed by a falling slope, which is precisely the mechanism developed in Horowitz \textit{et. al.} for peak detection in electrocardiography~\cite{Horowitz}.
 %\par
 %We can think of this morphological description in terms of a characterization by means of features. These features can either be used to transform the signal into a symbolic representation, in which each sample is converted to a symbol, or a feature-based representation, in which a \textit{word-feature series} characterizes the time series for a specific property. 
 %\par
@@ -37,19 +37,19 @@ The chapter will start by detailing how \gls{SSTS} works, showing its usage in s
 \centering
 \includegraphics[width=\linewidth]{ssts_intro.pdf}
 \label{fig:ssts_intro}
-\caption{SSTS modular architecture: the proposed system is divided into three main modules - pre-processing, symbolic connotation and search.}
+\caption{\gls{ssts} modular architecture: the proposed system is divided into three main modules - pre-processing, symbolic connotation and search.}
 \end{figure}
 
-In Chapter \ref{cha:theory} was presented the well-known \gls{SAX}, which is a symbolic representation of the time series based on the amplitude distributions. With \gls{SAX}, query with text was not considered, but \gls{SSTS} takes inspiration of this symbolic transformation by including additional attributes besides amplitude, such as the derivative, speed of the derivative, etc.... Each property characterizes each sample of the signal. The combination of these attributes into sequence of primitives is a symbolic characterization of the signal that enables the use of regular expressions for searching the desired pattern. The proposed tool focuses on the knowledge retrieved from the visual interpretation of the signal that enables the search of the desired patterns by writing a regular expression that parses the syntactic representation of the signal.
+In Chapter \ref{cha:theory} was presented the well-known \gls{sax}, which is a symbolic representation of the time series based on the amplitude distributions. With \gls{sax}, query with text was not considered, but \gls{ssts} takes inspiration of this symbolic transformation by including additional attributes besides amplitude, such as the derivative, speed of the derivative, etc.... Each property characterizes each sample of the signal. The combination of these attributes into sequence of primitives is a symbolic characterization of the signal that enables the use of regular expressions for searching the desired pattern. The proposed tool focuses on the knowledge retrieved from the visual interpretation of the signal that enables the search of the desired patterns by writing a regular expression that parses the syntactic representation of the signal.
 \par
-The proposed tool, \gls{SSTS}, uses symbolic sequences to perform each of the three steps that compose it: \textit{pre-processing} - prepare the signal to highlight the desired patterns and ease the search process; \textit{connotation} - symbolic representation of time series into a set of primitives that give information about the shape and attributes of the time series over time and is governed by a set of grammatical rules; and \textit{search} - a parser (\gls{regex}) to search for patterns in the symbolic representation. Both \textit{pre-processing} and \textit{connotation} steps rely on \textit{tokens} to call specific methods.
+The proposed tool, \gls{ssts}, uses symbolic sequences to perform each of the three steps that compose it: \textit{pre-processing} - prepare the signal to highlight the desired patterns and ease the search process; \textit{connotation} - symbolic representation of time series into a set of primitives that give information about the shape and attributes of the time series over time and is governed by a set of grammatical rules; and \textit{search} - a parser (\gls{regex}) to search for patterns in the symbolic representation. Both \textit{pre-processing} and \textit{connotation} steps rely on \textit{tokens} to call specific methods.
 \par
-The next sections explain each step of the \gls{SSTS} process and will be accompanied by an example to elucidate how it works. The represented signal is the \textit{z} axis of an accelerometer placed in the wrist of a subject while performing a rotating task in different angles. The purpose of this example is to find the time intervals where the plateaus above a certain threshold begin to decrease. Each step of this problem's resolution is shown in Figure \ref{fig:Exercise1} and will be thoroughly explained throughout the next sections. We take the liberty to start introducing some of the processing tokens ( $Sm$ is the smooth function, $A$ is the Connotation Threshold and $D1$ is the Connotation Derivative) to give a base complete example of the usage of the \gls{SSTS}.
+The next sections explain each step of the \gls{ssts} process and will be accompanied by an example to elucidate how it works. The represented signal is the \textit{z} axis of an accelerometer placed in the wrist of a subject while performing a rotating task in different angles. The purpose of this example is to find the time intervals where the plateaus above a certain threshold begin to decrease. Each step of this problem's resolution is shown in Figure \ref{fig:Exercise1} and will be thoroughly explained throughout the next sections. We take the liberty to start introducing some of the processing tokens ( $Sm$ is the smooth function, $A$ is the Connotation Threshold and $D1$ is the Connotation Derivative) to give a base complete example of the usage of the \gls{ssts}.
 
 
 \subsection{Pre-Processing - Preparing the Data}
 
-The pre-processing stage is responsible for preparing the signal, either by removing noise that arises from several sources or adjusting the signal so that the information is unveiled. Traditional pre-processing methods, such as a pipeline of linear filters, moving window average filters and statistical de-noising or re-sampling techniques, are typical procedures to prepare the signal for further tasks \cite{preProcessing}. The current approach uses a symbolic representation of these techniques, in which each is represented by its corresponding \textit{token}, which can be a symbol or a function name. In order to manage the pre-processing tasks, a string containing a set of tokens and their corresponding arguments is written by following the polish notation \cite{polishNotation}, in which the token precedes the corresponding argument(s), and each element is separated by a white-space character. The available pre-processing methods to be used with \gls{SSTS} are presented in Table \ref{tab:preprocess}.
+The pre-processing stage is responsible for preparing the signal, either by removing noise that arises from several sources or adjusting the signal so that the information is unveiled. Traditional pre-processing methods, such as a pipeline of linear filters, moving window average filters and statistical de-noising or re-sampling techniques, are typical procedures to prepare the signal for further tasks \cite{preProcessing}. The current approach uses a symbolic representation of these techniques, in which each is represented by its corresponding \textit{token}, which can be a symbol or a function name. In order to manage the pre-processing tasks, a string containing a set of tokens and their corresponding arguments is written by following the polish notation \cite{polishNotation}, in which the token precedes the corresponding argument(s), and each element is separated by a white-space character. The available pre-processing methods to be used with \gls{ssts} are presented in Table \ref{tab:preprocess}.
 \par
 In the example of Figure \ref{fig:ssts_intro}, the pre-processing step uses the following string: "$Sm$ 500", which indicates that a smooth filter using a window with a size of 500 samples is applied to the signal. The resulting signal is showed under the original one. The area sectioned in the plots represents the segment of the signal that will be represented in subsection \ref{subsec:symbolic_connotation}.
 
@@ -58,7 +58,7 @@ In the example of Figure \ref{fig:ssts_intro}, the pre-processing step uses the 
 	\centering
     \setlength{\tabcolsep}{3pt}
 	\renewcommand{\arraystretch}{1.5}
-	\caption{List of common \gls{SSTS} pre-processing operators. As input parameters, \textit{s} is the signal, \textit{fc} is the cut-off frequency and \textit{win\_size} is the size of the window used (number of samples). The linear filters (HP, BP and LP) have a default order of 2}
+	\caption{List of common \gls{ssts} pre-processing operators. As input parameters, \textit{s} is the signal, \textit{fc} is the cut-off frequency and \textit{win\_size} is the size of the window used (number of samples). The linear filters (HP, BP and LP) have a default order of 2}
 	~\\~
 	\label{tab:preprocess}
 	\begin{tabular}{lcP}
@@ -77,7 +77,7 @@ In the example of Figure \ref{fig:ssts_intro}, the pre-processing step uses the 
         \midrule
         Sm &  (\textit{win\_size}) & smoothing of \textit{T} by a moving average window filtering technique of size \textit{win\_size}\\
         \midrule
-        Z_{norm} & (\textit{s}) & z-normalize the time series $\overline{T} = \frac{T-\bar{\mu_T}}{\sigma_T}$, being: $\overline{T}$ the normalized signal, $\bar{\mu_T}$ the signal's mean and $\sigma_T$ the standard deviation of the signal\\
+        $Z_{norm}$ & (\textit{s}) & z-normalize the time series $\overline{T} = \frac{T-\bar{\mu_T}}{\sigma_T}$, being: $\overline{T}$ the normalized signal, $\bar{\mu_T}$ the signal's mean and $\sigma_T$ the standard deviation of the signal\\
         \midrule
         | & N.A. & Separates the pre-processing methods applied to multiple signals or multiple processing of the same signal\\
         \bottomrule[0.5mm]
@@ -93,8 +93,8 @@ In the example of Figure \ref{fig:ssts_intro}, the pre-processing step uses the 
 \begin{figure}
 \centering
 \includegraphics[width=\linewidth]{ssts_connotation_step.pdf}
-\label{fig:ssts_intro}
-\caption{SSTS modular architecture: the proposed system is divided into three main modules - pre-processing, symbolic connotation and search.}
+\label{fig:ssts_connotation}
+\caption{\gls{ssts} modular architecture: the proposed system is divided into three main modules - pre-processing, symbolic connotation and search.}
 \end{figure}
 
 In semiotics, it is described that the connotative aspect of an image or a sign corresponds to the extraction of meaning (sometimes called the \textit{second meaning}), by the personal interpretation of its traits and characteristics \cite{connotation}. The \textit{connotation}step is exactly the same connotative aspect, but of a time series. In this, the interpreter (the analyst) has made his personal analysis of the time series and retrieved the necessary information in order to search for the desired patterns. 
@@ -103,19 +103,19 @@ The symbolic \textit{connotation} step generates a sequence of \textit{character
 \par
 The string can be based on a single connotation method, or the combination of multiple ones. In addition, the \textit{connotation} process also handles multidimensional signals, in which cases the string is a combination of \textit{connotation} methods corresponding to each time series, returning a group of \textit{characters} for each sample of the time series.
 \par
-The reader may appreciate that we recall the general text definitions from Chapter \ref{cha:intro}, and associate these with \textit{connotation} step's output. Each sample of the time series, $T=(t_1, t_2, ..., t_n)$,  is converted into a \textit{character} from this \textit{connotation} alphabet ($char_C$), generating a symbolic time series, $ST = (st_1, st_2, ..., st_i, ..., st_n)$, in which $st_i = char_C$. A \textit{character} is any unit symbol from the connotation alphabet ("Group of Symbols" in Table \ref{tab:connotation}). When the analyst selects more than one \textit{connotation} method to transform the time series $T$, each sample of $T$ is converted into the corresponding \textit{characters}, one for each alphabet of each \textit{connotation} method applied, resulting in: $st_i =$ \bnfpn{$char_{C1}$}\bnfpn{$char_{C2}$}\bnfpn{...}\bnfpn{$char_{Cc}$} , being $ char_{Cc}$ the $c^{th}$ \textit{connotation} method applied. In case $T$ is a multi-dimensional time series, the symbolic time series (MST)' samples from each time series are grouped $MST =$ (\bnfpn{$st_{1,1}$}\bnfpn{$...$}\bnfpn{$st_{1,k}$}$,..., $\bnfpn{$st_{n,1}$}\bnfpn{$...$}\bnfpn{$st_{n,k}$}).
-\par
+%The reader may appreciate that we recall the general text definitions from Chapter \ref{cha:intro}, and associate these with \textit{connotation} step's output. Each sample of the time series, $T=(t_1, t_2, ..., t_n)$,  is converted into a \textit{character} from this \textit{connotation} alphabet ($char_C$), generating a symbolic time series, $ST = (st_1, st_2, ..., st_i, ..., st_n)$, in which $st_i = char_C$. A \textit{character} is any unit symbol from the connotation alphabet ("Group of Symbols" in Table \ref{tab:connotation}). When the analyst selects more than one \textit{connotation} method to transform the time series $T$, each sample of $T$ is converted into the corresponding \textit{characters}, one for each alphabet of each \textit{connotation} method applied, resulting in: $st_i =$ \bnfpn{$char_{C1}$}\bnfpn{$char_{C2}$}\bnfpn{...}\bnfpn{$char_{Cc}$} , being $ char_{Cc}$ the $c^{th}$ \textit{connotation} method applied. In case $T$ is a multi-dimensional time series, the symbolic time series (MST)' samples from each time series are grouped $MST =$ (\bnfpn{$st_{1,1}$}\bnfpn{$...$}\bnfpn{$st_{1,k}$}$,..., $\bnfpn{$st_{n,1}$}\bnfpn{$...$}\bnfpn{$st_{n,k}$}).
+
 The set of connotation methods can be defined by the user and added as needed. A base list of connotation methods and the corresponding symbols used for the examples presented in the paper are listed in Table \ref{tab:connotation}.
 
 \begin{table}[h!]
 	\centering
-	\caption{List of base \gls{SSTS} connotation operators. The input parameters are \textit{s}, which represents the input signal and \textit{thr}, which defines the threshold percentage value of the amplitude range of the signal ($max(s) - min(s)$) for a given connotation method. The operator that separates the connotation methods applied to multiple signals or multiple representations of the same signal is the vertical bar "\textbf{|}".}
+	\caption{List of base \gls{ssts} connotation operators. The input parameters are \textit{s}, which represents the input signal and \textit{thr}, which defines the threshold percentage value of the amplitude range of the signal ($max(s) - min(s)$) for a given connotation method. The operator that separates the connotation methods applied to multiple signals or multiple representations of the same signal is the vertical bar "\textbf{|}".}
 	~\\~
 	\label{tab:connotation}
    \setlength{\tabcolsep}{3pt}
    \renewcommand{\arraystretch}{1.5}
    \begin{tabular}{
-   c M{0.1\linewidth} M{0.2\linewidth} D} 
+   c M{0.1\linewidth} M{0.2\linewidth} E} 
    \toprule[0.5mm]
 		Name & Input Parameters & Group of Symbols & Description\\ \midrule[0.3mm]
 		 A & (\textit{s}, \textit{thr}) & ["1","0"] & Amplitude comparison, If $t_i$ > \textit{thr}*($t_{max} - t_{min}$), $t_i$ is "1", else $t_i$ is "0"\\ 
@@ -151,8 +151,8 @@ The symbolic connotation step of the exercise of Figure \ref{fig:Exercise1} demo
 \begin{figure}
 \centering
 \includegraphics[width=\linewidth]{ssts_search_step.pdf}
-\label{fig:ssts_intro}
-\caption{SSTS modular architecture: the proposed system is divided into three main modules - pre-processing, symbolic connotation and search.}
+\label{fig:ssts_search}
+\caption{\gls{ssts} modular architecture: the proposed system is divided into three main modules - pre-processing, symbolic connotation and search.}
 \end{figure}
 
 The last step of the process involves searching for the desired pattern in the generated symbolic time series with a regular expression. This string is governed by the rules of regular expressions from the \textit{alternative regular expression Python module} \cite{rgxPy} and benefits from all the functionalities and meta-characters typically used with this tool, which can be recalled from Chapter \ref{cha:theory}.The search procedure returns the intervals at which positive matches occurred. It is relevant to note that it has been decided to use \gls{regex}, although any other parser, conveniently combined with the previous steps, might be used for the same purpose.
@@ -160,7 +160,7 @@ The last step of the process involves searching for the desired pattern in the g
 In the example of Figure \ref{fig:Exercise1}, the purpose is to determinate when a plateau superior to \textit{80 \%} of the amplitude range of the signal starts to fall, which based on the string representation of the second step is indicated by a "1" and a sequence of stationary ("z") to falling ("n"). The regular expression used for the search is precisely \textit{z1n}, which indicates that the signal, at some point superior to the threshold will start to decrease. 
 \par
 In Figure \ref{fig:Ex_part3} is presented this reasoning.
-The next chapters will provide some examples, based on real data, in which each of the steps will be thoroughly explained in order to fully understand the capabilities of the \gls{SSTS} tool.
+The next chapters will provide some examples, based on real data, in which each of the steps will be thoroughly explained in order to fully understand the capabilities of the \gls{ssts} tool.
 
 
 
@@ -169,7 +169,7 @@ The next chapters will provide some examples, based on real data, in which each 
 
 
 
-In this study, we propose a tool that focuses in ease simple query search tasks in time series, which we refer as \gls{SSTS}. This is achieved by an innovative methodology, where the user gives a syntactic nature to time series, which turns the search procedure less verbose and more related with the reasoning of the user in recognizing the desired pattern.
+In this study, we propose a tool that focuses in ease simple query search tasks in time series, which we refer as \gls{ssts}. This is achieved by an innovative methodology, where the user gives a syntactic nature to time series, which turns the search procedure less verbose and more related with the reasoning of the user in recognizing the desired pattern.
 
 
 
@@ -182,16 +182,16 @@ In this study, we propose a tool that focuses in ease simple query search tasks 
 \begin{figure}
 \centering
 \includegraphics[width=\linewidth]{overall_interpretable.pdf}
-\label{fig:ssts_intro}
-\caption{SSTS modular architecture: the proposed system is divided into three main modules - pre-processing, symbolic connotation and search.}
+\label{fig:ssts_interpretable}
+\caption{\gls{ssts} modular architecture: the proposed system is divided into three main modules - pre-processing, symbolic connotation and search.}
 \end{figure}
 
 
 The ability to transform a time series into a meaningful symbolic representation makes the usage of text mining tools available for time series analysis. This means that the analysis process can be different and complement traditional methods or even bring novel strategies by thinking in how to solve it differently. What is proposed in this section is to use this novel representation to profit from the text mining knowledge and use it into time series classification. In order to perform a class separation, differences and similarities have to be highlighted, and this is also possible to be done with text.
 \par
-In text mining, the difference between text \textit{documents} is traditionally performed with a feature extraction process on text, such as \gls{bow} or \gls{tfidf}, returning a statistical representation of the words or \gls{ngrams}. \textit{Documents} with different words and sequences of words will have different weights on these models, which is used to perform a class separation on the \textit{documents}. In this work, we take inspiration on this process and apply it to time series. Figure \ref{fig:overall_interpretable} shows the main steps to perform a transformation of the time series into a \gls{bow}/\gls{tfidf} model that can be used with a classifier. 
+In text mining, the difference between text \textit{documents} is traditionally performed with a feature extraction process on text, such as \gls{bow} or \gls{tfidf}, returning a statistical representation of the words or ngram. \textit{Documents} with different words and sequences of words will have different weights on these models, which is used to perform a class separation on the \textit{documents}. In this work, we take inspiration on this process and apply it to time series. Figure \ref{fig:overall_interpretable} shows the main steps to perform a transformation of the time series into a \gls{bow}/\gls{tfidf} model that can be used with a classifier. 
 \par
-In this section we explain each step of the proposed strategy to perform time series classification based on a textual description with \gls{SSTS}. The fact that the time series are translated into text also provides a layer of readability and interpretability on the data, as we will explore throughout this section.
+In this section we explain each step of the proposed strategy to perform time series classification based on a textual description with \gls{ssts}. The fact that the time series are translated into text also provides a layer of readability and interpretability on the data, as we will explore throughout this section.
 
 %
 %The proposed method, conceptually developed based on text mining techniques, abstracts how a time series can be structured in a linguistic representation, similar to how the human would describe a time series with words. In order to introduce the reader with this abstraction and representation, we explain how we use \textit{SSTS} to make this abstraction.
@@ -240,16 +240,16 @@ In this section we explain each step of the proposed strategy to perform time se
 \begin{figure}[!h]
     \centering
     \includegraphics[width=0.85\linewidth]{interpretable_class_intro.pdf}
-    \caption{Steps for the generation of sentences from a raw time series and organization as a document. Here: {PP - Pre-processing, C- connotation and S - Search} are each \gls{SSTS} queries used to search for the patterns and attribute the matched \textit{subsequences} the corresponding \textit{word}.}
-    \label{fig:sentence_gen}
+    \caption{Steps for the generation of sentences from a raw time series and organization as a document. Here: {PP - Pre-processing, C- connotation and S - Search} are each \gls{ssts} queries used to search for the patterns and attribute the matched \textit{subsequences} the corresponding \textit{word}.}
+    \label{fig:interpretable_intro}
 \end{figure}
 
-Samples of the signal are converted to characters, patterns are searched to form words, and these are ordered by their time index. With this, the time series can be translated into sentences and be described just as a human would describe it. For instance, this signal \includegraphics[height=2.5ex, width=3.5ex, valign=m]{trace1.png} can be very broadly translated into \texttt{Flat Rise Fall Rise Flat} or \texttt{Flat Peak Valley Flat}, while this signal \includegraphics[height=2.5ex, width=3.5ex, valign=m]{trace_2.png} would be translated into \texttt{Flat Fall Rise Flat} or \texttt{Flat Valley Flat}. This type of description is easily performed with \gls{SSTS}, as showed on Figure \ref{fig:SSTS_example}.
+Samples of the signal are converted to characters, patterns are searched to form words, and these are ordered by their time index. With this, the time series can be translated into sentences and be described just as a human would describe it. For instance, this signal \includegraphics[height=2.5ex, width=3.5ex, valign=m]{trace1.png} can be very broadly translated into \texttt{Flat Rise Fall Rise Flat} or \texttt{Flat Peak Valley Flat}, while this signal \includegraphics[height=2.5ex, width=3.5ex, valign=m]{trace_2.png} would be translated into \texttt{Flat Fall Rise Flat} or \texttt{Flat Valley Flat}. This type of description is easily performed with \gls{ssts}, as showed on Figure \ref{fig:SSTS_example}.
 \par
-In order to perform this description, the words have to be associated with a specific \textit{\gls{SSTS} query}. Each query is a \gls{regex} pattern that searches the match on the time series and attributes it its corresponding \textit{word}. For instance, the query \{PP: Sm 25, C: D1 0.05, S: p+\} searches for moments where the time series is increasing and attributes to these \textit{subsequences} the word \textit{Rise}. A specific set of \gls{SSTS} queries are used to build a full description of the signal dynamics in higher leveled structures, mostly with amplitude and derivative \textit{connotations}. 
-The selection of \gls{SSTS} queries is made by the analyst, either using pre-defined set of queries or creating his/her own, more appropriate for the type of signals to analyze. This is the customizable step of the process, in which the analyst can include his/her intuition.
+In order to perform this description, the words have to be associated with a specific \textit{\gls{ssts} query}. Each query is a \gls{regex} pattern that searches the match on the time series and attributes it its corresponding \textit{word}. For instance, the query \{PP: Sm 25, C: D1 0.05, S: p+\} searches for moments where the time series is increasing and attributes to these \textit{subsequences} the word \textit{Rise}. A specific set of \gls{ssts} queries are used to build a full description of the signal dynamics in higher leveled structures, mostly with amplitude and derivative \textit{connotations}. 
+The selection of \gls{ssts} queries is made by the analyst, either using pre-defined set of queries or creating his/her own, more appropriate for the type of signals to analyze. This is the customizable step of the process, in which the analyst can include his/her intuition.
 \par
-The ability to distinguish time series with text will be as good as the descriptive richness of the generated sentences. Depending on the differences between the time series being classified, a simple description based on the sign of the signal's derivative might be enough. However, in some cases, the overall dynamic of signals might be dissimilar in other dimensions. In order to have a rich foundation to perform a sentence description of a time series, we created the set of \gls{SSTS} queries presented on Table \ref{tab:ssts_queries}, grouped by sentence ($S1, S2, ...$). 
+The ability to distinguish time series with text will be as good as the descriptive richness of the generated sentences. Depending on the differences between the time series being classified, a simple description based on the sign of the signal's derivative might be enough. However, in some cases, the overall dynamic of signals might be dissimilar in other dimensions. In order to have a rich foundation to perform a sentence description of a time series, we created the set of \gls{ssts} queries presented on Table \ref{tab:ssts_queries}, grouped by sentence ($S1, S2, ...$). 
 The table also has an example of matching the corresponding query on a real signal. We would like to highlight that these queries are not mandatory and can be adapted by the analyst or event new connotation methods and queries can be created that might make more sense for the problem being solved. In cases where the user knows exactly what kind of patterns are relevant to perform the distinction, specific patterns can be used, targeting the relevant differences. Otherwise, the existing list can be used.
 
 \begin{table}
@@ -294,37 +294,37 @@ Sentence Group & Connotation & Search & Word & Example\\
 \end{center}
 \end{table}
  
-An example of performing this analysis on a signal is presented on Figure \ref{fig:SSTS_example}. The process highlights the usage of \gls{SSTS} queries from two different groups of sentences. From the first group, the signal is analyzed in terms of derivative, matching parts of the signal where it \textit{rises, falls} or is \textit{flat}. A sentence is generated, describing it as \texttt{Flat Rise Fall Rise Flat}. The same process is done now with the second group of \gls{SSTS} queries, but this time, searching for \textit{peaks, valleys and plateaus}. A sentence is then generated based on the matches: \texttt{Peak Valley}. The same process is applied to each class of signals, being, for each signal, generated a \textit{document} with the corresponding sentences.
+An example of performing this analysis on a signal is presented on Figure \ref{fig:SSTS_example}. The process highlights the usage of \gls{ssts} queries from two different groups of sentences. From the first group, the signal is analyzed in terms of derivative, matching parts of the signal where it \textit{rises, falls} or is \textit{flat}. A sentence is generated, describing it as \texttt{Flat Rise Fall Rise Flat}. The same process is done now with the second group of \gls{ssts} queries, but this time, searching for \textit{peaks, valleys and plateaus}. A sentence is then generated based on the matches: \texttt{Peak Valley}. The same process is applied to each class of signals, being, for each signal, generated a \textit{document} with the corresponding sentences.
 
 \begin{figure}[!h]
     \centering
     \includegraphics[width=\linewidth]{sentence_generation.pdf}
-    \caption{(Top) Using SSTS to detect the rising stage of a time series. Each step of the process is written described as follows: (1) pre-processing: \textit{Sm} is the function \textit{Smooth} with a window size of 25 samples; (2) connotation: \textit{D1}, indicates the first derivate, from which each sample is converted to \textit{z} - Flat, \textit{p} - rising and \textit{n} falling; (3) search - regular expression \textit{p+} searches for all sequences with 1 or more \textit{p} characters. (Bottom) Example of sentence generation. Using the other search queries (\textit{p+, n+, z+}), we can find the derivative patterns and convert it into ordered words.}
+    \caption{(Top) Using \gls{ssts} to detect the rising stage of a time series. Each step of the process is written described as follows: (1) pre-processing: \textit{Sm} is the function \textit{Smooth} with a window size of 25 samples; (2) connotation: \textit{D1}, indicates the first derivate, from which each sample is converted to \textit{z} - Flat, \textit{p} - rising and \textit{n} falling; (3) search - regular expression \textit{p+} searches for all sequences with 1 or more \textit{p} characters. (Bottom) Example of sentence generation. Using the other search queries (\textit{p+, n+, z+}), we can find the derivative patterns and convert it into ordered words.}
     \label{fig:SSTS_example}
 \end{figure}
 
-Having now a method to translate time series into text, we are able to use text mining methods directly on the \textit{documents}. Typically, text data is vectorized with the \gls{BOW} or \gls{TFIDF} models. This brings the reader to the second step of the process.
+Having now a method to translate time series into text, we are able to use text mining methods directly on the \textit{documents}. Typically, text data is vectorized with the \gls{bow} or \gls{tfidf} models. This brings the reader to the second step of the process.
 
 \subsection{Vectorization of Time Series Documents}
 
-The document generation stage receives a time series and transforms it into a \textit{document} with several sentences, descriptive of its shape and dynamics. As mentioned, this transformation is made with \textit{SSTS}, which searches for specific patterns on a symbolic representation of the signal and for which a word is given.  
+The document generation stage receives a time series and transforms it into a \textit{document} with several sentences, descriptive of its shape and dynamics. As mentioned, this transformation is made with \gls{ssts}, which searches for specific patterns on a symbolic representation of the signal and for which a word is given.  
 \par
-After converting the time series into \textit{documents}, the text is analyzed to build a matrix of \textit{word} or \textit{n-gram }frequencies, the \gls{BoW} model. In this case, the features extracted are purely statistical, but can provide a relevant measure of differences between documents. Each row of the \gls{BoW} model is a time series \textit{document}, represented by columns that have the number of occurrences of a \textit{word} or \textit{n-gram}. Figure \ref{fig:bow_model} shows the vectorization of a document as one row of the BoW model.
+After converting the time series into \textit{documents}, the text is analyzed to build a matrix of \textit{word} or \textit{n-gram }frequencies, the \gls{bow} model. In this case, the features extracted are purely statistical, but can provide a relevant measure of differences between documents. Each row of the \gls{bow} model is a time series \textit{document}, represented by columns that have the number of occurrences of a \textit{word} or \textit{n-gram}. Figure \ref{fig:bow_model} shows the vectorization of a document as one row of the \gls{bow} model.
 
 \begin{figure}[!h]
     \centering
     \includegraphics[width=\linewidth]{vectorization.pdf}
-    \caption{Steps for the generation of sentences from a raw time series and organization as a document. Here: {PP - Pre-processing, C- connotation and S - Search} are each \gls{SSTS} queries used to search for the patterns and attribute the matched \textit{subsequences} the corresponding \textit{word}.}
+    \caption{Steps for the generation of sentences from a raw time series and organization as a document. Here: {PP - Pre-processing, C- connotation and S - Search} are each \gls{ssts} queries used to search for the patterns and attribute the matched \textit{subsequences} the corresponding \textit{word}.}
     \label{fig:sentence_gen}
 \end{figure}
 
-The \gls{BoW} model can be used in several ways. Following guidelines from the text mining domain, it can be used for unsupervised tasks as well as supervised ones, for topic modelling and keyword extraction. The \gls{BOW} model can also be trained with Naive Bayes Classifiers, Support Vector Machine or Linear Regressors \cite{scikit-learn}. In addition, the \gls{BoW} model feature matrix can be converted into the \gls{TFIDF} feature matrix, which can then be trained with the same classifiers. In this work, we explored several of these combinations to understand which can give better results.
+The \gls{bow} model can be used in several ways. Following guidelines from the text mining domain, it can be used for unsupervised tasks as well as supervised ones, for topic modelling and keyword extraction. The \gls{bow} model can also be trained with Naive Bayes Classifiers, Support Vector Machine or Linear Regressors \cite{scikit-learn}. In addition, the \gls{bow} model feature matrix can be converted into the \gls{tfidf} feature matrix, which can then be trained with the same classifiers. In this work, we explored several of these combinations to understand which can give better results.
 \par
-As was pointed out in Chapter \ref{cha:theory], one of the reported issues of the \gls{BoW} model is evaluating the relevance of a word based on its frequency in all documents, while not considering that words that occur in all documents might be less relevant. Therefore, we decided to use the \gls{TF-IDF} model, which increases the relevance of a word by means of its raw occurrences, while reducing its importance in proportion to the number of \textit{documents} that contain that word. The model is defined by being a ratio between the \textit{tf} and the \textit{inverse document frequency (idf)} (equation \ref{eq:tfidf}).
+As was pointed out in Chapter \ref{cha:theory], one of the reported issues of the \gls{bow} model is evaluating the relevance of a word based on its frequency in all documents, while not considering that words that occur in all documents might be less relevant. Therefore, we decided to use the \gls{TF-IDF} model, which increases the relevance of a word by means of its raw occurrences, while reducing its importance in proportion to the number of \textit{documents} that contain that word. The model is defined by being a ratio between the \textit{tf} and the \textit{inverse document frequency (idf)} (equation \ref{eq:tfidf}).
+
+Both the \gls{bow} and \gls{tfidf} models give a weight to each \textit{word} for each \textit{document}. This means that each time series document is vectorized into a distribution of weights for each \textit{word}, according to its presence on the time series document and, in case of the \gls{tfidf} model, all the other time series documents. The difference between the distribution of each time series document can be used as a distance measure to compare them. In Figure \ref{fig:distribution_dendogram} is showed the distribution of \textit{word's} weights for four different time series documents of the \textit{Trace} dataset, based on a \gls{tfidf} model. The x-axis of each distribution is the \textit{word} or \textit{n-gram} and the y-axis, the corresponding weight for a time series document.
 \par
-Both the \gls{BOW} and \gls{TFIDF} models give a weight to each \textit{word} for each \textit{document}. This means that each time series document is vectorized into a distribution of weights for each \textit{word}, according to its presence on the time series document and, in case of the \gls{TFIDF} model, all the other time series documents. The difference between the distribution of each time series document can be used as a distance measure to compare them. In Figure \ref{fig:distribution_dendogram} is showed the distribution of \textit{word's} weights for four different time series documents of the \textit{Trace} dataset, based on a \gls{TFIDF} model. The x-axis of each distribution is the \textit{word} or \textit{n-gram} and the y-axis, the corresponding weight for a time series document.
-\par
-The reader can notice that each distribution is different and this provides a way of distancing them. On the right of the distribution, the reader can see a dendogram of sorting examples from the \textit{Trace} dataset. We used the cosine distance between vectors of time series documents (RSVP) and compared it with the euclidean distance (ED). Surprisingly, the \gls{ED} misses a few matches. Although the example is very simple, it highlights well how this strategy can compensate for some mismatches that can occur with the \gls{ED}.
+The reader can notice that each distribution is different and this provides a way of distancing time series based on them. On the right of the distribution, the reader can see a dendogram of sorting examples from the \textit{Trace} dataset. We used the cosine distance between vectors of time series documents (RSVP) and compared it with the \gls{ed}. Surprisingly, the \gls{ed} misses a few matches. Although the example is very simple, it highlights well how this strategy can compensate for some mismatches that can occur with the \gls{ed}.
 
 \begin{figure}
     \centering
@@ -333,11 +333,11 @@ The reader can notice that each distribution is different and this provides a wa
     \label{fig:distribution_dendogram}
 \end{figure}
  
-As the reader can notice, the \gls{ED} mismatched signals from class 1 with signals from class 2, and signals from class 4 with signals from class 3. The fact that a misalignment between the main structures of the signals occur (the main peaks from signals of class 1 are misaligned and the main small peak and valley shapes of class 3 are slightly misaligned), increases the distance between signals that apparently have the same shape. In the other end, the proposed strategy follows a distance measure based on the presence(absence) of specific shapes, as well as how these are ordered (if \textit{n-grams} are used). This means that classes 1 and 2 will not be mismatched, because signals from class 1 have a peak whereas the ones from class 2 don't.
+As the reader can notice, the \gls{ed} mismatched signals from class 1 with signals from class 2, and signals from class 4 with signals from class 3. The fact that a misalignment between the main structures of the signals occur (the main peaks from signals of class 1 are misaligned and the main small peak and valley shapes of class 3 are slightly misaligned), increases the distance between signals that apparently have the same shape. In the other end, the proposed strategy follows a distance measure based on the presence(absence) of specific shapes, as well as how these are ordered (if \textit{n-grams} are used). This means that classes 1 and 2 will not be mismatched, because signals from class 1 have a peak whereas the ones from class 2 don't.
 
 \subsection{Towards Interpretable Results}
 
-Having demonstrated that it is possible to create a distance measure between time series with pure text, we highlight an advantage of working on the text domain, which is \textit{interpretability} of the data. By \textit{interpretability}, we mean that it is possible to extract meaning in what differentiate classes of signals. This advantage is taken because of the weighting factor attributed to each \textit{word} or \textit{n-gram} from the \gls{TFIDF} model. As explained by Pavel Senin \textit{et. al}, the weights can be used as a weighting vector for each word extracted, highlight the corresponding shape on the original signal and measuring its importance for the classification process \cite{sax_vsm}.
+Having demonstrated that it is possible to create a distance measure between time series with pure text, we highlight an advantage of working on the text domain, which is \textit{interpretability} of the data. By \textit{interpretability}, we mean that it is possible to extract meaning in what differentiate classes of signals. This advantage is taken because of the weighting factor attributed to each \textit{word} or \textit{n-gram} from the \gls{tfidf} model. As explained by Pavel Senin \textit{et. al}, the weights can be used as a weighting vector for each word extracted, highlight the corresponding shape on the original signal and measuring its importance for the classification process \cite{sax_vsm}.
 
 \begin{figure}
     \centering
@@ -347,7 +347,7 @@ Having demonstrated that it is possible to create a distance measure between tim
 \end{figure}
 
 
-The process to highlight the areas of the signal that are more relevant and able to explain the difference between classes is illustrated on Figure \ref{fig:interpretable_step}. From the \gls{BOW} model, the \gls{TFIDF} model is computed, following equations \ref{eq:tf}, \ref{eq:idf} and \ref{eq:tfidf}. From this representation, each \textit{time series} is represented as a vector of weights for each \textit{word}. These weights can be used to highlight the area of the signal represented by the corresponding \textit{word}. Therefore, the process is to search back the areas of the signal that match the \textit{word} or \textit{n-gram} ($w_i$) as an \gls{SSTS} query, while keeping the corresponding \textit{weight} ($h_{ij}$), for word $i$ from time series document $j$, on the indexes of the match, with indexes $a$ and $b$:
+The process to highlight the areas of the signal that are more relevant and able to explain the difference between classes is illustrated on Figure \ref{fig:interpretable_step}. From the \gls{bow} model, the \gls{tfidf} model is computed, following equations \ref{eq:tf}, \ref{eq:idf} and \ref{eq:tfidf}. From this representation, each \textit{time series} is represented as a vector of weights for each \textit{word}. These weights can be used to highlight the area of the signal represented by the corresponding \textit{word}. Therefore, the process is to search back the areas of the signal that match the \textit{word} or \textit{n-gram} ($w_i$) as an \gls{ssts} query, while keeping the corresponding \textit{weight} ($h_{ij}$), for word $i$ from time series document $j$, on the indexes of the match, with indexes $a$ and $b$:
 
 \begin{equation}
 (a,b) = ssts(t_j, w_i)
@@ -438,23 +438,23 @@ Word & Description & Example\\
 \hline
 \textbf{\texttt{\textcolor{myblue4}{Complex} (\textcolor{myblue3}{Simple})}} & The complexity-invariant distance measure of the \textit{subsequence} of \ref{eq:complexity}. (\texttt{simple = !complex}) & \includegraphics[height=10ex, valign=m]{thumbnail_complex.pdf}\\
 \hline
-\textbf{\texttt{\textcolor{myblue4}{Symmetric} (\textcolor{myblue3}{Asymmetric})}} & The normalized \gls{ED} (\ref{eq:norm_ed}) to the \textit{subsequence}’s horizontally flipped self. & \includegraphics[height=10ex, valign=m]{thumbnail_symmetric.pdf}\\
+\textbf{\texttt{\textcolor{myblue4}{Symmetric} (\textcolor{myblue3}{Asymmetric})}} & The normalized \gls{ed} (\ref{eq:norm_ed}) to the \textit{subsequence}’s horizontally flipped self. & \includegraphics[height=10ex, valign=m]{thumbnail_symmetric.pdf}\\
 \hline
-\textbf{\texttt{\textcolor{myblue4}{Peak} (\textcolor{myblue3}{Valley})}} & The logarithmic normalized \gls{ED} (\ref{eq:norm_ed}) to the template of a peak (valley), modulated by a gaussian function. & \includegraphics[height=10ex, valign=m]{thumbnail_valley_peak.pdf}\\
+\textbf{\texttt{\textcolor{myblue4}{Peak} (\textcolor{myblue3}{Valley})}} & The logarithmic normalized \gls{ed} (\ref{eq:norm_ed}) to the template of a peak (valley), modulated by a gaussian function. & \includegraphics[height=10ex, valign=m]{thumbnail_valley_peak.pdf}\\
 \hline
-\textbf{\texttt{\textcolor{myblue4}{StepUp} (\textcolor{myblue3}{StepDown})}} & The logarithmic normalized \gls{ED} (\ref{eq:norm_ed}) to the template of a step-up(down) function. & \includegraphics[height=10ex, valign=m]{thumbnail_step_up_down.pdf}\\
+\textbf{\texttt{\textcolor{myblue4}{StepUp} (\textcolor{myblue3}{StepDown})}} & The logarithmic normalized \gls{ed} (\ref{eq:norm_ed}) to the template of a step-up(down) function. & \includegraphics[height=10ex, valign=m]{thumbnail_step_up_down.pdf}\\
 \hline
-\textbf{\texttt{\textcolor{myblue4}{PlateauUp} (\textcolor{myblue3}{PlateauDown})}} & The logarithmic normalized \gls{ED} (\ref{eq:norm_ed})to the template of a plateau-up(down) function & \includegraphics[height=10ex, valign=m]{thumbnail_plateau_up_down.pdf}\\
+\textbf{\texttt{\textcolor{myblue4}{PlateauUp} (\textcolor{myblue3}{PlateauDown})}} & The logarithmic normalized \gls{ed} (\ref{eq:norm_ed})to the template of a plateau-up(down) function & \includegraphics[height=10ex, valign=m]{thumbnail_plateau_up_down.pdf}\\
 \hline
 \textbf{\texttt{\textcolor{myblue4}{Top} (\textcolor{myblue3}{Bottom})}} & The moving average of the time series: $ma(i) = \frac{1}{w}\Sigma_{j=a}^{a+w} t(j)$. (\texttt{bottom = !top}) & \includegraphics[height=10ex, valign=m]
 {thumbnail_top_bottom.pdf}\\
 \hline
 \textbf{\texttt{\textcolor{myblue4}{High} (\textcolor{myblue3}{Low})}} & The difference between the maximum and minimum value of a \textit{subsequence}: \texttt{high(i)} $= max(t(a,a+w)) - min(t(a,a+w))$. (\texttt{low = !high}) & \includegraphics[height=10ex, valign=m]{thumbnail_high_low.pdf}\\
 \hline
-\textbf{\textit{Shape}} & The normalized \gls{ED} profile of the time series with a query (e.g. in orange) given by the user as an example. A word must be given as well and integrated on the query language. & \includegraphics[height=10ex, valign=m]{thumbnail_shape.pdf}\\
+\textbf{\textit{Shape}} & The normalized \gls{ed} profile of the time series with a query (e.g. in orange) given by the user as an example. A word must be given as well and integrated on the query language. & \includegraphics[height=10ex, valign=m]{thumbnail_shape.pdf}\\
 \bottomrule[1.5pt]
 \end{tabular}
-\label{tab:ssts_queries}
+\label{tab:quots_wfv}
 \end{center}
 \end{table}
 

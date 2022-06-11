@@ -12,6 +12,7 @@
 %%============================================================
 %%  FOR DEMO PURPOSES ONLY --- YOU MAY REMOVE THESE PACKAGES
 %%============================================================
+%\PassOptionsToPackage[x11names]{xcolor} %package to use colored text
 \usepackage{float}        % FOR DEMO PURPOSES ONLY --- PLEASE REMOVE
 \usepackage{wrapfig}      % FOR DEMO PURPOSES ONLY --- PLEASE REMOVE
 \restylefloat{figure}     % FOR DEMO PURPOSES ONLY --- PLEASE REMOVE
@@ -42,7 +43,7 @@
 
 \usepackage{backnaur} %package for backus naur text rules
 
-\newfontfamily\symb{Symbola} %Package to use special symbols
+%\newfontfamily\symb{Symbola} %Package to use special symbols
 
 \usepackage{booktabs}
 
@@ -60,7 +61,12 @@
 \usepackage[T1]{fontenc}
 \usepackage{courier}
 
-\usepackage[dvipsnames]{xcolor} %package to use colored text
+\usepackage{gensymb} % for the degree symbol
+
+
+\usepackage{csquotes}
+
+
 \definecolor{myblue}{RGB}{83, 119, 209}
 \definecolor{myred}{RGB}{231, 95, 74}
 \definecolor{mygreen}{RGB}{1, 163, 165}
@@ -72,10 +78,12 @@
 \definecolor{myblue3}{RGB}{51, 194, 223}
 \definecolor{myblue4}{RGB}{72, 129, 214}
 
+\DeclareMathOperator{\sign}{sign}
+
 \newcolumntype{A}{p{0.05\textwidth}}
 \newcolumntype{B}{p{0.5\textwidth}}
 \newcolumntype{C}{p{0.325\textwidth}}
-\newcolumntype{D}{p{0.5\textwidth}}
+\newcolumntype{E}{p{0.5\textwidth}}
 \newcolumntype{P}{p{0.6\textwidth}}
 \newcolumntype{L}[1]{>{\raggedright\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
 \newcolumntype{M}[1]{>{\centering\arraybackslash}m{#1}}

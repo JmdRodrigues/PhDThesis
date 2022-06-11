@@ -18,13 +18,13 @@ Considering the diversity of methods developed, this chapter will be divided int
 
 \section{Novelty Segmentation}
 
-In this section, we present several examples in how the \textit{nova} function, retrieved from the \gls{SSM}, is useful for the segmentation of time series. The reader will appreciate that we also provide a measure of the algorithm's performance considering ground truth events from public benchmarks (presented on Chapter \ref{cha:dataset}, while also comparing our proposed solution with state of the art methods for change point detection from the \textit{Turing Change Point Detection Benchmark} \cite{cpd_alan}.
+In this section, we present several examples in how the \textit{nova} function, retrieved from the \gls{ssm}, is useful for the segmentation of time series. The reader will appreciate that we also provide a measure of the algorithm's performance considering ground truth events from public benchmarks (presented on Chapter \ref{cha:dataset}, while also comparing our proposed solution with state of the art methods for change point detection from the \textit{Turing Change Point Detection Benchmark} \cite{cpd_alan}.
 \par
 This section is divided into three main categories: (1) Validation in segmentation datasets, (2) comparison with state of the art methods and (3) discussion of the results obtained.
 
 \subsection{Performance on Public Datasets}
 
-The datasets that were used to test and validate this method have categorized labels that were used to generate ground-truth events. These include different contexts (HAR, Hand Posture, Noise Detection, etc...) and different types of data (Inertial data, \gls{EMG} and \gls{ECG}).
+The datasets that were used to test and validate this method have categorized labels that were used to generate ground-truth events. These include different contexts (\gls{har}, Hand Posture, Noise Detection, etc...) and different types of data (Inertial data, \gls{emg} and \gls{ecg}).
 \par
 The method has been computed in the same conditions and by following the same procedure for all records of all datasets. The features used have been the same for each record, varying the time scale parameter, the overlap size of the sliding window and the kernel size. The peak detection strategy was the same for all records, which is based on a threshold mechanism. The threshold value varied for each record.  
 \par
@@ -40,15 +40,15 @@ Results for publicly available datasets are presented in Tables \ref{tab:overall
 			Dataset 2 & ACC-GYR & 6 & HACP & 157 & 18 & 22 & 0.897 & 0.877 & 0.887 \\
 			Dataset 3 & ACC-GYR & 6 & HACP & 1378 & 313 & 263 & 0.815 & 0.840 & 0.827 \\
 			Dataset 4 & ACC-GYR & 12 & HACP & 499 & 71 & 38 & 0.875 & 0.929 & 0.902 \\
-			Dataset 5 & EMG & 8 & Act/Rel & 309 & 0 & 72 & 1.000 & 0.811 & 0.811 \\
-			Dataset 6  & ECG & 1 & Noise & 132 & 25 & 10 & 0.841 & 0.930 & 0.883 \\
-			Dataset 7  & ECG & 4 & Noise & 21 & 2 & 3 & 0.913 & 0.875 & 0.894 \\
+			Dataset 5 & \gls{emg} & 8 & Act/Rel & 309 & 0 & 72 & 1.000 & 0.811 & 0.811 \\
+			Dataset 6  & \gls{ecg} & 1 & Noise & 132 & 25 & 10 & 0.841 & 0.930 & 0.883 \\
+			Dataset 7  & \gls{ecg} & 4 & Noise & 21 & 2 & 3 & 0.913 & 0.875 & 0.894 \\
 			\midrule
 			Total  & N.A. & N.A. & N.A. & 2629 & 465 & 386 & 0.850 & 0.872 & 0.861 \\
 			\bottomrule
 		\end{tabular}
 	\end{center}
-	\caption{Overall results for the performance of the method on novelty segmentation. The dimension of the records is presented on the column \textit{\# Ch}, as well as the types of signals used and the task in which  applied (HACP - Human Activity Change Point detection; Act/Rel - Activation/Relaxation of the EMG detection and Noise detection).}
+	\caption{Overall results for the performance of the method on novelty segmentation. The dimension of the records is presented on the column \textit{\# Ch}, as well as the types of signals used and the task in which  applied (HACP - Human Activity Change Point detection; Act/Rel - Activation/Relaxation of the \gls{emg} detection and Noise detection).}
 	\label{tab:overall_cpd}
 \end{table*}
 
@@ -190,9 +190,9 @@ In order to compare the proposed method with state of the art approaches we used
     
     \textbf{Average F1-measure (ALL)} & \cellcolor{cyan!05}\textbf{0.871} & n.a. & n.a. & 0.855 & 0.604 & n.a. & 0.797 & 0.683 & n.a. & n.a. & 0.343 & n.a. & n.a. & n.a. & 0.61
     \end{tabular}
-    \label{tab:alanturing}
 \end{adjustbox}
     \caption{Comparison of performance between the proposed method (\textit{Nova}) and other algorithms. The colors indicate if the other algorithms were better (Orange) or worse (Blue) in performance than the \textit{Nova} method for a specific dataset. Time series from \textit{apple}, \textit{bee\_waggle\_6}, \textit{occupancy} and \textit{run\_log} are multivariate. The average results are grouped on the last row. Averages did not considered the gray columns, since these would imply that no change point should be detected, or an error on the signal was present. \textit{T} appears when the method timedout, \textit{M} and \textit{F} when the method failed in compiling}.
+    \label{tab:alanturing}
 \end{table*}
 
 As presented in Figure \ref{fig:cdd_alant}, the critical distance diagram ranks the proposed method in the top four, without a significant difference in performance (considering methods that only work in uni-dimensional datasets). The average F1-measure is 79.6\% for both uni and multi-dimensional datasets. Two of the F1-measures are null due to the fact that in these two time series, no change point was supposed to be found, but the proposed method is not yet prepared to return no results. 
@@ -223,9 +223,9 @@ For datasets with categorized events, which are a transition between one categor
     \label{fig:fn_dataset2}
 \end{wrapfigure}
 
-As the results illustrate on Figure \ref{fig:fn_dataset2}, the F1-score is lower in cases of activities with similar characteristics on time series. In this case, the transition between $Walking \xrightarrow[]{} Walking Upstairs$ has the lowest accuracy rate. However, transitions between $Walking \xrightarrow[]{} Walking up/downstairs$, as well as transitions between $Sitting \xrightarrow[]{} Standing$, are more difficult to detect. These results are supported by Figure \ref{fig:fn_dataset2}, where peaks in the \textit{nova} function are smaller for these transitions. Although a significant portion of these events have been missed, the problem is not necessarily that the \gls{SSM} has not the checkerboard pattern. In this cases, these more subtle changes were overshadowed by very significant changes, such as $Walking \xrightarrow[]{} Standing$. Nevertheless, a re-normalization of the \gls{SSM} segment of interest can help in better visualize the differences that were initially hidden. 
+As the results illustrate on Figure \ref{fig:fn_dataset2}, the F1-score is lower in cases of activities with similar characteristics on time series. In this case, the transition between $Walking \xrightarrow[]{} Walking Upstairs$ has the lowest accuracy rate. However, transitions between $Walking \xrightarrow[]{} Walking up/downstairs$, as well as transitions between $Sitting \xrightarrow[]{} Standing$, are more difficult to detect. These results are supported by Figure \ref{fig:fn_dataset2}, where peaks in the \textit{nova} function are smaller for these transitions. Although a significant portion of these events have been missed, the problem is not necessarily that the \gls{ssm} has not the checkerboard pattern. In this cases, these more subtle changes were overshadowed by very significant changes, such as $Walking \xrightarrow[]{} Standing$. Nevertheless, a re-normalization of the \gls{ssm} segment of interest can help in better visualize the differences that were initially hidden. 
 \par
-An example of the enhancement process is better seen on Figure \ref{fig:example1_zoom} from Chapter \ref{cha:ssm}. The block $A$ is highlighted, showing clearly the three modes of the time series. Now that we only focused in that segment, we can clearly perceive these transitions. This example demonstrates that this tool has the potential of enhancing the detection of several transitions in a hierarchical process by re-normalizing segments of an initial segmentation. This would come without a significant extra computational cost, since these measures of the \gls{SSM} are already computed. Nevertheless, there is the potential of finding extra undesired events depending on the threshold level.
+An example of the enhancement process is better seen on Figure \ref{fig:example1_zoom} from Chapter \ref{cha:ssm}. The block $A$ is highlighted, showing clearly the three modes of the time series. Now that we only focused in that segment, we can clearly perceive these transitions. This example demonstrates that this tool has the potential of enhancing the detection of several transitions in a hierarchical process by re-normalizing segments of an initial segmentation. This would come without a significant extra computational cost, since these measures of the \gls{ssm} are already computed. Nevertheless, there is the potential of finding extra undesired events depending on the threshold level.
 
 \subsubsection{Comparisons to Related Work}
 
@@ -233,34 +233,34 @@ We will now look for specific datasets from the \textit{TCPD} benchmark that sho
 \par
 The results show that this method is highly competitive in performing event detection in time series, with high performance scores in real-world datasets. From all methods tested in the \textit{TCPD benchmark}, only the \textit{BOCPD} method was able to obtain similar results (Figure \ref{fig:cdd_alant} and Table \ref{tab:alanturing}), considering also multidimensional datasets, but it does so with an optimization of many parameters. The proposed method is being computed with several parameters as well, but has the potential to accept only one.
 \par
-One of the other great advantages of the proposed method is that it also provides a rich visual feedback, which can be perfect to support the analyst in interpreting a time series. The content of the \gls{SSM} goes beyond change point detection, providing relevant information about periodicity and similarity. Not only can we detect change points, as we can also find which segments are more (dis)similar. The other tested methods do not provide such rich information.
+One of the other great advantages of the proposed method is that it also provides a rich visual feedback, which can be perfect to support the analyst in interpreting a time series. The content of the \gls{ssm} goes beyond change point detection, providing relevant information about periodicity and similarity. Not only can we detect change points, as we can also find which segments are more (dis)similar. The other tested methods do not provide such rich information.
 
 \subsubsection{Effects of Window Size and Overlap}
 
 There are several parameters that affect the ability to detect the desired patterns. These are the window size, the overlap percentage and the kernel size. Although in this work we used all three parameters, these can potentially be combined into a single one. We only considered entry parameters on the method that affect the visual output and novelty function. We do not consider the parameters for the simple threshold-based peak strategy used.
 \par
-The reader may appreciate that these parameters can be explained with the analogy of a camera. The window size works like the \textit{zoom function}, defining the scale of interest in the time series. Larger windows correspond to lower \textit{zoom values} and will compute the similarity of larger \textit{subsequences}, while smaller windows are like a \textit{zoom-in} function on the time series, searching for any small detail that might be a change. The overlap percentage is the \textit{camera sensor}, which defines the pixel resolution of the image and works as a downsampler of the time series. A full resolution of the \gls{SSM} is only achieved with total overlap, and the lower the overlap percentage, the less accurate are the highlighted changes.
+The reader may appreciate that these parameters can be explained with the analogy of a camera. The window size works like the \textit{zoom function}, defining the scale of interest in the time series. Larger windows correspond to lower \textit{zoom values} and will compute the similarity of larger \textit{subsequences}, while smaller windows are like a \textit{zoom-in} function on the time series, searching for any small detail that might be a change. The overlap percentage is the \textit{camera sensor}, which defines the pixel resolution of the image and works as a downsampler of the time series. A full resolution of the \gls{ssm} is only achieved with total overlap, and the lower the overlap percentage, the less accurate are the highlighted changes.
 \par
-These two parameters are fundamental for the success of the event detection process. This is mostly evident in some of the datasets where we applied the proposed method, since the larger the time scale used, the larger the MAE in the detected events. For instance, in \textit{Dataset 4}, the time series are very large (3 minutes for each of the 18 activities, at 20 Hz), which due to computation time and memory allocation constraints, we used a larger time window with a lower overlap percentage. The result was an increase in the \gls{MAE}.
+These two parameters are fundamental for the success of the event detection process. This is mostly evident in some of the datasets where we applied the proposed method, since the larger the time scale used, the larger the \gls{mae} in the detected events. For instance, in \textit{Dataset 4}, the time series are very large (3 minutes for each of the 18 activities, at 20 Hz), which due to computation time and memory allocation constraints, we used a larger time window with a lower overlap percentage. The result was an increase in the \gls{mae}.
 \par
-In the other hand, the sliding kernel computes the sharpness of the changes detected with the novelty function. The larger it is, the smoother will be the resulting function. Potentially, even if with a small decrease in accuracy, the kernel size could be calculated as a ratio of the window size. The overlap percentage should be maximized and based on the memory available to perform the \gls{SSM} computation. With this we could define the window size as the sole parameter of this algorithm.
+In the other hand, the sliding kernel computes the sharpness of the changes detected with the novelty function. The larger it is, the smoother will be the resulting function. Potentially, even if with a small decrease in accuracy, the kernel size could be calculated as a ratio of the window size. The overlap percentage should be maximized and based on the memory available to perform the \gls{ssm} computation. With this we could define the window size as the sole parameter of this algorithm.
 \par
-In terms of computation time, the algorithm performs (1) a sliding window to extract features, which is \textit{O(n)} complexity and (2) performs the dot product between matrices, which is traditionally \textit{O($m^2n$)} (recall that m is the number of features and n is the size of the inputted signal). Finally, the correlation of a kernel on the \gls{SSM}'s diagonal has a complexity of $O(nM^2)$ (recall that $M=2L+1$, being the size of the sliding kernel).
+In terms of computation time, the algorithm performs (1) a sliding window to extract features, which is \textit{O(n)} complexity and (2) performs the dot product between matrices, which is traditionally \textit{O($m^2n$)} (recall that m is the number of features and n is the size of the inputted signal). Finally, the correlation of a kernel on the \gls{ssm}'s diagonal has a complexity of $O(nM^2)$ (recall that $M=2L+1$, being the size of the sliding kernel).
 \par
-The memory bandwidth is a drawback in this current stage, since the \gls{SSM} increases exponentially with the increase in the time series size. We showed that downsampling the time series with a lower overlap percentage is a valid option, while also pursuing a hierarchical search strategy (\textit{recall the example of walking patterns}) can help in searching for the events in multiple steps, reducing the memory limitation. Another potential solution is the computation of only the central diagonal of the \gls{SSM} with the size of the kernel, which corresponds to the area of interest to detect change points. This procedure would reduce the broad applications that the \gls{SSM} can provide, namely the periodic segmentation and the similarity measure between \textit{subsequences}.
+The memory bandwidth is a drawback in this current stage, since the \gls{ssm} increases exponentially with the increase in the time series size. We showed that downsampling the time series with a lower overlap percentage is a valid option, while also pursuing a hierarchical search strategy (\textit{recall the example of walking patterns}) can help in searching for the events in multiple steps, reducing the memory limitation. Another potential solution is the computation of only the central diagonal of the \gls{ssm} with the size of the kernel, which corresponds to the area of interest to detect change points. This procedure would reduce the broad applications that the \gls{ssm} can provide, namely the periodic segmentation and the similarity measure between \textit{subsequences}.
 
 \section{Cyclic Segmentation}
 
-The detection of cycles was validated on dataset \ref{data:arikmetic}. It consists in 15 multivariate time series with the same repeated cyclic activity. Each time series was segmented based on the \gls{sf}, which enhances the periodic nature of the time series when present. This method was applied to this dataset, being the results displayed on Table \ref{tab:har_results}.
+The detection of cycles was validated on dataset \ref{data:arikmetic}. It consists in 15 multivariate time series with the same repeated cyclic activity. Each time series was segmented based on the \gls{s_f}, which enhances the periodic nature of the time series when present. This method was applied to this dataset, being the results displayed on Table \ref{tab:har_results}.
 
 
 \begin{table}[ht]
-\caption[Detected cycles and \gls{D_e} results of the detection of type 2 events, over the \textit{\gls{HAR}} database]{Detected cycles and \gls{D_e} results of the detection of type 2 events, over the \textit{\gls{HAR}} database.}
+\caption[Detected cycles and \gls{d_e} results of the detection of type 2 events, over the \textit{\gls{har}} database]{Detected cycles and \gls{d_e} results of the detection of type 2 events, over the \textit{\gls{har}} database.}
 \label{tab:har_results}
 \centering
 \begin{tabular}{ccc}
 \toprule
-TS sample & Detected Cycles & \gls{D_e}(\%) \\ \midrule
+TS sample & Detected Cycles & \gls{d_e}(\%) \\ \midrule
 1         & 19/19           & 13,25                                                                                   \\
 2         & 19/19           & 8,81                                                                                    \\
 3         & 19/19           & 8,82                                                                                    \\
@@ -281,9 +281,9 @@ TS sample & Detected Cycles & \gls{D_e}(\%) \\ \midrule
 \end{tabular}
 \end{table}
 
-The results show the ability of this function to segment the time series into each cycle. It has successfully segmented all time series in all desired segments while having a low duration error ($D_e$) compared to the ground truth.
+The results show the ability of this function to segment the time series into each cycle. It has successfully segmented all time series in all desired segments while having a \gls{d_e} compared to the ground truth.
 \par
-Although this method was successful in segmenting the signal, the proposed solution is not yet optimal. It does not always provide the moment where the \textit{path} starts on the \gls{SSM}. This moment should be the one detected to capture the true starting point of a period. 
+Although this method was successful in segmenting the signal, the proposed solution is not yet optimal. It does not always provide the moment where the \textit{path} starts on the \gls{ssm}. This moment should be the one detected to capture the true starting point of a period. 
 
 
 \section{Additional Applications}
@@ -295,7 +295,7 @@ Although this method was successful in segmenting the signal, the proposed solut
 
 \section{Pattern Search with SSTS}
 
-This section contains the solutions of the aforementioned examples (\textit{Example 1} is omitted since it was discussed in the previous section). For all presented examples, each step will be explained individually in order to demonstrate its corresponding role, present how the transition from the float domain to the string domain is achieved, and the mechanisms for the search step. Finally, a comparison between \gls{SSTS} and the \textit{classical} solution using the \textit{Halstead} complexity measures will be presented.
+This section contains the solutions of the aforementioned examples (\textit{Example 1} is omitted since it was discussed in the previous section). For all presented examples, each step will be explained individually in order to demonstrate its corresponding role, present how the transition from the float domain to the string domain is achieved, and the mechanisms for the search step. Finally, a comparison between \gls{ssts} and the \textit{classical} solution using the \textit{Halstead} complexity measures will be presented.
 
 \subsection{Examples' solution}
 The tool focuses essentially on facilitating the solving of simple tasks, although it can be used for more complex scenarios. We will present three examples: the first and second examples consists of simple problems that require the detection of local maxima and minima. The third example is a more challenging task, which requires the use of more sophisticated mechanisms of the regular expression module.
@@ -307,32 +307,32 @@ The example consists of detecting the subject's steps in the acceleration signal
 \begin{figure}[H]
   \centering
       \includegraphics[width=\textwidth]{ssts_example2.pdf}
-  \caption{Example 2 - Solution pipeline of Step Detection example. At the bottom of the figure is summarized the operators and methods used in each step. In the symbolic connotation step, the alternation between the methods is made with colours (Blue - ampC - \symb \symbol{"21DE}, Red - diffC - \symb \symbol{"2202}). A doted line is shown to represent the threshold level. To each colorband in the signal corresponds a specific primitive. A positive match is highlighted with green in the search step.}
+  \caption{Example 2 - Solution pipeline of Step Detection example. At the bottom of the figure is summarized the operators and methods used in each step. In the symbolic connotation step, the alternation between the methods is made with colours (Blue - A - Amplitude Comparison, Red - D1 - First Derivative). A doted line is shown to represent the threshold level. To each colorband in the signal corresponds a specific primitive. A positive match is highlighted with green in the search step.}
   \label{fig:Exercise2}
 \end{figure}
 
-The signal is initially pre-processed in order to ease the identification of the subject's steps. This is achieved using a low pass filter (\symb \symbol{"2634} or LP). The result is presented in the second image of the first step in Fig. \ref{fig:Exercise2}. An highlight is also present and delineates a segment of the signal that has a minimum peak, which corresponds to a right heel contact. The string representation of this segment is depicted in the second step.
+The signal is initially pre-processed in order to ease the identification of the subject's steps. This is achieved using a low pass filter (LP). The result is presented in the second image of the first step in Fig. \ref{fig:Exercise2}. An highlight is also present and delineates a segment of the signal that has a minimum peak, which corresponds to a right heel contact. The string representation of this segment is depicted in the second step.
 \par
-The string is a sequence of primitives composed by two connotation methods (ampC - \symb \symbol{"21DE} in blue, diffC - \symb \symbol{"2202} in red). Based on these methods, the samples of the signal with amplitudes greater than \textit{40}\% of the range amplitude are transcribed into $1$, while the remaining turn into $0$; the slopes are converted into $p$, $z$ and $n$, when rising, being stationary and falling, respectively.
+The string is a sequence of primitives composed by two connotation methods (A in blue, D1 in red). Based on these methods, the samples of the signal with amplitudes greater than \textit{40}\% of the range amplitude are transcribed into $1$, while the remaining turn into $0$; the slopes are converted into $p$, $z$ and $n$, when rising, being stationary and falling, respectively.
 \par
 The solution involves detecting each minimum with an amplitude inferior to the threshold level. The morphological representation of a minimum can be reduced to a negative slope followed by a positive one, which in the symbolic representation is defined by the second connotation method as the transition from $n$ to $p$ or $z$ to $p$. Regarding the amplitude requirement, it is assigned by the first connotation method, in which any value lower to the threshold level is $0$. The regular expression used to find this minimum was $0z0p$, which implies that: (1) the amplitude has to be $0$; and (2) the derivative is $z$ and then $p$. The detection is highlighted in green in the last plot of Fig. \ref{fig:Exercise2}.
 
-\subsubsection{Example 3 - Dicrotic notch detection in \gls{ABP} signals}
+\subsubsection{Example 3 - Dicrotic notch detection in ABP signals}
 
-The \gls{ABP} waves are morphologically represented by a high positive slope that corresponds to the systolic uptake and ends in the peak of the systolic pressure. After this behaviour, follows the systolic decline, which ends with the aortic valve closure, named the \textit{dicrotic notch} in the signal representation~\cite{abpSignal}.
+The \gls{abp} waves are morphologically represented by a high positive slope that corresponds to the systolic uptake and ends in the peak of the systolic pressure. After this behaviour, follows the systolic decline, which ends with the aortic valve closure, named the \textit{dicrotic notch} in the signal representation~\cite{abpSignal}.
 \par
-These type of signals are commonly affected by low frequency noise that modulates the signal and contaminated with high frequency noise of low amplitude. The typical procedure is to bandpass the \gls{ABP} signal in order to remove both types of noise. Fig. \ref{fig:Exercise3} depicts how a band pass filter that cuts frequencies under 1 Hz and above 20 Hz (\symb \symbol{"2632} or BP) is applied to the signal to remove both types of noise. The modulation removal is shown with the linear regression in both original and pre-processed signals, which in the first case has a positive slope and after the pre-processing is approximately zero.
+These type of signals are commonly affected by low frequency noise that modulates the signal and contaminated with high frequency noise of low amplitude. The typical procedure is to bandpass the \gls{abp} signal in order to remove both types of noise. Fig. \ref{fig:Exercise3} depicts how a band pass filter that cuts frequencies under 1 Hz and above 20 Hz (BP) is applied to the signal to remove both types of noise. The modulation removal is shown with the linear regression in both original and pre-processed signals, which in the first case has a positive slope and after the pre-processing is approximately zero.
 
 \begin{figure}[H]
   \centering
       \includegraphics[width=\textwidth]{ssts_example3.pdf}
-  \caption{Example 2 - Solution pipeline of Dicrotic notch detection example. The operators or methods used in each step are summarized at the bottom of the figure. In the symbolic connotation step, the alternation between methods is represented with colors (Blue - RiseAmp - \symb \symbol{"2195}, Red - diffC - \symb \symbol{"2202}). For each colorband in the signal there is a corresponding primitive. The match is highlighted with green in the search step.}
+  \caption{Example 2 - Solution pipeline of Dicrotic notch detection example. The operators or methods used in each step are summarized at the bottom of the figure. In the symbolic connotation step, the alternation between methods is represented with colors (Blue - AD, Red - D1). For each colorband in the signal there is a corresponding primitive. The match is highlighted with green in the search step.}
   \label{fig:Exercise3}
 \end{figure}
 
-In the symbolic connotation step, the reasoning follows the signal morphological description and uses two methods for the symbolic representation. The first, \symb \symbol{"2195} (represented in blue), detects all rising and falling slopes that are higher than a specific threshold (in this case 30\% of the amplitude range of the signal) and transcribes the sample values to $1$, while the remaining values are converted to $0$. The second method (represented in red) uses the derivative, as mentioned in the previous examples.
+In the symbolic connotation step, the reasoning follows the signal morphological description and uses two methods for the symbolic representation. The first, AD (represented in blue), detects all rising and falling slopes that are higher than a specific threshold (in this case 30\% of the amplitude range of the signal) and transcribes the sample values to $1$, while the remaining values are converted to $0$. The second method (represented in red) uses the derivative, as mentioned in the previous examples.
 \par
-The first connotation method is necessary in order to distinguish between the rising slope that occurs in the beginning of the pressure wave and the one after the \textit{dicrotic notch}. With this distinction, it is possible to find the beginning of the \gls{ABP} wave as a high positive slope ($1p$) and find the \textit{dicrotic notch} when the lower slope starts ($0.$). In order to find this area of the \gls{ABP} wave, the regular expression has to start with the first $1p$ primitive and end with the first $0.$ primitive. 
+The first connotation method is necessary in order to distinguish between the rising slope that occurs in the beginning of the pressure wave and the one after the \textit{dicrotic notch}. With this distinction, it is possible to find the beginning of the \gls{abp} wave as a high positive slope ($1p$) and find the \textit{dicrotic notch} when the lower slope starts ($0.$). In order to find this area of the \gls{abp} wave, the regular expression has to start with the first $1p$ primitive and end with the first $0.$ primitive. 
 
 \par
 The example is solved with the following regular expression: $(1p).*?(0.)$. This string means that the search will match anything (represented by "$.*?$") between the first "$1p$" primitive and the first "\textit{0.}" primitive.
@@ -347,13 +347,13 @@ The next problem involves the segmentation of a lifting step that has occurred 5
 \begin{figure}[H]
   \centering
       \includegraphics[width=\textwidth]{ssts_example6.pdf}
-  \caption{Example 6 - Solution pipeline of Stable Lifting Detection. The operators or methods used in each step are summarized at the bottom of the figure. In the symbolic connotation step, the alternation between the methods is made with colors (Blue - RiseAmp - \symb \symbol{"2195}, Red - diffC - \symb \symbol{"2202}). The threshold level is identified with a white dotted line. To each colorband in the signal corresponds a specific primitive. The match is highlighted with green in the "Search" step.}
+  \caption{Example 6 - Solution pipeline of Stable Lifting Detection. The operators or methods used in each step are summarized at the bottom of the figure. In the symbolic connotation step, the alternation between the methods is made with colors (Blue - AD, Red - D1). The threshold level is identified with a white dotted line. To each colorband in the signal corresponds a specific primitive. The match is highlighted with green in the "Search" step.}
   \label{fig:Hard}
 \end{figure}
 
 Fig. \ref{fig:Hard} demonstrates how the example is solved. In both pre-processing and symbolic connotation steps, a vertical bar $|$ separates the methods that are applied for each representation of the same signal. The pre-processing phase uses a sequence of whitening, modulus and smoothing of the signal for "\textit{Process A}", and a sequence of whitening and smoothing for "\textit{Process B}". The first processing sequence turns the signal similar to a plateau, in which the beginning of the activity is easily identified; whereas, in the second sequence, the signal is smoothed such that each lifting step is well defined.
 \par
-Regarding the symbolic connotation step, the first method \symb \symbol{"21DE} (represented in blue) turns all sample values of the first signal that are higher to the threshold level into $1$, while the remaining samples are converted to $0$. The second set is applied to the second signal and uses the derivative of the signal \symb \symbol{"2202} (represented in red). Both symbolic connotations merge into a sequence of primitives, in which the first element inspects if the exercise has already started ($1.$)  or not ($0.$), and the second infers the sectioning of the lifting steps, that is, if the sample of the signal is increasing ($.p$), stationary ($.z$) or decreasing ($.n$).
+Regarding the symbolic connotation step, the first method AD (represented in blue) turns all sample values of the first signal that are higher to the threshold level into $1$, while the remaining samples are converted to $0$. The second set is applied to the second signal and uses the derivative of the signal D1(represented in red). Both symbolic connotations merge into a sequence of primitives, in which the first element inspects if the exercise has already started ($1.$)  or not ($0.$), and the second infers the sectioning of the lifting steps, that is, if the sample of the signal is increasing ($.p$), stationary ($.z$) or decreasing ($.n$).
 \par
 The regular expression written to solve the example is $(?<=1.\{15000,\})(n1p)(.*?)(n1p$). Decomposing this expression in the two steps of the example results in: (1) $(?<=1.{15000,})$ and (2)$(n1p)(.*?)(n1p)$. In (1), a \textit{lookbehind} operator is used, therefore, the compiler will search ahead of the first match inside the operator, i.e., the search will match the expression "$1.\{15000,\}$" and search ahead of it. This method aims to handle the temporal dependence between events in the string, in which the number $15000$ is calculated by the number of characters that correspond to 5 seconds in the string. This calculation was achieved by multiplying the sampling frequency, the number of connotations in each primitive, and the desired time, in this case: 1000 Hz, 3 connotations and 5s, respectively.
 
@@ -367,7 +367,7 @@ The regular expression written to solve the example is $(?<=1.\{15000,\})(n1p)(.
 
 \section{Time Series Classification with HeaRTS}
 
-In this section is evaluated the ability to perform time series classification with the proposed \gls{hearts} method. For this, it has been applied to the \textit{UCR time series classification benchmark} and compared with the traditional 1-nearest neighbor based on the euclidean distance. As was mentioned on Chapter \ref{cha:ssts}, this process can be performed in multiple ways, namely with the combination of a \textit{Baysian} or \gls{SVM} classifiers with either a \gls{bow} or a \gls{tfidf} model. These combinations were also compared. With these evaluations, we expect to conclude (1) if this approach of using a linguistic transformation of a time series with high level words ordered in time of occurrences is possible with significant performances and (2) which is the combination that best fits this approach.
+In this section is evaluated the ability to perform time series classification with the proposed \gls{hearts} method. For this, it has been applied to the \textit{UCR time series classification benchmark} and compared with the traditional 1-nearest neighbor based on the euclidean distance. As was mentioned on Chapter \ref{cha:ssts}, this process can be performed in multiple ways, namely with the combination of a \textit{Baysian} or \gls{svm} classifiers with either a \gls{bow} or a \gls{tfidf} model. These combinations were also compared. With these evaluations, we expect to conclude (1) if this approach of using a linguistic transformation of a time series with high level words ordered in time of occurrences is possible with significant performances and (2) which is the combination that best fits this approach.
 \par
 In addition to these experiments, we performed an individual analysis of several use-cases to understand which is the interpretability and readability of the data based on this linguistic translation. This study should tell us if the words extracted are valuable to indicate the \textit{subsequences} of the time series that are relevant to identify it and distinguish it from others. 
 
@@ -386,16 +386,16 @@ n-gram \in [1, 2, 3, 4, 5]\\
 \end{equation}
 
 
-We performed the classification with several strategies and combinations, namely: \gls{bow} with Baysian Classifier (BoW+NB), \gls{bow} with \gls{SVM} (BoW+SVM), \gls{tfidf} with Baysian Classifier (TF-IDF+NB) and \gls{tfidf} with \gls{SVM}. The summary of the performance is presented on Figure \ref{fig:cd_diagram}.
+We performed the classification with several strategies and combinations, namely: \gls{bow} with Baysian Classifier (BoW+NB), \gls{bow} with \gls{svm} (BoW+SVM), \gls{tfidf} with Baysian Classifier (TF-IDF+NB) and \gls{tfidf} with \gls{svm}. The summary of the performance is presented on Figure \ref{fig:cd_diagram}.
 
 \begin{figure}
     \centering
     \includegraphics[width=\linewidth]{cd_diagram.png}
-    \caption{Critical distance diagram for the methods that rely in a textual representation of the time series (BoW and TF-IDF) and euclidean distance.}
+    \caption{Critical distance diagram for the methods that rely in a textual representation of the time series (\gls{bow} and \gls{tfidf}) and euclidean distance.}
     \label{fig:cd_diagram}
 \end{figure}
 
-As can be seen, the strategies that rely on a \gls{SVM} classifier are more robust. The \gls{tfidf} turns out to not be reliable when used with the Baysian Classifier. In the other end, it works well with \gls{SVM} Classifiers, being the best method studied. We then compared it in more detail with the 1-NN ED classifier, as presented on Figure \ref{fig:comparison_1}
+As can be seen, the strategies that rely on a \gls{svm} classifier are more robust. The \gls{tfidf} turns out to not be reliable when used with the Baysian Classifier. In the other end, it works well with \gls{svm} Classifiers, being the best method studied. We then compared it in more detail with the 1-NN ED classifier, as presented on Figure \ref{fig:comparison_1}
 
 \begin{figure}[h]
     \centering
@@ -451,7 +451,7 @@ Regarding the \textit{ShapeletSim} dataset, the data has also two classes. In on
 
 In this section, we wanted to answer two main research questions: (1) can we solve time series classification tasks based on its textual representation following traditional \textit{NLP} methods and (2) could we use the words that describe the time series as a readable explanation of the data and the differences between classes. For this purpose, we applied the proposed method on the \textit{UCR} classification benchmark and highlighted several relevant use-cases and the overall results achieved.
 \par
-The results provide evidence that it is possible to compare time series based on a textual representation and using traditional strategies from the text mining domain. Not only is it possible to compare the vectorized of time series document with the cosine distance (as we have seen on Figure \ref{fig:distribution_dendogram}, but \gls{bow} or \gls{tfidf} models can be used with a linear \gls{SVM} to solve classification tasks.
+The results provide evidence that it is possible to compare time series based on a textual representation and using traditional strategies from the text mining domain. Not only is it possible to compare the vectorized of time series document with the cosine distance (as we have seen on Figure \ref{fig:distribution_dendogram}, but \gls{bow} or \gls{tfidf} models can be used with a linear \gls{svm} to solve classification tasks.
 \par
 Additionally, the fact that words are weighted based on their relevance to distinguish each time series document from all the others, it is possible to highlight the \textit{subsequences} of the time series corresponding to these words and understand which are most relevant for the distinction of class, being a step forward into interpretability of time series. The limited examples were still simple and intuitive and the process turns harder to understand in more complex data. This might mean that the method has a diverse enough set of words to perform a distinction between classes, but the words used are not capable of expressing this difference. We can highlight many cases with high accuracy scores, but their interpretability falls short. A few examples can be showed. For instance, on Figure \ref{fig:interpretable_beetlefly} is showed a binary classification problem in which the method has 100\% accuracy but does not show expressively the difference between classes. Of course, it might be difficult to express this difference and maybe words are not sufficient. 
 \par
@@ -468,8 +468,8 @@ We start by demonstrating the ability of \gls{quots} to sort how well individual
 \begin{figure}
 \centering
 \includegraphics[width=\linewidth]{quots_wavegestures.pdf}
-\label{fig:quots_uwave}
 \caption{\textit{UWaveGestureLibrary} subsequence matches with \gls{quots}. Column-wise are showed the gesture class, the corresponding mean wave for all subsequences, the query used to match the subsequence class and the corresponding match score for all subsequences, highlighting with the color of the specific class.}
+\label{fig:quots_uwave}
 \end{figure}
 
 We not only demonstrate that the system can significantly distinguish gesture patterns, but it does so with very simple and intuitive queries. The ability of the written queries to match the correct class is presented both visually (Figure \ref{fig:quots_uwave} and quantitatively (Table \ref{tab:quots_exp1}). In Figure 5, the set of eight gestures is described row-wise, having a corresponding mean shape (\textbf{MeanWave}) and a query (\textbf{Query}) that should filter it. The visual intuition is demonstrated with the barplot (\textbf{MatchScore}), which for the sake of readability, highlights the normalized match score ([0-1]) of subsequences belonging to the row-wise specific gesture. The other classes are shown in gray. For each gesture, we show the shape for all the available axis (X, Y and Z). We attempt to create queries using only a single axis (X-axis) but used other dimensions when needed.
@@ -486,7 +486,7 @@ TP/10 & 10 & 10 & 10 & 10 & 10 & 10 & 10 & 10\\
 TP/100 & 96 & 100 & 94 & 95 & 74 & 100 & 100 & 99\\
 \bottomrule[1.5pt]
 \end{tabular}
-\caption{Results for the top 10 and top 100 sorted gestures classes  (G) when using the queries from Figure \ref{fig:quots_exp1}.}
+\caption{Results for the top 10 and top 100 sorted gestures classes  (G) when using the queries from Figure \ref{fig:quots_uwave}.}
 \label{tab:quots_exp1}
 \end{table}
 
@@ -504,7 +504,7 @@ We believe that \gls{quots} is intuitive enough to allow most novice users to cr
     \centering
     \includegraphics[width=0.95\linewidth]{toycar_puppet_example.pdf}
     \caption{Creating query prompt data by puppeteering a car model. The puppet data for a 3-point turn (smoothed with 10 samples moving average) is presented on the left, while the real data from a real car is presented on the right. }
-    \label{fig:comparison_1}
+    \label{fig:puppeteering}
 \end{figure}
 
 We added the puppet data and the word \texttt{3pointturn} to our vocabulary. Searching for it in our dataset matched all the desired shapes. Note that the template has a different amplitude and time scale, but for \textit{MASS}, the z-normalization makes the amplitude difference irrelevant, and the time scale was adjusted by resampling the template based on the selected window size for the query search. With this, the template is not only a template, it also becomes part of the language, being used in combination with all the other words available in our vocabulary.
@@ -519,12 +519,12 @@ Using a single time series of a multivariate record is optional and depends on t
 \par
 The record is a multi-dimensional time series that measures room occupancy based on temperature, humidity, light and CO2. All events can only be detected if using several time series of the record \cite{cpd_alan}. On Figure \ref{fig:occupancy_uni}.left, a single time series was analyzed by the proposed method to detect relevant events, while Figure \ref{fig:occupancy_uni}.right presents the application of the method to all the time series of the record. The results are different because the information from all the time series is combined, while with the single dimensional record, the detected events resulted from the information available on the single time series.\\
 
-\begin{figure}
-    \centering
-    \includegraphics[width=\linewidth]{Figures/example_occupancy.png}
-    \caption{Proposed method applied on "\textit{Occupancy}" record of Dataset 7. A single time series of the record is used to extract events.}
-    \label{fig:occupancy_uni}
-\end{figure}
+%\begin{figure}
+%    \centering
+%    \includegraphics[width=\linewidth]{Figures/example_occupancy.png}
+%    \caption{Proposed method applied on "\textit{Occupancy}" record of Dataset 7. A single time series of the record is used to extract events.}
+%    \label{fig:occupancy_uni}
+%\end{figure}
 
 
 % {\small \textbf{Time-scale and Overlap selection}}\\
@@ -540,7 +540,7 @@ The record is a multi-dimensional time series that measures room occupancy based
 \subsection{Storytelling Occupational Data}
 \label{subsec:storytel}
 
-1 - Example of the data we acquired in Volkswagen when we arrived and tried to compare two workstations. We were trying to find specific cyclic moments and labelled it by hand. We can use this tool to make this identification (SSM):
+1 - Example of the data we acquired in Volkswagen when we arrived and tried to compare two workstations. We were trying to find specific cyclic moments and labelled it by hand. We can use this tool to make this identification (ssm):
 
 1.1 - show matrix of the data
 
