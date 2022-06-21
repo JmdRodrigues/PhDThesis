@@ -18,7 +18,7 @@ Considering the diversity of methods developed, this chapter will be divided int
 
 \section{Novelty Segmentation}
 
-In this section, we present several examples in how the \textit{nova} function, retrieved from the \gls{ssm}, is useful for the segmentation of time series. The reader will appreciate that we also provide a measure of the algorithm's performance considering ground truth events from public benchmarks (presented on Chapter \ref{cha:dataset}, while also comparing our proposed solution with state of the art methods for change point detection from the \textit{Turing Change Point Detection Benchmark} \cite{cpd_alan}.
+In this section, we present several examples in how the \textit{nova} function, retrieved from the \gls{ssm}, is useful for the segmentation of time series. The reader will appreciate that we also provide a measure of the algorithm's performance considering ground truth events from public benchmarks (presented on Chapter \ref{cha:data}, while also comparing our proposed solution with state of the art methods for change point detection from the \textit{Turing Change Point Detection Benchmark} \cite{cpd_alan}.
 \par
 This section is divided into three main categories: (1) Validation in segmentation datasets, (2) comparison with state of the art methods and (3) discussion of the results obtained.
 
@@ -40,34 +40,21 @@ Results for publicly available datasets are presented in Tables \ref{tab:overall
 			Dataset 2 & ACC-GYR & 6 & HACP & 157 & 18 & 22 & 0.897 & 0.877 & 0.887 \\
 			Dataset 3 & ACC-GYR & 6 & HACP & 1378 & 313 & 263 & 0.815 & 0.840 & 0.827 \\
 			Dataset 4 & ACC-GYR & 12 & HACP & 499 & 71 & 38 & 0.875 & 0.929 & 0.902 \\
-			Dataset 5 & \gls{emg} & 8 & Act/Rel & 309 & 0 & 72 & 1.000 & 0.811 & 0.811 \\
+			Dataset 5 & \gls{emg} & 8 & Act/Rel & 309 & 0 & 0 & 1.000 & 1.000 & 1.000 \\
 			Dataset 6  & \gls{ecg} & 1 & Noise & 132 & 25 & 10 & 0.841 & 0.930 & 0.883 \\
 			Dataset 7  & \gls{ecg} & 4 & Noise & 21 & 2 & 3 & 0.913 & 0.875 & 0.894 \\
 			\midrule
-			Total  & N.A. & N.A. & N.A. & 2629 & 465 & 386 & 0.850 & 0.872 & 0.861 \\
+			Total & N.A. & N.A. & N.A. & 2629 & 465 & 352 & 0.850 & 0.882 & 0.866 \\
 			\bottomrule
 		\end{tabular}
 	\end{center}
-	\caption{Overall results for the performance of the method on novelty segmentation. The dimension of the records is presented on the column \textit{\# Ch}, as well as the types of signals used and the task in which  applied (HACP - Human Activity Change Point detection; Act/Rel - Activation/Relaxation of the \gls{emg} detection and Noise detection).}
+	\caption{Overall results for the performance of the method on novelty segmentation. The dimension of the records is presented on the column \textit{\# Ch}, as well as the types of signals used and the task in which  applied (HACP - Human Activity Change Point detection; Act/Rel - Activation/Relaxation of the \gls{emg} detection and Noise detection). The overall measures of Recall and Precision were micro-averaged.}
 	\label{tab:overall_cpd}
 \end{table*}
 
 
 \begin{table}
 	\begin{center}
-% 		\begin{tabular}{l|c|c|c|c}
-% 			Dataset & T_s (s) & MAE/T_s (\%) & MSE/T_s (\%) & MsE/T_s (\%)\\
-% 			\toprule
-% 			Dataset 1 & 5 & 2.665 & 7.102 & -0.578 \\
-% 			Dataset 2 & 10 & 2.879 & 8.291 & -0.653 \\
-% 			Dataset 3 & 1 & 0.338 & 0.114 & -0.043 \\
-% 			Dataset 4 & 25 & 5.779 & 33.392 & -0.009 \\
-% 			Dataset 5 & 1 & 1.081 & 1.169 & -0.133 \\
-% 			Dataset 6 & 10 & 1.972 & 3.889 & -0.875 \\
-% 			Dataset 7 & 1 & 0.172 & 0.030 & -0.062 \\
-% 			\midrule
-% 			Average & N.A. & 1.777 & 3.156 & -0.142 \\
-% 		\end{tabular}
         \begin{tabular}{lccc}
             \toprule
 			Dataset & $T_s$ (s) & $MAE/T_s$ & $MsE/T_s$ \\
@@ -94,7 +81,7 @@ The method achieved an overall macro-averaged 85.0\% of Precision, 87.2\% of Rec
 
 \subsection{Comparison with SOA Methods}
 
-In order to compare the proposed method with state of the art approaches we used a benchmark provided by the Alan Turing Institute \cite{cpd_alan}. The performance was evaluated by computing the proposed method to search for change point events in each of the time series available. The time scale and threshold values for peak detection were selected empirically and available at \cite{}. The results are summarized in Table \ref{tab:alanturing} and Figure \ref{fig:cdd_alant}. Both cases show the F1-score. The performance considered for other methods was selected as the best score of each method available on the benchmark \cite{cpd_alan}.
+In order to compare the proposed method with state of the art approaches we used a benchmark provided by the Alan Turing Institute \cite{cpd_alan}. The performance was evaluated by computing the proposed method to search for change point events in each of the time series available. The time scale and threshold values for peak detection were selected empirically and available at Table \ref{tab:app_ati_parameters}. The results are summarized in Table \ref{tab:alanturing} and Figure \ref{fig:cdd_alant}. Both cases show the F1-score. The performance considered for other methods was selected as the best score of each method available on the benchmark \cite{cpd_alan}.
 
 \begin{table*}[h!]
 \begin{adjustbox}{width=\textwidth}
@@ -102,41 +89,41 @@ In order to compare the proposed method with state of the art approaches we used
     Dataset & \textsc{Nova} & \textsc{amoc} & \textsc{binseg} & \textsc{bocpd} & \textsc{bocpdms} & \textsc{cpnp} & \textsc{ecp} & \textsc{kcpa} & \textsc{pelt} & \textsc{prophet} & \textsc{rbocpdms} & \textsc{rfpop} & \textsc{segneigh} & \textsc{wbs} & \textsc{zero}\\
     \hline
     \cellcolor{gray!100}\verb+bank+ & \cellcolor{gray!100}0 & \cellcolor{gray!100}\textbf{1.000} & \cellcolor{gray!100}\textbf{1.000} & \cellcolor{gray!100}\textbf{1.000} & \cellcolor{gray!100}0.500 & \cellcolor{gray!100}0.054 & \cellcolor{gray!100}0.200 & \cellcolor{gray!100}0.333 & \cellcolor{gray!100}0.400 & \cellcolor{gray!100}\textbf{1.000} & \cellcolor{gray!100}T & \cellcolor{gray!100}0.015 & \cellcolor{gray!100}\textbf{1.000} & \cellcolor{gray!100}0.043 & \cellcolor{gray!100}\textbf{1.000}\\
-    \verb+bitcoin+ & \cellcolor{orange!04}\textbf{0.694} & 0.507 & 0.690 & 0.733 & 0.533 & 0.611 & 0.625 & 0.665 & 0.735 & 0.446 & T & 0.284 & 0.735 & 0.690 & 0.450\\
-    \verb+brent_spot+ & \cellcolor{cyan!20}\textbf{0.861} & 0.465 & 0.670 & 0.609 & 0.239 & 0.607 & 0.636 & 0.553 & 0.586 & 0.249 & T & 0.521 & 0.586 & 0.564 & 0.315\\
-    \verb+businv+ & \cellcolor{cyan!40}\textbf{0.927} & 0.588 & 0.588 & 0.588 & 0.455 & 0.386 & 0.370 & 0.294 & 0.490 & 0.275 & 0.370 & 0.261 & 0.588 & 0.289 & 0.588\\
-    \verb+centralia+ & \cellcolor{orange!01}0.984 & 0.909 & \textbf{1.000} & \textbf{1.000} & \textbf{1.000} & \textbf{1.000} & 0.909 & \textbf{1.000} & \textbf{1.000} & 0.763 & 0.846 & \textbf{1.000} & \textbf{1.000} & 0.556 & 0.763\\
-    \verb+children_per_woman+ & \cellcolor{cyan!16}\textbf{0.879} & 0.678 & 0.663 & 0.712 & 0.405 & 0.344 & 0.551 & 0.525 & 0.637 & 0.310 & 0.504 & 0.246 & 0.637 & 0.500 & 0.507\\
+    \verb+bitcoin+ & \cellcolor{SeaGreen!04}\textbf{0.694} & 0.507 & 0.690 & 0.733 & 0.533 & 0.611 & 0.625 & 0.665 & 0.735 & 0.446 & T & 0.284 & 0.735 & 0.690 & 0.450\\
+    \verb+brent_spot+ & \cellcolor{blue!20}\textbf{0.861} & 0.465 & 0.670 & 0.609 & 0.239 & 0.607 & 0.636 & 0.553 & 0.586 & 0.249 & T & 0.521 & 0.586 & 0.564 & 0.315\\
+    \verb+businv+ & \cellcolor{blue!40}\textbf{0.927} & 0.588 & 0.588 & 0.588 & 0.455 & 0.386 & 0.370 & 0.294 & 0.490 & 0.275 & 0.370 & 0.261 & 0.588 & 0.289 & 0.588\\
+    \verb+centralia+ & \cellcolor{SeaGreen!01}0.984 & 0.909 & \textbf{1.000} & \textbf{1.000} & \textbf{1.000} & \textbf{1.000} & 0.909 & \textbf{1.000} & \textbf{1.000} & 0.763 & 0.846 & \textbf{1.000} & \textbf{1.000} & 0.556 & 0.763\\
+    \verb+children_per_woman+ & \cellcolor{blue!16}\textbf{0.879} & 0.678 & 0.663 & 0.712 & 0.405 & 0.344 & 0.551 & 0.525 & 0.637 & 0.310 & 0.504 & 0.246 & 0.637 & 0.500 & 0.507\\
     
-    \verb+co2_canada+ & \cellcolor{orange!07}0.851 & 0.544 & 0.856 & \textbf{0.924} & 0.479 & 0.642 & 0.875 & 0.867 & 0.670 & 0.482 & 0.542 & 0.569 & 0.872 & 0.681 & 0.361\\
+    \verb+co2_canada+ & \cellcolor{SeaGreen!07}0.851 & 0.544 & 0.856 & \textbf{0.924} & 0.479 & 0.642 & 0.875 & 0.867 & 0.670 & 0.482 & 0.542 & 0.569 & 0.872 & 0.681 & 0.361\\
     
-    \verb+construction+ & \cellcolor{cyan!23}0.933 & 0.696 & 0.709 & 0.709 & 0.410 & 0.602 & 0.709 & 0.634 & 0.709 & 0.324 & 0.340 & 0.185 & 0.709 & 0.523 & 0.696\\
+    \verb+construction+ & \cellcolor{blue!23}0.933 & 0.696 & 0.709 & 0.709 & 0.410 & 0.602 & 0.709 & 0.634 & 0.709 & 0.324 & 0.340 & 0.185 & 0.709 & 0.523 & 0.696\\
     
-    \verb+debt_ireland+ & \cellcolor{orange!01}0.974 & 0.760 & \textbf{1.000} & \textbf{1.000} & 0.892 & 0.958 & 0.980 & \textbf{1.000} & \textbf{1.000} & 0.469 & 0.748 & 0.824 & \textbf{1.000} & 0.538 & 0.469\\
+    \verb+debt_ireland+ & \cellcolor{SeaGreen!01}0.974 & 0.760 & \textbf{1.000} & \textbf{1.000} & 0.892 & 0.958 & 0.980 & \textbf{1.000} & \textbf{1.000} & 0.469 & 0.748 & 0.824 & \textbf{1.000} & 0.538 & 0.469\\
     
-    \verb+gdp_argentina+ & \cellcolor{orange!02}\textbf{0.968} & 0.889 & 0.947 & 0.947 & 0.583 & 0.818 & 0.889 & 0.800 & 0.947 & 0.615 & 0.452 & 0.615 & 0.947 & 0.421 & 0.824\\
+    \verb+gdp_argentina+ & \cellcolor{SeaGreen!02}\textbf{0.968} & 0.889 & 0.947 & 0.947 & 0.583 & 0.818 & 0.889 & 0.800 & 0.947 & 0.615 & 0.452 & 0.615 & 0.947 & 0.421 & 0.824\\
     
     \verb+gdp_croatia+ & \textbf{1.000} & \textbf{1.000} & 0.824 & \textbf{1.000} & 0.583 & \textbf{1.000} & 0.824 & 0.583 & 0.824 & 0.824 & 0.824 & 0.400 & 0.824 & 0.167 & 0.824\\
     
-    \verb+gdp_iran+ & \cellcolor{orange!06}0.921 & 0.696 & 0.652 & 0.862 & 0.492 & 0.620 & 0.824 & 0.734 & 0.808 & 0.652 & 0.737 & 0.636 & 0.808 & 0.576 & 0.652\\
+    \verb+gdp_iran+ & \cellcolor{SeaGreen!06}0.921 & 0.696 & 0.652 & 0.862 & 0.492 & 0.620 & 0.824 & 0.734 & 0.808 & 0.652 & 0.737 & 0.636 & 0.808 & 0.576 & 0.652\\
     
     \verb+gdp_japan+ & \textbf{1.000} & \textbf{1.000} & 0.889 & \textbf{1.000} & 0.615 & 0.667 & \textbf{1.000} & 0.500 & 0.889 & 0.889 & 0.889 & 0.222 & 0.889 & 0.222 & 0.889\\
     
-    \verb+global_co2+ & \cellcolor{orange!30}0.625 & 0.929 & 0.929 & 0.889 & 0.458 & 0.667 & \textbf{0.929} & 0.667 & 0.929 & 0.463 & 0.547 & 0.293 & 0.929 & 0.250 & 0.846\\
+    \verb+global_co2+ & \cellcolor{SeaGreen!30}0.625 & 0.929 & 0.929 & 0.889 & 0.458 & 0.667 & \textbf{0.929} & 0.667 & 0.929 & 0.463 & 0.547 & 0.293 & 0.929 & 0.250 & 0.846\\
     
-    \verb+homeruns+ & \cellcolor{cyan!10}\textbf{0.933} & 0.812 & 0.829 & 0.829 & 0.650 & 0.650 & 0.829 & 0.829 & 0.812 & 0.723 & 0.397 & 0.661 & 0.812 & 0.664 & 0.659\\
+    \verb+homeruns+ & \cellcolor{blue!10}\textbf{0.933} & 0.812 & 0.829 & 0.829 & 0.650 & 0.650 & 0.829 & 0.829 & 0.812 & 0.723 & 0.397 & 0.661 & 0.812 & 0.664 & 0.659\\
     
-    \verb+iceland_tourism+ & \cellcolor{orange!40}0.652 & 0.947 & 0.947 & 0.947 & 0.486 & 0.391 & \textbf{1.000} & 0.486 & 0.643 & 0.220 & 0.667 & 0.200 & 0.947 & 0.200 & 0.947\\
+    \verb+iceland_tourism+ & \cellcolor{SeaGreen!40}0.652 & 0.947 & 0.947 & 0.947 & 0.486 & 0.391 & \textbf{1.000} & 0.486 & 0.643 & 0.220 & 0.667 & 0.200 & 0.947 & 0.200 & 0.947\\
     
-    \verb+jfk_passengers+ & \cellcolor{cyan!20}\textbf{0.978} & 0.776 & 0.776 & 0.776 & 0.650 & 0.602 & 0.651 & 0.437 & 0.776 & 0.354 & T & 0.491 & 0.776 & 0.437 & 0.723\\
+    \verb+jfk_passengers+ & \cellcolor{blue!20}\textbf{0.978} & 0.776 & 0.776 & 0.776 & 0.650 & 0.602 & 0.651 & 0.437 & 0.776 & 0.354 & T & 0.491 & 0.776 & 0.437 & 0.723\\
     
-    \verb+lga_passengers+ & \cellcolor{orange!01}0.885 & 0.561 & 0.620 & 0.704 & 0.563 & 0.606 & \textbf{0.892} & 0.526 & 0.537 & 0.366 & T & 0.592 & 0.537 & 0.674 & 0.535\\
+    \verb+lga_passengers+ & \cellcolor{SeaGreen!01}0.885 & 0.561 & 0.620 & 0.704 & 0.563 & 0.606 & \textbf{0.892} & 0.526 & 0.537 & 0.366 & T & 0.592 & 0.537 & 0.674 & 0.535\\
     
     \cellcolor{gray!100}\verb+measles+ & \cellcolor{gray!100}0 & \cellcolor{gray!100}\textbf{0.947} & \cellcolor{gray!100}\textbf{0.947} & \cellcolor{gray!100}\textbf{0.947} & \cellcolor{gray!100}0.486 & \cellcolor{gray!100}0.118 & \cellcolor{gray!100}0.080 & \cellcolor{gray!100}0.281 & \cellcolor{gray!100}0.153 & \cellcolor{gray!100}0.391 & \cellcolor{gray!100}F/T & \cellcolor{gray!100}0.030 & \cellcolor{gray!100}\textbf{0.947} & \cellcolor{gray!100}0.041 & \cellcolor{gray!100}\textbf{0.947}\\
     
     \verb+nile+ & \textbf{1.000} & \textbf{1.000} & \textbf{1.000} & \textbf{1.000} & 0.800 & \textbf{1.000} & \textbf{1.000} & 0.824 & \textbf{1.000} & 0.824 & 0.667 & \textbf{1.000} & \textbf{1.000} & \textbf{1.000} & 0.824\\
     
-    \verb+ozone+ & \cellcolor{orange!0}0.857 & 0.776 & 0.723 & 0.857 & 0.778 & 0.750 & \textbf{1.000} & 0.667 & \textbf{1.000} & 0.723 & 0.651 & 0.429 & \textbf{1.000} & 0.286 & 0.723\\
+    \verb+ozone+ & \cellcolor{SeaGreen!0}0.857 & 0.776 & 0.723 & 0.857 & 0.778 & 0.750 & \textbf{1.000} & 0.667 & \textbf{1.000} & 0.723 & 0.651 & 0.429 & \textbf{1.000} & 0.286 & 0.723\\
     
     \verb+quality_control_1+ & \textbf{1.000} & \textbf{1.000} & \textbf{1.000} & \textbf{1.000} & 0.667 & 0.667 & \textbf{1.000} & 0.667 & \textbf{1.000} & 0.500 & 0.286 & 0.667 & \textbf{1.000} & 0.667 & 0.667\\
     
@@ -144,65 +131,65 @@ In order to compare the proposed method with state of the art approaches we used
     
     \verb+quality_control_3+ & \textbf{1.000} & \textbf{1.000} & \textbf{1.000} & \textbf{1.000} & 0.766 & 0.571 & \textbf{1.000} & \textbf{1.000} & \textbf{1.000} & 0.667 & T & 0.800 & \textbf{1.000} & \textbf{1.000} & 0.667\\
     
-    \verb+quality_control_4+ & \cellcolor{cyan!10}0.974 & 0.810 & 0.873 & 0.787 & 0.561 & 0.658 & 0.726 & 0.658 & 0.780 & 0.780 & T & 0.241 & 0.780 & 0.608 & 0.780\\
+    \verb+quality_control_4+ & \cellcolor{blue!10}0.974 & 0.810 & 0.873 & 0.787 & 0.561 & 0.658 & 0.726 & 0.658 & 0.780 & 0.780 & T & 0.241 & 0.780 & 0.608 & 0.780\\
     
     \cellcolor{gray!100}\verb+quality_control_5+ & \cellcolor{gray!100}0 & \cellcolor{gray!100}\textbf{1.000} & \cellcolor{gray!100}\textbf{1.000} & \cellcolor{gray!100}\textbf{1.000} & \cellcolor{gray!100}0.500 & \cellcolor{gray!100}\textbf{1.000} & \cellcolor{gray!100}\textbf{1.000} & \cellcolor{gray!100}\textbf{1.000} & \cellcolor{gray!100}\textbf{1.000} & \cellcolor{gray!100}\textbf{1.000} & \cellcolor{gray!100}0.500 & \cellcolor{gray!100}\textbf{1.000} & \cellcolor{gray!100}\textbf{1.000} & \cellcolor{gray!100}\textbf{1.000} & \cellcolor{gray!100}\textbf{1.000}\\
     
-    \verb+rail_lines+ & \cellcolor{orange!06}\textbf{0.909} & 0.846 & 0.846 & 0.966 & 0.889 & 0.966 & {0.966} & 0.800 & 0.846 & 0.537 & 0.730 & 0.615 & 0.889 & 0.205 & 0.537\\
+    \verb+rail_lines+ & \cellcolor{SeaGreen!06}\textbf{0.909} & 0.846 & 0.846 & 0.966 & 0.889 & 0.966 & {0.966} & 0.800 & 0.846 & 0.537 & 0.730 & 0.615 & 0.889 & 0.205 & 0.537\\
     
-    \verb+ratner_stock+ & \cellcolor{cyan!07}0.933 & 0.776 & 0.824 & 0.868 & 0.559 & 0.396 & 0.776 & 0.754 & 0.824 & 0.280 & T & 0.203 & 0.824 & 0.378 & 0.571\\
+    \verb+ratner_stock+ & \cellcolor{blue!07}0.933 & 0.776 & 0.824 & 0.868 & 0.559 & 0.396 & 0.776 & 0.754 & 0.824 & 0.280 & T & 0.203 & 0.824 & 0.378 & 0.571\\
     
-    \verb+robocalls+ & \cellcolor{cyan!01}0.979 & 0.800 & 0.966 & 0.966 & 0.750 & 0.862 & 0.966 & 0.966 & 0.966 & 0.636 & 0.846 & 0.714 & 0.966 & 0.714 & 0.636\\
+    \verb+robocalls+ & \cellcolor{blue!01}0.979 & 0.800 & 0.966 & 0.966 & 0.750 & 0.862 & 0.966 & 0.966 & 0.966 & 0.636 & 0.846 & 0.714 & 0.966 & 0.714 & 0.636\\
     
-    \verb+scanline_126007+ & \cellcolor{orange!04}0.887 & 0.710 & 0.920 & \textbf{0.921} & 0.829 & 0.906 & 0.870 & 0.838 & 0.889 & 0.644 & T & 0.649 & 0.889 & 0.818 & 0.644\\
+    \verb+scanline_126007+ & \cellcolor{SeaGreen!04}0.887 & 0.710 & 0.920 & \textbf{0.921} & 0.829 & 0.906 & 0.870 & 0.838 & 0.889 & 0.644 & T & 0.649 & 0.889 & 0.818 & 0.644\\
     
-    \verb+scanline_42049+ & \cellcolor{cyan!01}\textbf{0.977} & 0.485 & 0.879 & 0.962 & 0.889 & 0.713 & 0.910 & 0.908 & 0.910 & 0.269 & T & 0.460 & 0.910 & 0.650 & 0.276\\
+    \verb+scanline_42049+ & \cellcolor{blue!01}\textbf{0.977} & 0.485 & 0.879 & 0.962 & 0.889 & 0.713 & 0.910 & 0.908 & 0.910 & 0.269 & T & 0.460 & 0.910 & 0.650 & 0.276\\
     
-    \verb+seatbelts+ & \cellcolor{orange!20}0.659 & 0.824 & \textbf{0.838} & 0.683 & 0.583 & 0.735 & 0.683 & 0.621 & 0.683 & 0.452 & 0.383 & 0.563 & 0.735 & 0.583 & 0.621\\
+    \verb+seatbelts+ & \cellcolor{SeaGreen!20}0.659 & 0.824 & \textbf{0.838} & 0.683 & 0.583 & 0.735 & 0.683 & 0.621 & 0.683 & 0.452 & 0.383 & 0.563 & 0.735 & 0.583 & 0.621\\
     
-    \verb+shanghai_license+ & \cellcolor{cyan!01}\textbf{0.979} & 0.966 & 0.868 & 0.868 & 0.605 & 0.600 & 0.868 & 0.465 & 0.868 & 0.532 & 0.389 & 0.357 & 0.868 & 0.385 & 0.636\\
+    \verb+shanghai_license+ & \cellcolor{blue!01}\textbf{0.979} & 0.966 & 0.868 & 0.868 & 0.605 & 0.600 & 0.868 & 0.465 & 0.868 & 0.532 & 0.389 & 0.357 & 0.868 & 0.385 & 0.636\\
     
     \cellcolor{gray!100}\verb+uk_coal_employ+ & \cellcolor{gray!100}F & \cellcolor{gray!100}F & \cellcolor{gray!100}F & \cellcolor{gray!100}F & \cellcolor{gray!100}0.617 & \cellcolor{gray!100}F & \cellcolor{gray!100}0.513 & \cellcolor{gray!100}0.513 & \cellcolor{gray!100}F & \cellcolor{gray!100}\textbf{0.639} & \cellcolor{gray!100}F & \cellcolor{gray!100}F & \cellcolor{gray!100}F & \cellcolor{gray!100}F & \cellcolor{gray!100}0.513\\
     
-    \verb+unemployment_nl+ & \cellcolor{orange!07}0.820 & 0.742 & \textbf{0.889} & 0.876 & 0.592 & 0.747 & 0.755 & 0.744 & 0.788 & 0.566 & F/T & 0.628 & 0.788 & 0.801 & 0.566\\
+    \verb+unemployment_nl+ & \cellcolor{SeaGreen!07}0.820 & 0.742 & \textbf{0.889} & 0.876 & 0.592 & 0.747 & 0.755 & 0.744 & 0.788 & 0.566 & F/T & 0.628 & 0.788 & 0.801 & 0.566\\
     
-    \verb+us_population+ & \cellcolor{orange!40}0.636 & \textbf{1.000} & 0.889 & \textbf{1.000} & 0.615 & 0.232 & 0.471 & 0.276 & 0.500 & 0.159 & T & 0.889 & 0.889 & 0.113 & 0.889\\
+    \verb+us_population+ & \cellcolor{SeaGreen!40}0.636 & \textbf{1.000} & 0.889 & \textbf{1.000} & 0.615 & 0.232 & 0.471 & 0.276 & 0.500 & 0.159 & T & 0.889 & 0.889 & 0.113 & 0.889\\
     
-    \verb+usd_isk+ & \cellcolor{cyan!20}0.914 & 0.785 & 0.704 & 0.785 & 0.678 & 0.674 & 0.785 & 0.601 & 0.657 & 0.489 & 0.510 & 0.462 & 0.678 & 0.636 & 0.489\\
+    \verb+usd_isk+ & \cellcolor{blue!20}0.914 & 0.785 & 0.704 & 0.785 & 0.678 & 0.674 & 0.785 & 0.601 & 0.657 & 0.489 & 0.510 & 0.462 & 0.678 & 0.636 & 0.489\\
     
-    \verb+well_log+ & \cellcolor{orange!10}0.814 & 0.336 & 0.914 & 0.832 & 0.743 & 0.822 & \textbf{0.928} & 0.776 & 0.873 & 0.149 & T & 0.923 & 0.873 & 0.832 & 0.237\\
+    \verb+well_log+ & \cellcolor{SeaGreen!10}0.814 & 0.336 & 0.914 & 0.832 & 0.743 & 0.822 & \textbf{0.928} & 0.776 & 0.873 & 0.149 & T & 0.923 & 0.873 & 0.832 & 0.237\\
     
     \hline
     
-    \verb+apple+ & \cellcolor{cyan!03}\textbf{0.949} &  &  & 0.916 & 0.445 &  & 0.745 & 0.634 &  &  & F/T &  &  &  & 0.594\\
+    \verb+apple+ & \cellcolor{blue!03}\textbf{0.949} &  &  & 0.916 & 0.445 &  & 0.745 & 0.634 &  &  & F/T &  &  &  & 0.594\\
     
-    \verb+bee_waggle_6+ & \cellcolor{orange!28}0.657 &  &  & \textbf{0.929} & 0.481 &  & 0.233 & 0.634 &  &  & 0.245 &  &  &  & \textbf{0.929}\\
+    \verb+bee_waggle_6+ & \cellcolor{SeaGreen!28}0.657 &  &  & \textbf{0.929} & 0.481 &  & 0.233 & 0.634 &  &  & 0.245 &  &  &  & \textbf{0.929}\\
     
-    \verb+occupancy+ & \cellcolor{cyan!02}0.953 &  &  & 0.919 & 0.735 &  & \textbf{0.932} & 0.812 &  &  & F/T &  &  &  & 0.341\\
+    \verb+occupancy+ & \cellcolor{blue!02}0.953 &  &  & 0.919 & 0.735 &  & \textbf{0.932} & 0.812 &  &  & F/T &  &  &  & 0.341\\
     
     \verb+run_log+ & 0.994 &  &  & \textbf{1.000} & 0.469 &  & 0.990 & 0.909 &  &  & 0.380 &  &  &  & 0.446\\
     
     \bottomrule
     
-    \textbf{Average F1-measure (1D)} & \cellcolor{cyan!05}\textbf{0.845} & 0.739 & 0.798 & 0.822 & 0.596 & 0.651 & 0.784 & 0.657 & 0.766 & 0.482 & 0.354 & 0.517 & 0.797 & 0.517 & 0.599\\
+    \textbf{Average F1-measure (1D)} & \cellcolor{blue!05}\textbf{0.845} & 0.739 & 0.798 & 0.822 & 0.596 & 0.651 & 0.784 & 0.657 & 0.766 & 0.482 & 0.354 & 0.517 & 0.797 & 0.517 & 0.599\\
     
     \bottomrule
     
-    \textbf{Average F1-measure (ALL)} & \cellcolor{cyan!05}\textbf{0.871} & n.a. & n.a. & 0.855 & 0.604 & n.a. & 0.797 & 0.683 & n.a. & n.a. & 0.343 & n.a. & n.a. & n.a. & 0.61
+    \textbf{Average F1-measure (ALL)} & \cellcolor{blue!05}\textbf{0.871} & n.a. & n.a. & 0.855 & 0.604 & n.a. & 0.797 & 0.683 & n.a. & n.a. & 0.343 & n.a. & n.a. & n.a. & 0.61
     \end{tabular}
 \end{adjustbox}
-    \caption{Comparison of performance between the proposed method (\textit{Nova}) and other algorithms. The colors indicate if the other algorithms were better (Orange) or worse (Blue) in performance than the \textit{Nova} method for a specific dataset. Time series from \textit{apple}, \textit{bee\_waggle\_6}, \textit{occupancy} and \textit{run\_log} are multivariate. The average results are grouped on the last row. Averages did not considered the gray columns, since these would imply that no change point should be detected, or an error on the signal was present. \textit{T} appears when the method timedout, \textit{M} and \textit{F} when the method failed in compiling}.
+    \caption{Comparison of performance between the proposed method (\textit{Nova}) and other algorithms. The colors indicate if the other algorithms were better (Green) or worse (Blue) in performance than the \textit{Nova} method for a specific dataset. Time series from \textit{apple}, \textit{bee\_waggle\_6}, \textit{occupancy} and \textit{run\_log} are multivariate. The average results are grouped on the last row. Averages did not considered the gray columns, since these would imply that no change point should be detected, or an error on the signal was present. \textit{T} appears when the method timedout, \textit{M} and \textit{F} when the method failed in compiling}.
     \label{tab:alanturing}
 \end{table*}
 
 As presented in Figure \ref{fig:cdd_alant}, the critical distance diagram ranks the proposed method in the top four, without a significant difference in performance (considering methods that only work in uni-dimensional datasets). The average F1-measure is 79.6\% for both uni and multi-dimensional datasets. Two of the F1-measures are null due to the fact that in these two time series, no change point was supposed to be found, but the proposed method is not yet prepared to return no results. 
 \par
-The results obtained in this benchmark demonstrate that this method is promising, having a performance that competes with several state-of-the art methods in the problem of novelty segmentation. We highlight that the proposed method is applicable to multi-dimensional time series problems, while two of the best ranked methods in Figure \ref{fig:cdd_alant} are not. In addition, this method is not solely focused in retrieving change points, but also provides additional layers of information, namely periodic changes and the level of similarity between segments, being an advantage over the \textit{BOCPD}.
+The results obtained in this benchmark demonstrate that this method is promising, having a performance that competes with several state-of-the art methods in the problem of novelty segmentation. We highlight that the proposed method is applicable to multi-dimensional time series, while two of the best ranked methods in Figure \ref{fig:cdd_alant} are not. In addition, this method is not solely focused in retrieving change points, but also provides additional layers of information, namely periodic changes and the level of similarity between segments, being an advantage over the \textit{BOCPD}.
 
 \begin{figure}
     \centering
     \includegraphics[width=\linewidth]{critical_distance_novelty.pdf}
-    \caption{Critical distance diagram comparing the methods used in \cite{cpd_alan} (except \textit{RBOCPDMS}) and the \textit{novelty function} (\textit{nova} - highlighted in orange). The performance measure corresponds to the F1-score for all single-dimension datasets of the benchmark (except the ones highlighted in gray in Figure \ref{tab:alanturing}).}
+    \caption{Critical distance diagram comparing the methods used in \cite{cpd_alan} (except \textit{RBOCPDMS}) and the \textit{novelty function} (\textit{nova} - highlighted in SeaGreen). The performance measure corresponds to the F1-score for all single-dimension datasets of the benchmark (except the ones highlighted in gray in Figure \ref{tab:alanturing}).}
     \label{fig:cdd_alant}
 \end{figure}
 
@@ -237,13 +224,15 @@ One of the other great advantages of the proposed method is that it also provide
 
 \subsubsection{Effects of Window Size and Overlap}
 
-There are several parameters that affect the ability to detect the desired patterns. These are the window size, the overlap percentage and the kernel size. Although in this work we used all three parameters, these can potentially be combined into a single one. We only considered entry parameters on the method that affect the visual output and novelty function. We do not consider the parameters for the simple threshold-based peak strategy used.
+There are several parameters that affect the ability to detect the desired patterns. These are the window size, the overlap percentage and the kernel size. Although in this work we used all three parameters, these can potentially be combined into a single one. We only considered entry parameters on the method that affect the visual output and novelty function. We do not consider the parameters for the threshold-based peak strategy used.
 \par
 The reader may appreciate that these parameters can be explained with the analogy of a camera. The window size works like the \textit{zoom function}, defining the scale of interest in the time series. Larger windows correspond to lower \textit{zoom values} and will compute the similarity of larger \textit{subsequences}, while smaller windows are like a \textit{zoom-in} function on the time series, searching for any small detail that might be a change. The overlap percentage is the \textit{camera sensor}, which defines the pixel resolution of the image and works as a downsampler of the time series. A full resolution of the \gls{ssm} is only achieved with total overlap, and the lower the overlap percentage, the less accurate are the highlighted changes.
 \par
-These two parameters are fundamental for the success of the event detection process. This is mostly evident in some of the datasets where we applied the proposed method, since the larger the time scale used, the larger the \gls{mae} in the detected events. For instance, in \textit{Dataset 4}, the time series are very large (3 minutes for each of the 18 activities, at 20 Hz), which due to computation time and memory allocation constraints, we used a larger time window with a lower overlap percentage. The result was an increase in the \gls{mae}.
+These two parameters are fundamental for the success of the event detection process. This is mostly evident in some of the datasets where we applied the proposed method, since the larger the time scale used, the larger the \gls{mae} in the detected events. For instance, in \textit{Dataset 4}, the time series are very large (3 minutes for each of the 18 activities, at 20 Hz), which due to computation time and memory allocation constraints, we used a larger time window with a lower overlap percentage. The result was an increase in the \gls{mae}. Still, this error was also affected by delays in the ground-truth, as explained in the previous section.
 \par
 In the other hand, the sliding kernel computes the sharpness of the changes detected with the novelty function. The larger it is, the smoother will be the resulting function. Potentially, even if with a small decrease in accuracy, the kernel size could be calculated as a ratio of the window size. The overlap percentage should be maximized and based on the memory available to perform the \gls{ssm} computation. With this we could define the window size as the sole parameter of this algorithm.
+\par
+In addition to this, there is the fact that the parameters can be configured for the type of problem and dataset. For instance, looking at the detailed tables presented on Appendix \ref{app:tables_detailed}, the window size and overlap size are in most cases the same, while the kernel size varies in the same order of values.
 \par
 In terms of computation time, the algorithm performs (1) a sliding window to extract features, which is \textit{O(n)} complexity and (2) performs the dot product between matrices, which is traditionally \textit{O($m^2n$)} (recall that m is the number of features and n is the size of the inputted signal). Finally, the correlation of a kernel on the \gls{ssm}'s diagonal has a complexity of $O(nM^2)$ (recall that $M=2L+1$, being the size of the sliding kernel).
 \par
@@ -283,15 +272,76 @@ TS sample & Detected Cycles & \gls{d_e}(\%) \\ \midrule
 
 The results show the ability of this function to segment the time series into each cycle. It has successfully segmented all time series in all desired segments while having a \gls{d_e} compared to the ground truth.
 \par
-Although this method was successful in segmenting the signal, the proposed solution is not yet optimal. It does not always provide the moment where the \textit{path} starts on the \gls{ssm}. This moment should be the one detected to capture the true starting point of a period. 
+Although this method was successful in segmenting the signal, the proposed solution is not yet optimal. It does not always provide the moment where the \textit{path} starts on the \gls{ssm}. This moment should be the one detected to capture the true starting point of a period. The fact that we are not able to find the exact moment the \textit{path} starts means that an offset is present on the cycle detection.
+\par
 
 
-\section{Additional Applications}
+\section{Segmentation of Occupational Data}
 
-\subsection{Search by Example}
+In occupational settings of the \textit{Volkswagen} Autoreuropa plant, workers mostly perform repetitive and cyclic tasks during their working day. These cyclic tasks are sometime interrupted by stoppages on the assembly line due to delays in other areas, or breaks by the worker, or even the case where the worker shifts to another workstation to help a colleague or take over another type of task.
+\par
+When performing occupational data analysis for risk evaluation, the analyst has to differentiate the moments of interest (active working periods) from the rest (non working periods). To be clear, the non working periods do not mean that the worker was motionless, but only that he/she was not performing the specific repetitive task. In addition, the process of risk analysis is made by working cycle. In that sense, the cyclic information of these cycles has to be segmented as well for the analysis.
 
-\subsection{Time Series Summarization with TSSummarize}
+\subsection{Active and Non-Active Periods}
 
+Overall, the ability to segment periods of active work and periods where the worker is not performing the demanded task is relatively good, with an overall score of 
+
+\begin{table}
+\caption{Results of type event 1 (work period transition), discriminated per time serie samples. Measurements of \gls{P}, \gls{R}, \gls{F}, \gls{A} and \gls{MAE}, of each according sample.}
+\label{table:auto_scores}
+\centering
+\begin{tabular}{llllll}
+\toprule
+TS sample         & \gls{P}    & \gls{R} & \gls{F}    & \gls{A}  & \gls{MAE} (s) \\
+\midrule
+\gls{Opr}1 \gls{Wkst}1      & 0,78 & 1 & 0,88 & 0,78 & 11,87   \\
+\gls{Opr}1 \gls{Wkst}2      & 1    & 1 & 1    & 1    & 34,77   \\
+\gls{Opr}2 \gls{Wkst}1\&2 & 0,86 & 1 & 0,92 & 0,86 & 10,17   \\
+\gls{Opr}3 \gls{Wkst}1    & 0,80 & 1 & 0,89 & 0,80 & 3,21    \\
+\gls{Opr}4 \gls{Wkst}1    & 1    & 1 & 1    & 1    & 8,83    \\
+\gls{Opr}5 \gls{Wkst}1      & 1    & 1 & 1    & 1    & 8,54    \\
+\gls{Opr}5 \gls{Wkst}2      & 1    & 1 & 1    & 1    & 8,38   \\ \hline
+Total & & & & &
+
+\bottomrule
+
+\end{tabular}
+\end{table}
+
+\subsection{Working Cycles}
+
+\begin{table}
+\centering
+\caption{Detected cycles and \gls{D_e} results of the detection of type 2 events, over the \textit{Industrial} database.}
+\label{tab:wc_results}
+\begin{tabular}{lcc} 
+\toprule
+\multirow{Signal} & \multicolumn{2}{c}{\textit{\gls{ssm}}}\\
+                                                         & Detected Cycles & Duration Error\\ 
+\midrule
+\gls{Opr}1 \gls{Wkst}1 & 11/11           & 3.26s (3.04\%)  \\
+\gls{Opr}1 \gls{Wkst}2 & 14/15           & 16.97s (15.83\%)\\
+\gls{Opr}2 \gls{Wkst}1 & 14/14           & 6.45s (6.40\%)   \\
+\gls{Opr}2 \gls{Wkst}2 & 11/11           & 8.48s (8.62\%)   \\
+\gls{Opr}3 \gls{Wkst}1 & 16/16           & 12.35s (11.79\%)\\
+\gls{Opr}3 \gls{Wkst}2 & 13/13           & 8.81s (8.25\%)   \\
+\gls{Opr}4 \gls{Wkst}1 & 14/14           & 1.05s (0.4\%)    \\
+\gls{Opr}4 \gls{Wkst}2 & 11/11           & 3.42s (3.32\%)   \\
+\gls{Opr}5 \gls{Wkst}1 & 12/12           & 2.83s (2.85\%)   \\
+\gls{Opr}5 \gls{Wkst}2 & 10/11           & 3.47s (3.45\%)   \\
+\gls{Opr}6 \gls{Wkst}1 & 14/15           & 3.79s (3.74\%)   \\
+\gls{Opr}6 \gls{Wkst}2 & 14/15           & 5.79s (5.73\%)   \\ 
+\cline{1-1}\cmidrule{2-5}
+\multicolumn{1}{c}{Total}                                & 154/157             & 6.12\%\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+From the 157 working cycles, 154 cycles were detected. The duration error was still significant, with a value of 6.12\% of the working cycle.
+\par
+An interesting fact about this data is that some working cycles are not made of one distinctive sequence of motions, but rather a junction of several stages that have similar motions. Being able to segment the entire cycle is therefore more difficult and relevant.
+\par
+The proposed method proves also to be applicable into several scenarios, namely different activities, performed in different workstations; and can manage inter subject variability.
 
 \section{Pattern Search with SSTS}
 

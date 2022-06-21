@@ -37,19 +37,51 @@ The following datasets were used:
 \begin{itemize}
 \item \textbf{Dataset 2 - Smartphone Dataset for Human Activity Recognition in Ambient Assisted Living} This dataset was gathered from an experiment on 30 volunteers. Each subject was wearing a smartphone on the waist while performing several activities: \textit{(1) Walking, (2) Walking Upstairs, (3) Walking Downstairs, (4) Sitting, (5) Standing and (6) Laying}. The activities were performed for approximately 60 seconds. The device recorder the internal accelerometer (ACC) and gyroscope (GYR) data at a constant rate of 50 Hz. Each activity has been categorized and labelled on the acquired data \cite{dataset2, dataset2_2}.\\
 \textbf{Purpose:} This dataset was used in the context of change point detection, to test the method in estimating transitions between the performed activities from the accelerometer data.
+
+\begin{figure}
+\centering
+\includegraphics[width=\linewidth]{datasets/har_2_dataset.pdf}
+\caption{•}
+\label{fig:har2_dataset}
+\end{figure}
     
 \item \textbf{Dataset 3 - Smartphone Based Recognition of Human Activities and Postural Transitions}\\
 The dataset was built in the context of human activity recognition experiments. These were carried out with a group of 30 volunteers that performed a protocol with six basic activities: three static postures (standing, sitting, lying) and three dynamic activities (walking, walking downstairs and walking upstairs). Additionally, the experiment also included postural transitions that occurred between the static postures. These are: stand-to-sit, sit-to-stand, sit-to-lie, lie-to-sit, stand-to-lie, and lie-to-stand. The data was collected with a smartphone (Samsung Galaxy S II) mounted on the waist of each subject. The data from a 3-axis accelerometer and 3-axis gyroscope was gathered at a constant rate of 50Hz. The experiments were video-recorded to label the data manually \cite{dataset3}.\\
 \textbf{Purpose:} This dataset was used in the context of change point detection, to test the method in estimating transitions between the performed static and dynamic activities from the accelerometer and gyroscope data.
 
+\begin{figure}
+\centering
+\includegraphics[width=\linewidth]{datasets/har_1_dataset.pdf}
+\caption{•}
+\label{fig:har1_dataset}
+\end{figure}    
     
 \item \textbf{Dataset 4 - Wireless Sensor Data Mining (WISDM) Smarphone and Smartwatch Activity Biometrics Dataset}\\
 The raw data from the accelerometer and gyroscope sensors is collected from a smartphone and smartwatch at a rate of 20Hz. This experiment was conducted on 51 participants as they performed 18 activities, each for a duration of 3 minutes. Each sample of the data was labelled based on the activity it corresponds to. The activities are diverse and include dribbling, eating, jogging, sitting, walking on stairs, standing, walking, among others \cite{dataset4}.\\
 \textbf{Purpose:} This dataset was used in the context of change point detection, to test the method in estimating transitions between the performed activities from the accelerometer and gyroscope data from both devices.
+
+\begin{figure}
+\centering
+\includegraphics[width=\linewidth]{datasets/wisdim_dataset.pdf}
+\caption{}
+\label{fig:wisdim_data}
+\end{figure}
+
+
     
 \item \textbf{Dataset 5 - EMG Data for Gestures}\\
 This dataset has EMG signals for recording patterns, by using a MYO Thalmic bracelet worn on a user's forearm. The bracelet is equipped with eight sensors equally spaced around the forearm that simultaneously acquire electromyographic signals. The dataset has raw EMG data from 36 subjects while they performed series of static hand gestures. The subject performs two series, each of which consists of six basic gestures. Each gesture was performed for 3 seconds with a pause of 3 seconds between gestures. The data was collected with a fixed sampling frequency of 200 Hz \cite{dataset5}.\\
 \textbf{Purpose:} This dataset was used in the context of change point detection, to test the method in estimating transitions between the activation and relaxation of the muscular activity.
+
+\begin{figure}
+\centering
+\includegraphics[width=\linewidth]{datasets/emg_dataset.pdf}
+\caption{•}
+\label{fig:emg_dataset}
+\end{figure}
+
+
+As indicated on Figure \ref{fig:emg_dataset}, the ground truth would have considered as events the absence of activity (which the original dataset uses because it was designed for a classification problem). In this case, we did not considered these events in our ground truth for this dataset.
     
     
     \item \textbf{Dataset 8 - } The dataset comprises several time series from real-world data. It was built from a project of the Alan Turing Insitute to have a repository for the evaluation of change point detection algorithms. The available benchmark page was used to get access to the datasets, and run the performance metrics developed. This way, the performance of the proposed method is compare with the performance of several existing methods \cite{cpd_alan}.
@@ -69,9 +101,23 @@ The dataset comprises data from 15 subjects that were performing 7 activities wh
 
 \textbf{Dataset 6 - } The dataset comprehends 12 half-hour \gls{ecg} recordings and 3 half-hour recordings of noise typical in ambulatory \gls{ecg} recordings. The noise recordings were made using physically active volunteers and standard \gls{ecg} recorders, leads, and electrodes. The three noise records were assembled from the recordings by selecting intervals that contained predominantly baseline wander (in record 'bw'), muscle (EMG) artifact (in record 'ma'), and electrode motion artifact (in record 'em'). Two clean \gls{ecg} signals were selected and noise was added with different signal-to-noise ratios (SNR) \cite{dataset6, PhysioNet}.\\
 
+\begin{figure}
+\centering
+\includegraphics[width=\linewidth]{datasets/ecg_noise1.pdf}
+\caption{•}
+\label{fig:ecg1_dataset}
+\end{figure}
+
 \textbf{Purpose:} This dataset was used in the context of change point detection, to test the method in estimating transitions to and from noise sections of the signal.
     
 \textbf{Dataset 7 - } This dataset has short duration \gls{ecg} signals, which were recorded from a healthy 25-year-old male performing different physical activities (standing, walking and single jump) to study the effect of motion artifacts on \gls{ecg} signals and their sparsity. The dataset was acquired with a sampling rate of 500 Hz and 16 bit resolution. For this exercise, only the records with jump were used \cite{dataset7, PhysioNet}.\\
+
+\begin{figure}
+\centering
+\includegraphics[width=\linewidth]{datasets/ecg_noise2.pdf}
+\caption{•}
+\label{fig:ecg2_dataset}
+\end{figure}
 
 \textbf{Purpose:} This dataset was used in the context of change point detection, to test the method in estimating transitions to and from noise sections of the signal.
 
@@ -232,5 +278,7 @@ Some important notes:
 \item In operator 2 workstation 1\& 2 the torso was not considered, due to malfunction.
 \end{enumerate}
 
+
+The data was annotated based on video inspection.
 
 \subsection{Office Job Dataset}
