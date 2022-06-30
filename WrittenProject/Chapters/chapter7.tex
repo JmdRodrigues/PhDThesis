@@ -119,9 +119,7 @@ The set of connotation methods can be defined by the user and added as needed. A
    \toprule[0.5mm]
 		Name & Input Parameters & Group of Symbols & Description\\ \midrule[0.3mm]
 		 A & (\textit{s}, \textit{thr}) & ["1","0"] & Amplitude comparison, If $t_i$ > \textit{thr}*($t_{max} - t_{min}$), $t_i$ is "1", else $t_i$ is "0"\\ 
-         
-         \midrule
-         
+         \midrule   
 		D1 & (\textit{s}, \textit{thr}) & ["p", "n", "z"] & Derivative of signal \textit{s} (\textit{s'}). If $t'_i$ > \textit{thr}, $t'_i$ is 'p'; elif $t'_i$ < \textit{- thr}, $t'_i$ is'n'; else, $t'_i$ is "z". \\ 
         
         \midrule
@@ -220,8 +218,6 @@ In this section, we explain each step of the proposed strategy to perform time s
 %\textit{\textbf{Definition 2.11}} \space \space \textit{N-grams} are a span of followed words that are counted in the BoW. It gives more context to words that are frequently followed by a specific word. As with time series we have temporal order of occurrences, this feature is very important. An example of \textit{2-gram} from the sentence \textit{Rise Flat Fall} would be \textit{Rise Flat} and \textit{Flat Fall}.
 
 \subsection{SSTS to Generate Time Series Documents}
-
-
 
 \begin{figure}[!h]
     \centering

@@ -12,6 +12,7 @@
 \label{cha:Conclusion}
 
 
+Fazer a relação com o início (imagens de segmentação)
 
 Future Work
 
@@ -37,4 +38,24 @@ Future Work
 
 - Use reduction and stacking methods to improve the algorithm
 
+- Classification with HearTS but using a direct translation of time series instead of searching for specific shapes
+
+- QuoTS could combine several features to describe 1 word.
+
+
 In this study, we propose a tool that focuses on the ease of simple query search tasks in time series, which we refer to as \gls{ssts}. This is achieved by an innovative methodology, where the user gives a syntactic nature to time series, which turns the search procedure less verbose and more related to the reasoning of the user in recognizing the desired pattern.
+
+\subsection{Further Applications of SSTS}
+
+- Classification
+- Compressing Tool
+- Edition Tool
+- Alignment between Time Series with Longest Common Distance
+
+\section{Further Application 2: Multidimensional Segmentation}
+
+The proposed method accepts both single and multidimensional records. The difference regards the number of features extracted. As presented on Figure \ref{fig:SSM_scheme}, the same set of features are extracted for each time series of the record and combined in the $F_M$. 
+\par
+Using a single time series of a multivariate record is optional and depends on the detection's purpose. In some cases, using a single time series from a multidimensional record can lead to missing relevant events undetected. An example of this can be seen on Figure \ref{fig:occupancy_uni} with record \textit{"Occupancy"} from Dataset 8. 
+\par
+The record is a multi-dimensional time series that measures room occupancy based on temperature, humidity, light and CO2. All events can only be detected if using several time series of the record \cite{cpd_alan}. On Figure \ref{fig:occupancy_uni}.left, a single time series was analyzed by the proposed method to detect relevant events, while Figure \ref{fig:occupancy_uni}.right presents the application of the method to all the time series of the record. The results are different because the information from all the time series is combined, while with the single dimensional record, the detected events resulted from the information available on the single time series.\\

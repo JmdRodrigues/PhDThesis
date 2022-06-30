@@ -199,16 +199,16 @@ The results obtained in this benchmark demonstrate that this method is promising
 
 In this section, we present a more comprehensive discussion regarding the \textit{FN} and \textit{FP} counts by means of examples of what could have decreased the performance of the proposed method.
 \par
-Regarding \textit{FP} counts, these were found in several datasets to be mostly associated with changes on the signal that were not labeled. Since our proposed approach is \textit{unsupervised}, most changes that appear significant will be detected, even if not explicitly labeled. This is visible in Figure \ref{fig:use_case1}, where the subject was climbing stairs but something happened during the acquisition that makes the signal change dramatically. We found the same type of mislabeled data on Datasets 2, 3 and 4, with Dataset 3 having the worst rate of \textit{FP}. This dataset also has a worse rate of \textit{FN}, but mostly because the transitions labeled as sit-to-stand, are often difficult to identify as two different events. It was able to detect most of these changes, but as one event and not as two different events.
+Regarding \textit{FP} counts, these were found in several datasets to be mostly associated with changes on the signal that were not labeled. Since our proposed approach is \textit{unsupervised}, most changes that appear significant will be detected, even if not explicitly labeled. This is visible in Figure \ref{fig:use_case1}, where the subject was climbing stairs but something happened during the acquisition that makes the signal change dramatically. We found the same type of mislabeled data on Datasets 2, 3 and 4, with Dataset 3 having the worst rate of \textit{FP}. Part of these false positives were due to some action that were not annotated, for instance, in Figure \ref{fig:har1_dataset} we highlighted in light yellow areas where something happened but no label is given. We assume, without certainty, that the subject was moving to return to a standard position, but this was not annotated in several datasets. Our method is actually able to find these occurrences, which increases the level of false positives. The method also has a worse rate of \textit{FN} for this dataset. We can explain these by the difficulty of the method in finding the labeled transitions between static positions (sit-to-stand, stand-to-sit, stand-to-laying, etc...). The method was able to find these as one change, but was not able to find the start and end of each of these transitions, as it was labeled. Detecting the start and end of these would require smaller window sizes.
 \par
 For datasets with categorized events, which are a transition between one categorized \textit{subsequence} to another, we can evaluate from which categories the events were missed. Then, identify if specific types of events were the cause of the \textit{FN} count rate. The Figure \ref{fig:fn_dataset2} indicates the F1-score of the \textit{nova} function in detecting the different transition categories of events using the color and size of circles associated with each event category. The activities before and after change point events are sorted in columns. Each row is associated with a specific event category and corresponding circle, which color indicates the detection's accuracy, while the size indicates the percentage of events associated with the corresponding event category.
 
-\begin{wrapfigure}{r}{0.5\linewidth}
-    \centering
-    \includegraphics[width=\linewidth]{FN_example.pdf}
-    \caption{F1-score in detecting each of the categories of event transition from Dataset 2. \textbf{Pre CP} - activity performed before the change point event; \textbf{Pos CP} - activity performed after the change point. The performance in detecting each transition is showed by the circles color.}
-    \label{fig:fn_dataset2}
-\end{wrapfigure}
+%\begin{wrapfigure}{r}{0.5\linewidth}
+%    \centering
+%    \includegraphics[width=\linewidth]{FN_example.pdf}
+%    \caption{F1-score in detecting each of the categories of event transition from Dataset 2. \textbf{Pre CP} - activity performed before the change point event; \textbf{Pos CP} - activity performed after the change point. The performance in detecting each transition is showed by the circles color.}
+%    \label{fig:fn_dataset2}
+%\end{wrapfigure}
 
 As the results illustrate on Figure \ref{fig:fn_dataset2}, the F1-score is lower in cases of activities with similar characteristics on time series. In this case, the transition between $Walking \xrightarrow[]{} Walking Upstairs$ has the lowest accuracy rate. However, transitions between $Walking \xrightarrow[]{} Walking up/downstairs$, as well as transitions between $Sitting \xrightarrow[]{} Standing$, are more difficult to detect. These results are supported by Figure \ref{fig:fn_dataset2}, where peaks in the \textit{nova} function are smaller for these transitions. Although a significant portion of these events have been missed, the problem is not necessarily that the \gls{ssm} has not the checkerboard pattern. In this cases, these more subtle changes were overshadowed by very significant changes, such as $Walking \xrightarrow[]{} Standing$. Nevertheless, a re-normalization of the \gls{ssm} segment of interest can help in better visualize the differences that were initially hidden. 
 \par
@@ -270,43 +270,46 @@ TS sample & Detected Cycles & \gls{d_e}(\%) \\ \midrule
 \end{tabular}
 \end{table}
 
-The results show the ability of this function to segment the time series into each cycle. It has successfully segmented all time series in all desired segments while having a \gls{d_e} compared to the ground truth.
+The results show the ability of this function to segment the time series into each cycle. It has successfully segmented all time series in all desired segments while having a \gls{d_e} compared to the ground truth. This ground truth indicates the moment the segment starts from a manual push-button.
 \par
-Although this method was successful in segmenting the signal, the proposed solution is not yet optimal. It does not always provide the moment where the \textit{path} starts on the \gls{ssm}. This moment should be the one detected to capture the true starting point of a period. The fact that we are not able to find the exact moment the \textit{path} starts means that an offset is present on the cycle detection.
+Although this method was successful in segmenting the signal, the proposed solution is not yet optimal. It does not always provide the moment where the \textit{path} starts on the \gls{ssm}. This moment should be the one detected to capture the true starting point of a period. The fact that we are not able to find the exact moment the \textit{path} starts means that an offset is present on the cycle detection. In the future, a different approach can be developed to search for the \textit{paths} on the \gls{ssm}. Nevertheless, the \gls{ssm} can still be used to segment periodic signals with the help of the analyst, by interactively selecting a segment of the signal as a query, or simply by indicating the index that corresponds to the beginning of the period. The method to perform this is simply applying the concept of query-based search but with columns/rows of the \gls{ssm}, as explained in Section \ref{subsec:query_search}.
 \par
-
+It is also important to mention that this problem is not necessarily hard to solve for this dataset, considering that it is a controlled dataset with one periodic signal. But our intention with this validation was to demonstrate the ability of the \gls{ssm} in finding periodic structures with a multidimensional signal. In Figure \ref{fig:example1_zoom} from Section \ref{sec:use_cases_ssm}, we showed an example of periodic segmentation, but the walking pattern was an easy periodic signal to segment. Example from more complex domains, such as the occupational domain can have more complex periods with even some variety of movements to execute the same tasks. The method should be robust to these changes and in this examples we can see that, for instance, with signal X, which periods are more complex than a simple walking pattern.
 
 \section{Segmentation of Occupational Data}
 
 In occupational settings of the \textit{Volkswagen} Autoreuropa plant, workers mostly perform repetitive and cyclic tasks during their working day. These cyclic tasks are sometime interrupted by stoppages on the assembly line due to delays in other areas, or breaks by the worker, or even the case where the worker shifts to another workstation to help a colleague or take over another type of task.
 \par
 When performing occupational data analysis for risk evaluation, the analyst has to differentiate the moments of interest (active working periods) from the rest (non working periods). To be clear, the non working periods do not mean that the worker was motionless, but only that he/she was not performing the specific repetitive task. In addition, the process of risk analysis is made by working cycle. In that sense, the cyclic information of these cycles has to be segmented as well for the analysis.
+\par
+In this section we show several examples where the \gls{ssm} can be used in this multidimensional information for several tasks in data processing, prior to the risk analysis.
 
 \subsection{Active and Non-Active Periods}
 
-Overall, the ability to segment periods of active work and periods where the worker is not performing the demanded task is relatively good, with an overall score of 
+As explained in Section \ref{sec:industry} with Figure \ref{fig:example_industry}, the signal can have several active and non-active periods. The \gls{ssm} was used with the \textit{nova} function to extract the transitions between these sections.
 
 \begin{table}
-\caption{Results of type event 1 (work period transition), discriminated per time serie samples. Measurements of \gls{P}, \gls{R}, \gls{F}, \gls{A} and \gls{MAE}, of each according sample.}
+\caption{Results of type event 1 (work period transition), discriminated per time serie samples. Measurements of \gls{P}, \gls{R}, \gls{F1}, \gls{A} and \gls{mae}, of each according sample.}
 \label{table:auto_scores}
 \centering
 \begin{tabular}{llllll}
 \toprule
-TS sample         & \gls{P}    & \gls{R} & \gls{F}    & \gls{A}  & \gls{MAE} (s) \\
+TS sample         & \gls{P}    & \gls{R} & \gls{F1}    & \gls{A}  & \gls{mae} (s) \\
 \midrule
-\gls{Opr}1 \gls{Wkst}1      & 0,78 & 1 & 0,88 & 0,78 & 11,87   \\
-\gls{Opr}1 \gls{Wkst}2      & 1    & 1 & 1    & 1    & 34,77   \\
-\gls{Opr}2 \gls{Wkst}1\&2 & 0,86 & 1 & 0,92 & 0,86 & 10,17   \\
-\gls{Opr}3 \gls{Wkst}1    & 0,80 & 1 & 0,89 & 0,80 & 3,21    \\
-\gls{Opr}4 \gls{Wkst}1    & 1    & 1 & 1    & 1    & 8,83    \\
-\gls{Opr}5 \gls{Wkst}1      & 1    & 1 & 1    & 1    & 8,54    \\
-\gls{Opr}5 \gls{Wkst}2      & 1    & 1 & 1    & 1    & 8,38   \\ \hline
-Total & & & & &
-
+Operator 1 Workstation 1      & 0,78 & 1 & 0,88 & 0,78 & 11,87   \\
+Operator 1 Workstation 2      & 1    & 1 & 1    & 1    & 34,77   \\
+Operator 2 Workstation 1\&2 & 0,86 & 1 & 0,92 & 0,86 & 10,17   \\
+Operator 3 Workstation 1    & 0,80 & 1 & 0,89 & 0,80 & 3,21    \\
+Operator 4 Workstation 1    & 1    & 1 & 1    & 1    & 8,83    \\
+Operator 5 Workstation 1      & 1    & 1 & 1    & 1    & 8,54    \\
+Operator 5 Workstation 2      & 1    & 1 & 1    & 1    & 8,38   \\ \hline
 \bottomrule
-
 \end{tabular}
 \end{table}
+
+The detection of transitions between active to non-active segments was possible with the usage of the \gls{ssm}. In Figure \ref{fig:stortytell}, the reader can notice that there are very clear \textit{block} structures that indicate this change. In addition, as this segment is highly different than the rest of the signal, it has very low values on the similarity function.
+\par
+Having found active periods of work, the next step would be to segment each cycle of the task.
 
 \subsection{Working Cycles}
 
@@ -331,17 +334,36 @@ Total & & & & &
 \gls{Opr}5 \gls{Wkst}2 & 10/11           & 3.47s (3.45\%)   \\
 \gls{Opr}6 \gls{Wkst}1 & 14/15           & 3.79s (3.74\%)   \\
 \gls{Opr}6 \gls{Wkst}2 & 14/15           & 5.79s (5.73\%)   \\ 
-\cline{1-1}\cmidrule{2-5}
+\midrule
 \multicolumn{1}{c}{Total}                                & 154/157             & 6.12\%\\
 \bottomrule
 \end{tabular}
 \end{table}
 
-From the 157 working cycles, 154 cycles were detected. The duration error was still significant, with a value of 6.12\% of the working cycle.
+From the 157 working cycles, 154 cycles were detected. The duration error was still significant, with a value of 6.12\% of the working cycle. This can be explained based on our justification for Dataset 4, which has a high \gls{mae}. The fact that the window that extracts features is very large, makes the method less precise. Still, it is able to segment the time series in the same moment of the working cycle.
 \par
 An interesting fact about this data is that some working cycles are not made of one distinctive sequence of motions, but rather a junction of several stages that have similar motions. Being able to segment the entire cycle is therefore more difficult and relevant.
 \par
-The proposed method proves also to be applicable into several scenarios, namely different activities, performed in different workstations; and can manage inter subject variability.
+The proposed method proves also to be applicable into several scenarios, namely different activities, performed in different workstations, and can manage inter subject variability.
+
+\subsection{Storytelling Data}
+
+As a concluding note, we believe this method is a support to tell the story behind the data. It can help identify moments that are relevant and try to figure out their meaning with minimal context. For instance, taking the example of Figure \ref{fig:autoeuropa_ssm}, a worker was performing workstation 1, was interrupted for a long period, restarted to perform workstation 1 and then shifted to workstation 2. This sequence of events is possible to be seen on the \gls{ssm} of the signals monitored.
+
+
+
+
+
+%For instance, before showing an example of the occupational domain, let us show the reader an example of Dataset 4.
+%
+%\begin{figure}
+%    \centering
+%    \includegraphics[width=\linewidth]{Clustering_real_difficult_timeseries.pdf}
+%    \caption{Activity segmentation and clustering based on the \gls{ssm} for an example of Dataset 4. The activities are color coded, as well as the segments identified by the analysis of the \gls{ssm}. These are then clustered based on the similarity profiles (which are also colorcoded on the dendogram).}
+%    \label{fig:example2_har}
+%\end{figure}
+%
+%Figure \ref{fig:example2_har} shows a signal with several activities (as described in Section \ref{subsec:uci}). The transitions are relatively easy to identify. After segmenting these transitions, we are able to sort them by their corresponding activity class. Besides, all subsequences related with being standing (standing, walking, climbing or falling stairs) are grouped together, while static postures such as sitting or laying are closer together.
 
 \section{Pattern Search with SSTS}
 
@@ -390,7 +412,6 @@ The example is solved with the following regular expression: $(1p).*?(0.)$. This
 \subsubsection{Example 6 - Stable lifting detection in accelerometer signals}
 
 In the previous example, the solution was achieved by searching for one simple transition in the string generated by the sequence of connotation methods. This tool may also be used to solve more complex examples in the same manner.
-
 \par
 The next problem involves the segmentation of a lifting step that has occurred 5 seconds after the start of a weight lifting exercise. The example can be solved in two steps: (1) find the start of the exercise, (2) search for the segment 5s after the start. This rationale can be expressed by combining two distinct symbolic representations of the same original signal, which requires the use of two pre-processing and symbolic connotation sets, in which one is used for the detection of the start and the other to find the desired segment.
 
@@ -407,15 +428,86 @@ Regarding the symbolic connotation step, the first method AD (represented in blu
 \par
 The regular expression written to solve the example is $(?<=1.\{15000,\})(n1p)(.*?)(n1p$). Decomposing this expression in the two steps of the example results in: (1) $(?<=1.{15000,})$ and (2)$(n1p)(.*?)(n1p)$. In (1), a \textit{lookbehind} operator is used, therefore, the compiler will search ahead of the first match inside the operator, i.e., the search will match the expression "$1.\{15000,\}$" and search ahead of it. This method aims to handle the temporal dependence between events in the string, in which the number $15000$ is calculated by the number of characters that correspond to 5 seconds in the string. This calculation was achieved by multiplying the sampling frequency, the number of connotations in each primitive, and the desired time, in this case: 1000 Hz, 3 connotations and 5s, respectively.
 
-\subsection{Further Applications of SSTS}
+\subsection{Measure of Expressiveness}
 
-- Classification
-- Compressing Tool
-- Edition Tool
-- Alignment between Time Series with Longest Common Distance
+In order to evaluate parameters of expressiveness with \gls{ssts}, we evaluated the legibility and difficulty in generating the solution for the corresponding task. In the programming field, \textit{Halstead} measures are typically used with this purpose. These measures describe the complexity of the script directly from the source code, based in a set of metrics calculated with the number of distinct \gls{oprt} and \gls{oprd}, and the \gls{Toprt} and \gls{Toprd} (recall Section \ref{subsec:complex} from Chapter \ref{cha:theory}.
+\par
+The complexity evaluation will be performed to compare the script generated by the \textit{classical} approach with the \textit{syntactic} approach. Concerning the \textit{classical} approach, the list of operators and operands are selected from the \textit{operator} module from python ~\citep{oprtPy}, which includes the list of arithmetic, logical , comparison, bitwise, assignment and special operators; and, the functions that are used in the resolution process will be set as operators and their corresponding arguments as operands. For example, considering this code line written in python:
+
+\begin{equation}
+\centering
+pks = peakdelta(s, delta=np.percentile(s, 70) - np.percentile(s, 30))
+\end{equation}
 
 
-\section{Time Series Classification with HeaRTS}
+\begin{itemize}
+\item \textit{\textbf{Total List of Operators}}: '\textit{peakdelta}', '\textit{percentile}', '$-$' and '\textit{percentile}'
+\item \textit{\textbf{Total List of Operands}}: '\textit{s}', '\textit{delta=np.percentile(s, 70) - np.percentile(s, 30)}', '\textit{s}', '\textit{70}', '\textit{s}', '\textit{np.percentile(s,30)}', '\textit{np.percentile(s,70)}' and '\textit{30}'
+\item \textit{\textbf{List of Distinct Operators}}: '\textit{peakdelta}', '\textit{percentile}' and '$-$'
+\item \textit{\textbf{List of Distinct Operands}}: '\textit{s}', '\textit{delta=np.percentile(s, 70) - np.percentile(s, 30)}', '\textit{np.percentile(s, 70)}', '\textit{np.percentile(s, 30)}',  '\textit{70}' and '\textit{30}'
+\end{itemize}
+
+In the second case, both \textbf{connotation} step and \textbf{search} procedure will be inspected for the \textbf{difficulty} measures. Regarding the \textbf{connotation} step, the evaluation will be made similarly with the previous method for inspecting functions, in which the function is set as an operator and its corresponding arguments as operands. For the \textbf{search} procedure, the set of instructions typically used in regular expressions (except the "." character) are defined as operators\citep{regex}. These can be revisited in the second section. The remaining characters of the regular expression string, except the parenthesis, will be set as operands. In this are included the "." operator that matches any character, and the "\textbackslash d" and "\textbackslash w" that matches all digits and alphabetical characters respectively. Regarding the parenthesis, when occurring ("\{\}" or "[]"), will be set as one operator. For example:\\
+
+{\centering
+\textbf{$Connotation: $} $Sm$ 500  $A$ 0.8 $D1$ 0.05\\
+\textbf{$Search: $} \textit{(z1n).*?}\\ }
+
+\begin{itemize}
+\item \textit{\textbf{Total List of Operators}}: '$Sm$', '$A$', '$D1$', '( )' and '\textit{*?}'
+\item \textit{\textbf{Total List of Operands}}: '\textit{500}', '\textit{0.8}', '\textit{0.05}', '\textit{z}', '\textit{1}', '\textit{n}' and '\textit{.}'
+\item \textit{\textbf{List of Distinct Operators}}: '$Sm$', '$A$', '$D1$', '( )' and '\textit{*?}'
+\item \textit{\textbf{List of Distinct Operands}}: '\textit{500}', '\textit{0.8}', '\textit{0.05}', '\textit{z}', '\textit{1}', '\textit{n}' and '\textit{.}'
+\end{itemize}
+
+
+\begin{adjustbox}{center, caption={Evaluation of the complexity in the resolution of examples with the \textit{syntactic} approach and with the \textit{classical} approach. Voc - Vocabulary, Lgth - Length, CL - Calculated Length, V - volume, D - difficulty, E - effort.}, float={table}[h!]}
+    \small
+    \setlength{\tabcolsep}{2pt}
+    \renewcommand{\arraystretch}{0.8}
+    \label{tab:halstead}
+    \begin{tabular}{cl cccccc cccccc}
+    	
+        \toprule[0.5mm]\\
+        
+        \multirow{2}{*}{Example} & & \multicolumn{6}{c}{Syntactic Resolution} & \multicolumn{6}{c}{Classical Resolution}\\
+        
+        \cmidrule[0.2mm](lr){3-8} \cmidrule[0.2mm](lr){9-14} & & \textit{\textbf{Voc}} & \textit{\textbf{Lgth}} & \textit{\textbf{CL}} & \textit{\textbf{V}} & \textit{\textbf{D}} & \textit{\textbf{E}} &
+        \textit{\textbf{Voc}} & \textit{\textbf{Lgth}} & \textit{\textbf{CL}} & \textit{\textbf{V}} & \textit{\textbf{D}} & \textit{\textbf{E}} \\      
+        
+        \midrule[0.3mm]\\
+        
+        Start/End of Plateau & & 7.0 & 7.0 & 13.6 & 19.7 & 2.0 & \large 39.3 & \maxf{12.0} & \maxf{13.0} & \maxf{33.3} & \maxf{46.6} & \maxf{2.5} & \large \maxf{116.5}\\
+         
+        \midrule[0.3mm]\\
+        
+        Step Detection (Left \& Right Heel) & & 7.0 & 8.0 & 13.6 & 22.5 & 2.2 & \large 49.4 & \maxf{19.0} & \maxf{22.0} & \maxf{63.6} & \maxf{93.5} &\maxf{ 4.2} & \large \maxf{388.2}\\
+        
+        \midrule[0.3mm]\\
+        
+        Systolic Phase Detection & & 8.0 & 8.0 & 16.4 & 24.0 & 2.5 & \large 60.0 & \maxf{21.0} & \maxf{25.0} & \maxf{73.0} & \maxf{109.8} & \maxf{4.7} & \large \maxf{517.7}\\
+        
+        \midrule[0.3mm]\\
+        
+        Electrocardiogram Peak Detection & & 4.0 & 4.0 & 4.8 & 8.0 & 1.5 & \large 12.0 & \maxf{9.0} & \maxf{12.0} & \maxf{20.3} & \maxf{38.0} & \maxf{3.0} & \large \maxf{114.0}\\
+        
+        \midrule[0.3mm]\\
+        
+        Straight Line Tracking & & 4.0 & 4.0 & 4.0 & 8.0 & 2.0 & \large 16.0 & \maxf{25.0} &\maxf{33.0}& \maxf{93.5} & \maxf{153.2} & \maxf{5.3} & \large \maxf{811.3}\\
+        
+        \midrule[0.3mm]\\
+        
+        Stable Lifting Step Detection & & 13.0 & 21.0 & 35.6 & 77.7 & 4.5 & \large 349.7 & \maxf{22.0} & \maxf{23.0} & \maxf{77.3} & \maxf{102.6} & \maxf{5.0} & \large \maxf{512.8}\\
+
+        \bottomrule[0.5mm] \\
+        
+    \end{tabular}
+\end{adjustbox}
+
+In Table \ref{tab:halstead} is presented the performance measures in both ways of solving the demonstrated examples. For the evaluation, the pre-processing step was omitted, which means that only the regular expression is used to compute the difficulty measures for the \textit{syntactic} approach, and only the script after the pre-processing steps is used to compute the difficulty measures for the \textit{classical} approach.
+
+
+\section{Time Series Classification with Hea\reflectbox{R}TS}
 
 In this section is evaluated the ability to perform time series classification with the proposed \gls{hearts} method. For this, it has been applied to the \textit{UCR time series classification benchmark} and compared with the traditional 1-nearest neighbor based on the euclidean distance. As was mentioned on Chapter \ref{cha:ssts}, this process can be performed in multiple ways, namely with the combination of a \textit{Baysian} or \gls{svm} classifiers with either a \gls{bow} or a \gls{tfidf} model. These combinations were also compared. With these evaluations, we expect to conclude (1) if this approach of using a linguistic transformation of a time series with high level words ordered in time of occurrences is possible with significant performances and (2) which is the combination that best fits this approach.
 \par
@@ -501,17 +593,19 @@ Regarding the \textit{ShapeletSim} dataset, the data has also two classes. In on
 
 In this section, we wanted to answer two main research questions: (1) can we solve time series classification tasks based on its textual representation following traditional \textit{NLP} methods and (2) could we use the words that describe the time series as a readable explanation of the data and the differences between classes. For this purpose, we applied the proposed method on the \textit{UCR} classification benchmark and highlighted several relevant use-cases and the overall results achieved.
 \par
-The results provide evidence that it is possible to compare time series based on a textual representation and using traditional strategies from the text mining domain. Not only is it possible to compare the vectorized of time series document with the cosine distance (as we have seen on Figure \ref{fig:distribution_dendogram}, but \gls{bow} or \gls{tfidf} models can be used with a linear \gls{svm} to solve classification tasks.
+The results provide evidence that it is possible to compare time series based on a textual representation and using traditional strategies from the text mining domain. Not only is it possible to compare the vectors of time series document with the cosine distance (as we have seen on Figure \ref{fig:distribution_dendogram}, but \gls{bow} or \gls{tfidf} models can be used with a linear \gls{svm} to solve classification tasks.
 \par
 Additionally, the fact that words are weighted based on their relevance to distinguish each time series document from all the others, it is possible to highlight the \textit{subsequences} of the time series corresponding to these words and understand which are most relevant for the distinction of class, being a step forward into interpretability of time series. The limited examples were still simple and intuitive and the process turns harder to understand in more complex data. This might mean that the method has a diverse enough set of words to perform a distinction between classes, but the words used are not capable of expressing this difference. We can highlight many cases with high accuracy scores, but their interpretability falls short. A few examples can be showed. For instance, on Figure \ref{fig:interpretable_beetlefly} is showed a binary classification problem in which the method has 100\% accuracy but does not show expressively the difference between classes. Of course, it might be difficult to express this difference and maybe words are not sufficient. 
 \par
-The textual representation is valuable in the sense that text mining domain knowledge can be used on time series. Nevertheless, we can profit from this knowledge as much as the translation of the time series into text is rich, valuable and domain specific. With the current set of \gls{ssts} queries we are able to make a limited description that works well in simple signals described mostly by their derivative dynamics. The keywords extracted for these time series make sense and we can relate to what we see. However, if more expressive queries are used to make a more robust translation, the keywords extracted can be more valuable and relatable with the time series we are looking at. Therefore, a more diverse set of queries should be used to make possible the extraction of relevant keywords.
+The textual representation is valuable in the sense that text mining domain knowledge can be used on time series. Nevertheless, we can profit from this knowledge as much as the translation of the time series into text is rich, valuable and domain specific. With the current set of \gls{ssts} queries we are able to make a limited description that works well in simple signals described mostly by their derivative dynamics. The keywords extracted for these time series still have a limited readability being even harder in complex. However, if more expressive queries are used to make a more robust translation, the keywords extracted can be more valuable and relatable with the time series we are looking at. Therefore, a more diverse set of queries should be used to make possible the extraction of more relevant keywords.
 \par
-We also wanted to mention that the translation of time series into text brings novel ways of measuring distances. It also shows a totally different textual feature domain that can help complement the information extracted by classic features from the statistical, time and frequency domains. 
+We also wanted to mention that the translation of time series into text brings novel ways of measuring distances. It also shows a totally different textual feature domain that can help complement the information extracted by classic features from the statistical, time and frequency domains.
 
 \section{Pattern Search with QuoTS}
 
-\subsection{\textit{QuoTS} Matches Shapes}
+In this Section we demonstrate the potential utility of \gls{quots} to search for relevant subsequences in real datasets. Table \ref{tab:operators} from the previous Chapter highlights the keywords and operators, if needed to follow these exampels.
+
+\subsection{\textit{QuoTS} Matches Gestures}
 
 We start by demonstrating the ability of \gls{quots} to sort how well individual shapes match a written query. For this, we used the \textit{UWaveGestureLibrary} dataset from the \textit{UCRArchive} as a proxy \cite{uWave}, which similar to telemetry data, relies on inertial time series. We use this proxy data simply because it is much larger than any publicly available labeled transportation data. However, we note that gestural interaction with the automobile interfaces is an area of active research \cite{autoui1, autoui2}. With this example, we show that the system can recognize different gestures with or without intuitive queries, hence, if humans were able to learn and master this tool, this recognition problem would be largely solved.
 
@@ -544,9 +638,25 @@ Although we simply wanted to demonstrate that with a set of meaningful words we 
 We also demonstrate that for the handful cases where this did not work, there was a semantic explanation for it. (e.g. Classes 5 and 6 have not a specific pattern and seem to be specially random in their X-axis or, classes 1 and 2 are very similar, and because of that, are mislabeled). But, as our tool can perform queries in multidimensional data, we can still  discriminate these by using the Y-axis in conjunction with X-axis to sort them correctly. 
 Note that discriminating among these eight classes is not a trivial problem. Of the more than 1,000 papers to have worked with this dataset, the current best accuracy was obtained by \textit{COTE} algorithm which achieved 76.56\% using a single axis. In addition, this dataset was acquired from eight different subjects, which indicates that our system can account for the intra-subject and inter-subject variability in motion for this dataset \cite{uWave}.
 
+\subsection{\textit{QuoTS} in Selected Use Cases}
+
+In this section we present several examples of where \gls{quots} can be used in continuous real data. We start with an \gls{ecg} signal that has motion artifacts.
+
+\begin{figure}
+\includegraphics[width=\linewidth]{Quots_ecg.pdf}
+\end{figure}
+
+As a start, we were searching for the motion artifact segment that appears in two areas of the signal. This artifact can be detected in two ways, as we are showing. The first would be to use the keyword \texttt{noise}, which searches for parts of the signal that have a higher difference from a moving average of the signal. In this case, the higher difference occurs when the motion artifacts appear. We could also search for each of these motion artifact sequences simply by pure visual intuition of their shape. For instance, the first motion artifact looks like a \texttt{valley}, while the second looks like a \texttt{peak}, which ends up matching the desired segments. This process was made looking for subsequences with 250 samples.
+\par
+On the \gls{ecg} signal there are also other segments of interest, namely from the \textit{PQRS} complex. In this case, we searched for the \textit{R} \texttt{peak}, the \textit{S} \texttt{valley} and the \textit{T} \texttt{peak}. The first subsequence was simply matched by searching for the keyword \texttt{peak}, with a window size of 50 samples, which contrasts with the 250 samples from the previous example. The keyword matched well the highest peak, but other peaks were present with lower amplitudes, such as the \textit{T} \texttt{peak}. This one was matched with the query \texttt{low peak}. In between these two subsequences, there is the \textit{S} \texttt{valley}. In this case, we show the usage of the special \texttt{followed by} operator. The query \texttt{[high low] [down up]} indicates that the first half of the searched subsequence should have a \textit{high change in amplitude going down} and end with a \textit{low change in amplitude going up}. This is exactly what is matched, as highlighted and indicated by the corresponding \textit{score} function. To be clear, the colored highlighted segments represent the 10-most relevant matches for the written query. The \textit{scoring} functions show that the other matches would be found as well.
+
+
+
 \subsection{Matching \textit{Known} Shapes with Words}
 
-We believe that \gls{quots} is intuitive enough to allow most novice users to create simple effective queries for most information retrieval tasks.  However, in some cases, the user’s ability to formulate queries may be a limitation. In this section we show that, perhaps uniquely, this domain allows us to generate queries by “puppeteering” a model car. To demonstrate this, we attached a smartphone to a model car (as indicated in Figure \ref{fig:comparison_1}) and acquired inertial data while mimicking a 3-point turn event on a table. The resulting shape is illustrated in \textit{puppet data}. We believe this can be used in two ways: for the user to gain intuition as to how a motion/\textit{manoeuver} is illustrated on motion data or the how the inertial data from the motion/manoeuver can be used as a MASS template on \gls{quots}: 
+We believe that \gls{quots} is intuitive enough to allow most novice users to create simple effective queries for most information retrieval tasks.  However, in some cases, the user’s ability to formulate queries may be a limitation. In this section we show that it is possible to perform a \textit{mimicry} of the process being searched and add the query designed with the mimicry process as a \textit{word feature vector} inside our vocabulary. We show a few examples of possible applications, starting with "puppeteering" a model car in performing a 3-point-turn.
+\par
+In order to demonstrate a match for a 3-point turn made by a real car with a query from a toy car, we attached a smartphone to a model car (as indicated in Figure \ref{fig:comparison_1}) and acquired inertial data while mimicking a 3-point turn event on a table. The resulting shape is illustrated in \textit{puppet data}. We believe this can be used in two ways: for the user to gain intuition as to how a motion/\textit{manoeuver} is illustrated on motion data or the how the inertial data from the motion/manoeuver can be used as a MASS template on \gls{quots}: 
 •	Shape Intuition: A user might not know what the shape of a 3-point turn looks like. By using a model car, he/she can mimic the motion and gain intuition over what the query should be (in this case, \texttt{[peak peak peak]}). 
 •	MASS template: As mentioned above, we have a special shape word, which corresponds to a shape template given by the user, to which a word can be assigned. We then can use the word in our language to match desired patterns with the MASS distance profile as a word feature vector.  
 
@@ -559,15 +669,7 @@ We believe that \gls{quots} is intuitive enough to allow most novice users to cr
 
 We added the puppet data and the word \texttt{3pointturn} to our vocabulary. Searching for it in our dataset matched all the desired shapes. Note that the template has a different amplitude and time scale, but for \textit{MASS}, the z-normalization makes the amplitude difference irrelevant, and the time scale was adjusted by resampling the template based on the selected window size for the query search. With this, the template is not only a template, it also becomes part of the language, being used in combination with all the other words available in our vocabulary.
 
-\section{Further Application 1: Search by Example}
 
-\section{Further Application 2: Multidimensional Segmentation}
-
-The proposed method accepts both single and multidimensional records. The difference regards the number of features extracted. As presented on Figure \ref{fig:SSM_scheme}, the same set of features are extracted for each time series of the record and combined in the $F_M$. 
-\par
-Using a single time series of a multivariate record is optional and depends on the detection's purpose. In some cases, using a single time series from a multidimensional record can lead to missing relevant events undetected. An example of this can be seen on Figure \ref{fig:occupancy_uni} with record \textit{"Occupancy"} from Dataset 8. 
-\par
-The record is a multi-dimensional time series that measures room occupancy based on temperature, humidity, light and CO2. All events can only be detected if using several time series of the record \cite{cpd_alan}. On Figure \ref{fig:occupancy_uni}.left, a single time series was analyzed by the proposed method to detect relevant events, while Figure \ref{fig:occupancy_uni}.right presents the application of the method to all the time series of the record. The results are different because the information from all the time series is combined, while with the single dimensional record, the detected events resulted from the information available on the single time series.\\
 
 %\begin{figure}
 %    \centering
@@ -609,4 +711,37 @@ The record is a multi-dimensional time series that measures room occupancy based
 \subsection{Pattern Search in Occupational Data}
 \label{subsec:search}
 
+\section{General Limitations}
 
+In this section we present the general limitations of the presented methods, following the results achieved.
+
+\subsection{Information Retrieval with the SSM}
+
+- size and memory consumption
+
+- feature reduction
+
+- feature specific
+
+- The method to retrieve the diagonals is not good enough
+
+- The summarization process is not good enough
+
+- To put it online might be a bit tricky
+
+\subsection{Pattern Search with SSTS}
+
+- requires knowledge on regular expressions
+- should have a tendency for a higher level of legibility, converting sequences of characters into words
+- can still be optimized in search speed with compression methods
+- The search process should be more flexible 
+
+\subsection{Classification with HeaRTS}
+
+- the readability is still limited, with words that come as output not always making sense.
+
+- the method works well with simple shapes that are based on derivative properties
+
+- the classification process is has good as the diversity of words used to describe it, a better vocabulary should be used to have better results and capture the essence of the transitions
+
+\subsection{Pattern Search with QuoTS}

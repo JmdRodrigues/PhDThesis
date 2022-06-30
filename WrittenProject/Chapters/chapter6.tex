@@ -198,6 +198,7 @@ The \textit{similarity profile} is computed column(row)-wise, being each column(
 A general example of applying this process to the segmented time series based on the \textit{nova} function is showed in Figure \ref{fig:profiles}. Each segment category (A, B and C) extracted from the \gls{ssm} of Figure \ref{fig:ssm_description} is computed into a profile ($P_A$, $P_B$ and $P_C$) by averaging column-wise. These \textit{similarity profiles}show how similar the segment is with all the other \textit{subsequences} of the time series. All segments A will have a similar $P_A$, while being very different from profiles $P_B$ and $P_C$. 
 
 \subsection{Query Search}
+\label{subsec:query_based}
 
 The mentioned similarity profiles are also useful to search for specific repetitions of a query from the time series. The process follows the traditional methods of template-based search methods explained in Chapter \ref{subsec:query_based_search), but instead of doing the process directly on the time series, it is performed on the \gls{ssm}. The search procedure works by sliding the smaller column window (the example selected on the time series) along the \gls{ssm}, one sample at a time. The distance, $D$, between the example and the segment it slides over is calculated through the sum of absolute differences:
 
@@ -209,6 +210,7 @@ where $SSM(i)$ is the segment of the \gls{ssm} over which the example, $SSM_t$, 
 
 
 \section{Experimental Evaluation in Selected Use-cases}
+\label{sec:use_cases_ssm}
 
 After explaining the process to represent the time series into a feature-based similarity matrix and the methods used to retrieve information from it, we present selected use-cases from multiple domains to exemplify its universal usage.
 
@@ -240,13 +242,6 @@ Any significant change in properties will be detected by the proposed method. As
 When \textit{zooming-in} the \gls{ssm} into segment \textit{A}, which shows transitions between walking behaviors, the checkerboard pattern that highlights change points are clearer and the three different walking patterns are easily segmented. The two major peaks in the corresponding \textit{nova} function are from these transitions, as presented in Figure \ref{fig:example1_zoom} (left). In addition, the reader might notice that the segments of the matrix related with \textit{walking in stairs} are also segmented into smaller \textit{blocks}. Although the information is not available in the dataset description, we strongly believe these are a flight of stairs.
 \par
 Considering that the signal is a walking behavior, the reader might question the fact that the periodicity of the walking pattern is not exhibited on the matrix. The reason is that the window size used to compute the \gls{ssm} of Figure \ref{fig:use_case1} is too large. If features are extracted with smaller window size, closer to the walking period, the \textit{paths} that indicate the recurrence of shapes are visible. Figure \ref{fig:example1_zoom} (right) shows the \gls{ssm} built from the segment \textit{B} of the original time series, with a window size of 10 samples and an overlap of 95 \%. The matrix shows the \textit{paths}, from which it is possible to extract the periods with the similarity function ($sf_B$).
-
-\begin{figure}
-    \centering
-    \includegraphics[width=\linewidth]{Clustering_real_difficult_timeseries.pdf}
-    \caption{Activity segmentation and clustering based on the \gls{ssm}}
-    \label{fig:example2_har}
-\end{figure}
 
 
 \subsection{Use-Case 2 - Medical domain}
@@ -356,4 +351,6 @@ The pairwise distance between profiles is also used to illustrate how the segmen
 \label{fig:summarize_step3}
 \end{figure}
 
-Finally, the process to summarize the time series can be iterative by adding \textit{subsegment layers}. These layers can be added by performing the \textit{novelty search} on the previously segmented time series with a smaller time scale or segmenting the time series based on periodicity. In this case, the signal is periodic, therefore Figure \ref{fig:summarize_step3} illustrates the \textit{periodic search}, where periods are segmented by the minima of the $s_f$. 
+Finally, the process to summarize the time series can be iterative by adding \textit{subsegment layers}. These layers can be added by performing the \textit{novelty search} on the previously segmented time series with a smaller time scale or segmenting the time series based on periodicity. In this case, the signal is periodic, therefore Figure \ref{fig:summarize_step3} illustrates the \textit{periodic search}, where periods are segmented by the minima of the $s_f$.
+\par
+This summarization process is mostly graphical and follows the results of each process for information retrieval from the \gls{ssm}. Therefore, this method will not present overall results or be validated in Chapter \ref{cha:results}.
