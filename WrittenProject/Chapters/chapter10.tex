@@ -11,3 +11,56 @@
 
 \chapter{Future Work}
 \label{cha:future}
+
+Future Work
+
+- Associate the Bag of Words model weights with the shapes extracted. Save the subsequences and the words. Transform it in the bag of subsequences, and you can create a distance between the words. For instance, a Peak in Signal 1 might be different than a Peak in Signal 2. Or the signal might have the same dynamic (up down flat) but the up and down have a much different shape. By comparing the shapes, we might have an additional distance measure that makes the process more relevant...keep this in mind.
+
+- Applying the cost matrix to the SSM to see what comes out of it. Would it help get the cyclic patterns in one time?
+
+- Explore more NLP methods that could be used on the symbolic/textual representation of time series
+
+- BERT for Time Series
+
+- Profile with a summarization and overall report of time series that includes a more detailed description of the content of the data, more statistical information
+
+- Test the systems developed with a control group to see if the tool is more or less expressive
+
+- Associate features with the type of change
+
+- Multiscale segmentation
+
+- Cyclic Segmentation with path kernel
+
+- Calculate distances in AB pairs instead of AA pairs.
+
+- Use reduction and stacking methods to improve the algorithm
+
+- Classification with HearTS but using a direct translation of time series instead of searching for specific shapes
+
+- QuoTS could combine several features to describe 1 word.
+
+
+In this study, we propose a tool that focuses on the ease of simple query search tasks in time series, which we refer to as \gls{ssts}. This is achieved by an innovative methodology, where the user gives a syntactic nature to time series, which turns the search procedure less verbose and more related to the reasoning of the user in recognizing the desired pattern.
+
+
+
+\subsection{MultiModal Classification with HeaRTS}
+
+- use multidimensional classification (Propose publication with Hui)
+- 
+
+\subsection{Further Applications of SSTS}
+
+- Classification
+- Compressing Tool
+- Edition Tool
+- Alignment between Time Series with Longest Common Distance
+
+\section{Further Application 2: Multidimensional Segmentation}
+
+The proposed method accepts both single and multidimensional records. The difference regards the number of features extracted. As presented on Figure \ref{fig:SSM_scheme}, the same set of features are extracted for each time series of the record and combined in the $F_M$. 
+\par
+Using a single time series of a multivariate record is optional and depends on the detection's purpose. In some cases, using a single time series from a multidimensional record can lead to missing relevant events undetected. An example of this can be seen on Figure \ref{fig:occupancy_uni} with record \textit{"Occupancy"} from Dataset 8. 
+\par
+The record is a multi-dimensional time series that measures room occupancy based on temperature, humidity, light and CO2. All events can only be detected if using several time series of the record \cite{cpd_alan}. On Figure \ref{fig:occupancy_uni}.left, a single time series was analyzed by the proposed method to detect relevant events, while Figure \ref{fig:occupancy_uni}.right presents the application of the method to all the time series of the record. The results are different because the information from all the time series is combined, while with the single dimensional record, the detected events resulted from the information available on the single time series.\\

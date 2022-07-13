@@ -12,50 +12,144 @@
 \label{cha:Conclusion}
 
 
-Fazer a relação com o início (imagens de segmentação)
-
-Future Work
-
-- Associate the Bag of Words model weights with the shapes extracted. Save the subsequences and the words. Transform it in the bag of subsequences, and you can create a distance between the words. For instance, a Peak in Signal 1 might be different than a Peak in Signal 2. Or the signal might have the same dynamic (up down flat) but the up and down have a much different shape. By comparing the shapes, we might have an additional distance measure that makes the process more relevant...keep this in mind.
-
-- Applying the cost matrix to the SSM to see what comes out of it. Would it help get the cyclic patterns in one time?
-
-- Explore more NLP methods that could be used on the symbolic/textual representation of time series
-
-- BERT for Time Series
-
-- Profile with a summarization and overall report of time series that includes a more detailed description of the content of the data, more statistical information
-
-- Test the systems developed with a control group to see if the tool is more or less expressive
-
-- Associate features with the type of change
-
-- Multiscale segmentation
-
-- Cyclic Segmentation with path kernel
-
-- Calculate distances in AB pairs instead of AA pairs.
-
-- Use reduction and stacking methods to improve the algorithm
-
-- Classification with HearTS but using a direct translation of time series instead of searching for specific shapes
-
-- QuoTS could combine several features to describe 1 word.
-
-
-In this study, we propose a tool that focuses on the ease of simple query search tasks in time series, which we refer to as \gls{ssts}. This is achieved by an innovative methodology, where the user gives a syntactic nature to time series, which turns the search procedure less verbose and more related to the reasoning of the user in recognizing the desired pattern.
-
-\subsection{Further Applications of SSTS}
-
-- Classification
-- Compressing Tool
-- Edition Tool
-- Alignment between Time Series with Longest Common Distance
-
-\section{Further Application 2: Multidimensional Segmentation}
-
-The proposed method accepts both single and multidimensional records. The difference regards the number of features extracted. As presented on Figure \ref{fig:SSM_scheme}, the same set of features are extracted for each time series of the record and combined in the $F_M$. 
+In this work we contemplated fundamental topics of time series data mining. We motivated these topics considering the need for tools that help analysts to better understand what happened during the recording process and find relevant instances on signals that can be related with specific occurrences. These motivations are intrinsically related with tools that are more visually interpretable and search mechanisms that are more expressive and intuitive. The work developed highly contributed to each of these domains with relevant standard mechanisms that can be further developed into practical tools for real scenarios. Not only these tool can be practical, but the methods presented bring novelty into the state of the art, either by "borrowing" more traditional methods from other domains (such as the \gls{ssm} in audio information retrieval or \gls{nlp} techniques for text mining) or by introducing novel concepts, specially in terms of text representation of time series and text-based query search mechanisms.
 \par
-Using a single time series of a multivariate record is optional and depends on the detection's purpose. In some cases, using a single time series from a multidimensional record can lead to missing relevant events undetected. An example of this can be seen on Figure \ref{fig:occupancy_uni} with record \textit{"Occupancy"} from Dataset 8. 
+In this Chapter, we highlight the main contributions of this thesis in each of this domains. Comments are also given regarding the contributions and applicability to occupational health scenarios. Finally, overall scientific production and collaborations during the period of this thesis are also provided. 
+
+\section{Scientific Contributions}
+
+\subsection{Unveiling the \textit{Grammar} of Time Series}
+
+One of the major topics of this work regarded the segmentation of time series into smaller segments, based on novelty and periodicity. In addition, it was also discussed the benefit of relating the resulting subsequences by how similar these are. As an example, we showed the \gls{abp} signal \vstretch{0.6}{\includegraphics[width=25ex, valign=m]{bvp_thumbnail_final.pdf}}, which can be divided into 7 segments, having the structure \textcolor{mygreen3}{A} \textcolor{mymagenta}{B} \textcolor{mygreen3}{A} \textcolor{mymagenta}{B} \textcolor{mygreen3}{A} \textcolor{myblue5}{C} \textcolor{mygreen3}{A}. We demonstrated with strong evidences that the usage of the \gls{ssm} is reliable in performing this type of task. From the \gls{ssm}, the novelty function can be extracted and the similarity profiles can be compared to perform a segmentation and association between subsequences. In addition, the segmentation might be periodic, meaning that a signal, such as \includegraphics[height=2.5ex, valign=m]{bvpABpng.png}, can be separated into \textcolor{myblue}{A} and \textcolor{mygreen}{B}, but also, \textcolor{myblue}{AAAAAAA}\textcolor{mygreen}{BBBBBB}. We also demonstrated that using the \gls{ssm}, we can compute the similarity function, which highlights the cyclic nature of the subsequence.
 \par
-The record is a multi-dimensional time series that measures room occupancy based on temperature, humidity, light and CO2. All events can only be detected if using several time series of the record \cite{cpd_alan}. On Figure \ref{fig:occupancy_uni}.left, a single time series was analyzed by the proposed method to detect relevant events, while Figure \ref{fig:occupancy_uni}.right presents the application of the method to all the time series of the record. The results are different because the information from all the time series is combined, while with the single dimensional record, the detected events resulted from the information available on the single time series.\\
+The performance of the method was validated for the novelty segmentation  process. It was compared to several SOA methods, showing to be competitive in tasks related with change point detection and segmentation. In addition, several use-cases from various fields were presented as examples, showing the ability of the algorithm to be agnostic to the type of signal, being functional in multidimensional signals and not requiring any previous knowledge on the data, such as the number of segmentation points. It also shows potential to be used for unsupervised annotation of data, being developed towards this purpose.
+\par
+In this work, datasets were carefully chosen to cover as much real scenarios as possible. Also, common benchmarks were used to validate the methods to guarantee independence from private datasets. Besides, the proposed method was also demonstrated to work well with multimodal and multidimensional occupational data.
+\par
+There are still several improvements to be made, namely considering the excessive memory that is required to compute the \gls{ssm} in cases where the signal is very large. The fact that a matrix has to be computed limits the ability to analyze in one run the entire signal. This process is specially relevant for periodic segmentation and computing similarity profiles. As previously explained, for novelty segmentation, the process can be adapted to only compute the \gls{ssm} along the diagonal with the size of the kernel width. An adaptation of the process has not yet been presented for the other processes, but a solution should be considered in the future. An additional limitation is the fact that the method is not invariant to trend. If events occur in slow trend changes, that is, a continuous change, the method will have more difficulty in identifying the segmentation point. The usage of pre-processing, additional time series representations, or time series decomposition methods could help in counteracting this effect. Currently, no pre-processing is made to the data. Additional methods could be performed to optimize the process, such as feature reduction and feature stacking.
+\par
+The ability of the method to be adapted in Online scenarios has not been discussed, but a solution should also be considered in the future.
+
+\subsection{Using Language for Time Series Data Mining}
+
+Representing data into different data types provides a new look on the original data. It may lead to find segments of interest that were not visible in the original data type and/or may benefit from the large experience in mining on this new data type. These are the first arguments for the ideas we presented in this work in transforming time series from the numerical domain to the text/symbolic domain. A new look on time series is possible, which enables to adapt some of the existing data mining techniques with a textual approach, and it can benefit from the large knowledge on text processing or \gls{nlp}.
+\par
+As a first concept, language and time series can apparently be a strange combination. However, we provided additional evidence that there is a bridge and a potential to perform several tasks with success, namely in text-based query pattern search with \gls{ssts} and \gls{quots}, as well as classification with \gls{hearts}. 
+\par
+The concept of symbolic representation has started with \gls{sax}, which was a great inspiration for the work developed further with \gls{ssts}. We developed this method with the purpose to make pattern search with more expressive queries, more closely related with the way we look and interpret visually the existing shapes on time series. Several examples were provided showing the possibility of using \gls{regex} (text patterns) on time series symbolic representation. There is still room to improvement. In one end, \gls{regex} are very useful and can be used to design patterns to be searched, but in the other end, \gls{regex} patterns can be very complex and limited to express the textual patterns that are being searched, and the search process is very radical and brittle, in the sense that if the time series patterns do not match the \gls{regex}, no output will be given and the pattern will not be find. In this case, there is no distance measure that is continuous and this should be taken into consideration in a next iteration of the method. Additionally, having higher levels of representation could be useful to search for increasingly higher-leveled structures, such as \texttt{peaks}, \texttt{plateaus} or a combination of these. This idea was what led us perform the next method for time series classification, \gls{hearts}. 
+\par
+We imagined that if time series could be \textit{translated} into text documents, these could be differentiated based on the words and sentences that would represent them. Inspired by \gls{nlp} techniques used for this purpose, such as \gls{bow} and \gls{tfidf}, we performed classification of time series documents, by creating a high-leveled distance measure that relies in the presence of structures, such as \texttt{peak}, \texttt{plateau}, \texttt{up, down} and \texttt{flat}, etc... and the order of these words in a sentence with ngrams. We then showed that it was possible to use traditional \gls{nlp} methods to perform this task on the UCR classification benchmark. It was able to have a better performance than the 1-NN \gls{ed} and showed to be competitive in this field. Especially because there is the possibility of extracting valuable information from the textual translation, namely by using the \gls{tfidf} weights to highlight areas of relevance on the signal or keywords that mostly represent the topic of the signal (such as topic modeling on text domain). We believe we introduced a novel idea with these processes that can be helpful for search but also for explaining which are the differences between signals. There is still a lot to improve, since as we showed, it would only be interpretable for time series with simple characteristics explained by the \textit{connotation} and \textit{queries} developed and used to describe the signals.
+\par
+Having queries closer to the way we express what we see was one the main motivations of this work. This led to the development of \gls{ssts} in the symbolic domain, but we believe as well that features are a good match to specific words that we used to describe parts of signal. This led to the development of \gls{quots}, which uses word-feature vectors to search for specific subsequences on time series by how well these match the set of keywords used, similarly to how we type keywords on \textit{Google} to search for web pages. We provided evidence of its usage in several types of signal and with several types of problems, from motion gestures, to \gls{ecg} patterns or telemetry data, in multidimensional time series. We highlight the potential to use this method to search subsequences based on visual intuition but also for \textit{words} that are \textit{known}, namely by \textit{puppeteering} or \textit{mimicking} shapes in practice. This is specially relevant if keywords can be transformed for each domain, being domain specific. Considering that the vocabulary can change from domain to domain, for instance, \texttt{peak} in medicine can mean an \gls{ecg}, while in automotive telemetry, it might mean \textit{turn right}. This domain specific match can help other non-experienced analysts to use it to search for specific patterns.
+
+
+\section{Other Contributions}
+
+\subsection{Managing Rotation Plans with Exposure, Diversity and Team Homogeneity}
+
+In close collaboration with Volkswagen Autoeuropa and the Faculty of Human Motricity of Lisbon (FMH), we developed a method to automatically suggest job rotation schedules based on ergonomic standards available at the factory. These standard factors are from the AutoErgo tool, based on \gls{eaws} measures. The motivation for the development of such a tool was to help team leaders to manage job rotation schedules more quickly and in a more informed way. Team leaders organize the working schedule for their team by assigning each worker to a sequence of workstations for the entire week, which is a time consuming tasks and not always informed in the risk level that each tasks represents for a worker. In this method, risk exposure, diversity in exposure, as well as team homogeneity, are taken into consideration when suggesting a daily rotation plan. The process was made by developing a genetic based optimization algorithm that followed an objective function developed by our team. The motivation, algorithm and results can be seen at \cite{jobrotation1}.
+
+\subsection{MicroErgo - Concept for Personal Assessment of Occupational Risk in Desk/Office Jobs}
+
+A lot of focus has been given to occupational health scenarios during my thesis. Especially for the main projects in which the group was involved. One of these projects is \gls{prevoccupai}, which has the purpose of preventing occupational disorders in office jobs, namely from the public administration. One of the ideas conceptualized during the project was a self-assessment tool for office workers, based on the idea of \textit{microCovid} \cite{microcovid}. The purpose was to help create more awareness about the biomechanical, environmental and mental occupational variables that affect our health. This would be a beneficial approach for any company to self-assess their occupations or even for remote workers who are not always aware if their desk setup is good or not for their biomechanical health, for example. The work can be found here \cite{microergo}.
+
+\subsection{In using Direct Measures for Occupational Health Assessment}
+
+- The introduction started to give several motives to complement the visual assessment performed by ergonomists.
+
+- The fact that quantifiable measures can be computed automatically
+
+- Can help to create occupational profiles for workers with similar anthropometric features, for specific workstations. 
+
+- Can help to understand which parts of the process in a workstation has the highest contribution to risk and in case of trying to modify a process to optimize productivity, understand the effects of this change in a worker. 
+
+- These measures could also be used to integrate into the algorithm developed to design job rotation schedules. Having a worker to perform periodically a specific workstation so that a working profile can be developed, it can be more useful than only using general scores that do not take into account several other variables, such as the anthropometric ones.
+
+- Having direct measures is also relevant considering that time series data mining methods, such as the ones developed in this work, can help compute distance measures and other relevant ways of analyzing occupational data can be developed based on these measures.
+
+\subsection{Volatile Organic Compounds Classification}
+
+A Master Thesis in collaboration with the Biomolecular Engineering Group, from the Chemstry Department of the NOVA University of Lisbon, we developed the first version of \gls{hearts} for the classification of \gls{voc}s. This resulted in a publication that is found here \cite{class_voc}.
+
+\section{Scientific Production}
+
+During the period of this thesis, the work developed has been converted into research publications. In addition, several research collaborations were made that also resulted in collaborative publications. The outcomes of this work is hereby presented.
+
+\subsection{Journal Publications}
+
+\begin{itemize}
+\item Ramos, G.; Vaz, J. R.; Mendonça, G. V.; Pezarat-Correia, P.; Rodrigues, J.; Alfaras, M.; Gamboa, H.. "Fatigue Evaluation through Machine Learning and a Global Fatigue Descriptor". Journal of Healthcare Engineering 2020 (2020): 1-18. http://dx.doi.org/10.1155/2020/6484129.
+
+\item Rodrigues, João; Folgado, Duarte; Belo, David; Gamboa, Hugo. "SSTS: A syntactic tool for pattern search on time series". Information Processing & Management 56 1 (2019): 61-76. http://dx.doi.org/10.1016/j.ipm.2018.09.001.
+\end{itemize}
+
+\subsection{Book Chapters}
+
+\begin{itemize}
+
+\item Santos, Sara; Folgado, Duarte; Rodrigues, João; Mollaei, Nafiseh; Fujão, Carlos; Gamboa, Hugo. "Exploring Inertial Sensor Fusion Methods for Direct Ergonomic Assessments". In Communications in Computer and Information Science, 289-303. Springer International Publishing, 2021;
+
+\item Gamboa, Patricia; Quaresma, Cláudia; Varandas, Rui; Canhão, Helena; de Sousa, Rute Dinis; Rodrigues, Ana; Jacinto, Sofia; et al. "Design of an Attention Tool Using HCI and Work-Related Variables". In IFIP Advances in Information and Communication Technology, 262-269. Portugal: Springer International Publishing, 2021;
+
+\item Rodrigues, João; Gamboa, Hugo; Mollaei, Nafiseh; Osório, Daniel; Assunção, Ana; Fujão, Carlos; Carnide, Filomena. "A Genetic Algorithm to Design Job Rotation Schedules with Low Risk Exposure". In IFIP Advances in Information and Communication Technology, 395-402. Portugal: Springer International Publishing, 2020.
+
+\item Cepeda, Catia; Rodrigues, Joao; Dias, Maria Camila; Oliveira, Diogo; Rindlisbacher, Dina; Cheetham, Marcus; Gamboa, Hugo. "Mouse Tracking Measures and Movement Patterns with Application for Online Surveys". In Machine Learning and Knowledge Extraction, 28-42. Springer International Publishing, 2018.
+
+\item 
+
+\end{itemize}
+
+
+\subsection{Conference Proceedings}
+
+\begin{itemize}
+
+\item Silva, Sara; Cepeda, Catia; Rodrigues, João; Probst, Phillip; Gamboa, Hugo. "Assessing Occupational Health with a Cross-platform Application based on Self-reports and Biosignals". Paper presented in BIOSTEC, Virtual, 2022.
+
+\item Alves, Rita; Rodrigues, João; Ramou, Efthymia; Palma, Susana; Roque, Ana; Gamboa, Hugo. "Classification of Volatile Compounds with Morphological Analysis of e-nose Response". Virtual, 2022.
+
+\item Mollaei, Nafiseh; Cepeda, Catia; Rodrigues, Joao; Gamboa, Hugo. "Biomedical Text Mining: Applicability of Machine Learning-based Natural Language Processing in Medical Database". Virtual, 2022.
+
+\item Rodrigues, Joao; Probst, Phillip; Gamboa, Hugo. "TSSummarize: A Visual Strategy to Summarize Biosignals". 2021.
+
+\item Santos, António; Rodrigues, João; Folgado, Duarte; Santos, Sara; Fujão, Carlos; Gamboa, Hugo. "Self-Similarity Matrix of Morphological Features for Motion Data Analysis in Manufacturing Scenarios". 2021.
+
+\item Rodrigues, Joao; Gamboa, Hugo; Kublanov, Vladimir; Dolganov, Anton. "Storage of Biomedical Signals: Comparative Review of Formats and Databases". Paper presented in Multi-Conference on Engineering, Computer and Information Sciences (SIBIRCON), Yekaterinburg, 2019.
+
+\end{itemize}
+
+\subsection{Methods}
+
+In this thesis, we contributed to the state of the art with several methods, hereby listed.
+
+\begin{itemize}
+
+\item Unsupervised Automatic Segmentation: Using the \gls{ssm} to search for segmentation points on any time series, including novelty segmentation and periodic segmentation.
+
+\item TSSummarize: Summarization of Time Series - Using the \gls{ssm} to provide relevant feedback on how the time series are structured and segments are related, towards automatic and unsupervised annotation of time series.
+
+\item SSTS: Synthatic Search on Time Series - performing search on a symbolic representation of times series with regular expressions.
+
+\item HeaRTS: Human Readable Time Series - Higher level classification process of time series with visual and possible keyword feedback on data differences.
+
+\item QuoTS: \textit{Where} on Time Series? - Text-based query search on word-feature vectors. 
+
+\end{itemize}
+
+\subsection{Projects}
+
+\begin{itemize}
+\item Project Operator
+\item Project PrevoccupAI
+\end{itemize}
+
+\subsection{Awards}
+
+\subsubsection{Fullbright}
+
+I was awarded a Fullbright scholarship to pursue a research project at the Computer Science Department of the University of California, Riverside (UCR). The exchange program was made under the supervision of prof. Eamonn Keogh. It made possible a close collaboration in the development of \gls{quots}. We are now working in the submission of a conference paper and a journal paper on this topic.
+
+\subsubsection{Best Paper Award}
+
+The best paper award for the category was awarded to the publication "MicroErgo: A Concept for Self-Assessment of Occupational Risk" at the ... conference.
+

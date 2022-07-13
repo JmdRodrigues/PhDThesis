@@ -63,6 +63,7 @@
 
 \usepackage{gensymb} % for the degree symbol
 
+\usepackage{scalerel} % stretch images
 
 \usepackage{csquotes}
 
@@ -78,6 +79,10 @@
 \definecolor{myblue3}{RGB}{51, 194, 223}
 \definecolor{myblue4}{RGB}{72, 129, 214}
 
+\definecolor{mygreen3}{RGB}{49, 216, 202}
+\definecolor{myblue5}{RGB}{7, 60, 159}
+\definecolor{mymagenta}{RGB}{216, 49, 136}
+
 \DeclareMathOperator{\sign}{sign}
 
 \newcolumntype{A}{p{0.05\textwidth}}
@@ -89,6 +94,26 @@
 \newcolumntype{M}[1]{>{\centering\arraybackslash}m{#1}}
 \newcolumntype{?}{!{\vrule width 1pt}}
 \newcolumntype{/}{!{\vrule width 0.5pt}}
+
+\usepackage{longtable}
+\usepackage{lscape}
+\usepackage{collcell}
+\usepackage{xfp}
+\usepackage{pgf}
+
+% This selects the amount of color to use
+\newcommand*{\MinNumber}{0}%
+\newcommand*{\MaxNumber}{1}%
+
+
+\newcommand{\ApplyGradient}[1]{%
+\ifnum\fpeval{#1 > 0} = 1
+	\pgfmathsetmacro{\PercentColor}{100.0*(#1-\MinNumber)/(\MaxNumber-\MinNumber)}
+    \textcolor{black!\PercentColor}{#1}
+\fi
+}
+
+\newcolumntype{R}{>{\collectcell\ApplyGradient}{r}<{\endcollectcell}}
 
 % \usepackage{indentfirst}       % Indent first list after a (sub)section title
 

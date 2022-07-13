@@ -1,0 +1,45 @@
+Tese - Comments
+
+Cap 1 -
+
+We - manter essa coerencia
+Reader - tentar mudar 
+
+Explaining the story originating the time series
+
+
+Pagina 3 - 
+
+Colocar mais no início na questão das time series e biosinais (Until now)
+
+Pagina seguinte -
+
+Biosinais
+
+Rever termo história (outra palavra).
+
+Definições - Cap 2
+
+Definições que aparecem mais tarde que juntaria
+
+Não introduzir o KNN logo ali
+
+confusão - desambiguar a questão do tempo da distância
+
+contrl+F - não usar
+
+Diagrama mais complexo do que explico (muitos termos que aparecem que não são explicados)
+
+
+
+Jaime Cardoso - 
+Liliana Ferreira - 
+Meinard Muller - 
+João Cardoso - 
+Vasco Amaral - https://www.di.fct.unl.pt/pessoas/docentes/vasco-miguel-moreira-amaral
+
+
+
+Perguntas:
+
+- Introdução sobre sensores e sinais?
