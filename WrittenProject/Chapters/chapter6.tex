@@ -17,7 +17,7 @@ The process follows the steps of building a similarity matrix using a feature-ba
 
 \section{The Problem}
 
-Defining what is relevant in a time series highly depends on the context and purpose of the analysis, but globally, for any type of time series, there is a general interest in understanding how the signal is structured, especially for tasks related to data annotation/labeling. The structure of a time series is built of \textit{segments} delimited by \textit{events}. The problem is the search for \textit{events} that are significant. 
+Defining what is relevant in a time series highly depends on the context and purpose of the analysis, but globally, for any type of time series, there is a general interest in understanding how the signal is structured, especially for tasks related to data annotation/labeling. The structure of a time series is built of \textit{segments} delimited by \textit{events}. The problem explored in this section is the search for such \textit{events} and how to find the ones that are significant. 
 \par
 From definition 4 of Chapter \ref{sec:global}, we highlight two primary considerations for the detection of events: (1) an event is a change in the behavior of the time series, and (2) it has to be significant both \textit{statistically} and \textit{qualitatively}. The \textit{qualitative} aspect indicates subjectivity from the analyst because of the domain or context of the problem. Considering this, we will start by explaining the dimensions of the problem: (1) search and (2) type of significance. 
 

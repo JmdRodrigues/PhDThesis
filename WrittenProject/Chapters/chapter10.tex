@@ -17,7 +17,7 @@
 The work developed in this thesis shows promising results that can be improved in several ways, and it also set a fertile ground for novel promising ideas. In this section, we will discuss the possibility for improvement in each of the methods presented, as well as which novel ideas follow the currently developed strategies.
 
 
-\section{Overall Improvements to compute the \gls{SSM} and Segmentation Process}
+\section{Overall Improvements to compute the \gls{ssm} and Segmentation Process}
 
 The \gls{ssm} was computed by using the standard approach found at \cite{muller, fmp}. A set of features were extracted for that purposes using \gls{tsfel} \cite{tsfel}. The results show promise in using this strategy for several tasks. We believe there are improvements that can be made in the feature extraction process, and contribute to a better \gls{ssm}. Currently, neither a dimensionality reduction method, such as Principal Component Analysis (PCA), nor a feature selection process, are performed prior to computing the \gls{ssm}. Performing these might be a way of improving the general matrix representation and remove features that do not contribute to explain the similarity between subsequences. Additionally, feature stacking has been proved to help in increasing the accuracy of feature-based classification of time series \cite{feature_stacking}. This means that it should better represent differences between subsequences and should be tested on the current approach.
 \par
