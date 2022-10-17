@@ -11,9 +11,26 @@
 \chapter{Unveiling the \textit{Grammar} of Time Series}
 \label{cha:segmentation}
 
-In this chapter is described the process to unveil the structure of a time series. The next sections will start by giving an introduction to the variables that have to be retrieved and demonstrates how to perform them. The main method is inspired by the audio-processing domain for \textit{music structure analysis}, namely segmentation and audio-thumbnailing. While having already been extensively studied in this domain \cite{fmp1, audiolabs1, audiolabs2, cpd_audio}, this knowledge has not yet been extended to other types of \textit{time series}, which could greatly benefit from it \cite{muller_music_health}. 
-\par
-The process follows the steps of building a similarity matrix using a feature-based representation of a time series. These will be explained and examples will be provided for (1) novelty segmentation, (2) periodic segmentation, (3) similarity profiles, and (4) query-based search. Additionally, we will show how this process can be used for time series summarization and automatic annotation.
+
+\begin{figure}
+\centering
+\includegraphics[width=\linewidth]{ssm_topics.pdf}
+\caption{Information retrieval topics explained in this Chapter. Each of these topics is a result of analyzing the \gls{SSM}.}
+\label{fig:info_retrieval_topics}
+\end{figure}
+
+Researchers are interested in understanding the structure of the recorded signals, the meaning behind them, and the influences of the context. In Chapter 1 (see Section \ref{sub:context1}) we gave several examples of how signals in our everyday life can be structured and partitioned, such as a signal representing a \textcolor{myblue}{walking} regime shifting to a \textcolor{mygreen}{jogging} regime (\includegraphics[height=5ex, valign=m]{walking_jogging.png}). The examples we mentioned in Chapter 1 and above manifest the relevance and importance of the following approaches:
+
+\begin{itemize}
+     \item \textbf{Novelty segmentation}: to identify significant changes in the signal's behaviour.
+    \item \textbf{Periodic segmentation}: to detect the presence of repeating cyclic patterns.
+    \item \textbf{Labelling}: to measure how similar the segments are between each other with the help of similarity profiles.
+    \item \textbf{Query search}: to find repeating patterns in the time series based on a \textit{subsequence} given as an example.
+    \item \textbf{Summarization}: to summarize visually the time series by partitioning it into relevant and uniform/periodic segments and joining segments based on their similarity.
+\end{itemize}
+
+In this Chapter, we present the proposed solutions to these five problems mentioned above, inspired by a method used for audio signal analysis and thumbnail generation \cite{fmp1, audiolabs1, audiolabs2, cpd_audio}. Such a method has not yet been extended to other types of \textit{time series} domains that could greatly benefit from it \cite{muller_music_health}. The method uses a feature-based \gls{ssm} of (multidimensional) time series, from which visual and analytical information is rendered to perform the segmentation process and associate \textit{subsequences} of the time series with each other, which forwards automatic labelling and ultimately can be used to summarize the signal. We extended its application to \textit{biosignals} with the usage of general features, and introduced new methods to analyze the \gls{ssm} for periodic segmentation, labelling, query search and summarization.
+
 
 \section{The Problem}
 
@@ -21,37 +38,63 @@ Defining what is relevant in a time series highly depends on the context and pur
 \par
 From definition 4 of Chapter \ref{sec:global}, we highlight two primary considerations for the detection of events: (1) an event is a change in the behavior of the time series, and (2) it has to be significant both \textit{statistically} and \textit{qualitatively}. The \textit{qualitative} aspect indicates subjectivity from the analyst because of the domain or context of the problem. Considering this, we will start by explaining the dimensions of the problem: (1) search and (2) type of significance. 
 
-\subsection{Search Dimension}
+\subsection{Search Ranks}
 
-\begin{figure}
-\begin{subfigure}{.5\textwidth}
-	\centering
-	\includegraphics[width=0.95\linewidth]{event_search.png}
-	\label{fig:event_search}
-	\caption{}
-\end{subfigure}%
-\begin{subfigure}{.5\textwidth}
-	\centering
-	\includegraphics[width=0.95\linewidth]{event_type.png}
-	\label{fig:event_type}
-	\caption{}
-\end{subfigure}
-\caption{(a) Categories of search of events. In this case are shown Dimension, Window and Domain. (b) Examples of different type of events that can be considered significant in a time series.}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth]{event_search.pdf}
+    \caption{Event search in different ranks of dimensionality, timescales, and representation.}
+    \label{fig:event_search}
 \end{figure}
 
-Figures \ref{fig:event_search} and \ref{fig:event_type} are an illustrated summary of the two dimensions of the problem. Regarding the \textit{search} dimension, it is formed by three layers: \textit{(1) dimensionality}: the search can be made in one or multiple time series. In the multidimensional space, events can occur simultaneously in several time series, but other events can be specified for each of them (e.g. an accelerometer signal has 3 dimensions, but some gestures might be noticeable in only one of them); \textit{(2) time scale}: \textit{events} might occur in different time scales (e.g. when looking into a time series of 1 hour long, we might see some relevant events, but when looking for a \textit{subsequence} of 10 minutes (zooming-in), other events are revealed); \textit{(3) domain}: the search procedure might be made directly on the time series using time properties, a distance measure (e.g. \gls{ed}), or can be made on another representation level, such as the feature domain.
 
-\subsection{Type Dimension}
+%\begin{figure}
+%\begin{subfigure}{.5\textwidth}
+%	\centering
+%	\includegraphics[width=0.95\linewidth]{event_search.png}
+%	\label{fig:event_search}
+%	\caption{}
+%\end{subfigure}%
+%\begin{subfigure}{.5\textwidth}
+%	\centering
+%	\includegraphics[width=0.95\linewidth]{event_type.png}
+%	\label{fig:event_type}
+%	\caption{}
+%\end{subfigure}
+%\caption{(a) Categories of search of events. In this case are shown Dimension, Window and Domain. (b) Examples of different type of events that can be considered significant in a time series.}
+%\end{figure}
 
-In what regards the \textit{event} type, we show in Figure \ref{fig:event_type} examples of events that are considered significant in a time series: \textit{(1) Property change:} when the change of a property or set of properties is greater than a threshold, such as changes on the mean (FIND THUMBNAIL IMAGE) or frequency (\includegraphics[height=3.5ex, valign=m]{walking_jogging.png}), \textit{(2) Peak/Valley}: peaks and valleys can typically be associated with significant physical changes (e.g. the peaks of an \gls{ecg} signal \includegraphics[height=3.5ex, valign=m]{high_peak_ecg.png}), \textit{(3) Periodicity}: if a signal is periodic, the moment each period starts is considered relevant (e.g. the cycles of a BVP signal \includegraphics[height=2.5ex, valign=m]{bvp_segment.png}), \textit{(4) recurrent pattern}: re-occurrences of similar \textit{subsequences} with a certain shape or \textit{(5) anomaly}: very dissimilar \textit{subsequences} are relevant to indicate (e.g. noise in a clean signal \includegraphics[height=3ex, valign=m]{ecg_noise_thumbnail.png}).
+
+Figure \ref{fig:event_search} illustrates the search ranks of the problem formed by three layers:
+
+\begin{itemize}
+    \item \textbf{Dimensionality}: The search can be applied to one or multiple time series. In multidimensional space, some events can coincide in several time series, while others are specified on a particular dimension. For example, some gestures produce noticeable signals on only one dimension of the three-axis accelerometer.
+    \item \textbf{Timescale}: \textit{Events}' occurrence can vary from different timescales. For example, when the signal being analysed is zoomed in from hour to minute scales, some events may disappear while new events may be detected.
+    \item \textbf{Representation}: The searchable objects can be straightforwardly the temporal nature of time series or other representation, such as frequency or on other extracted features.
+\end{itemize}
+
+Besides the ranks mentioned above, the search procedure can be customized by context or target, which is highly related with the relevance given to an \textit{event} or a \textit{subsequence}. Types of events that are considered significant include:
+
+\begin{itemize}
+  \item \textbf{Property change}: The change of a property, such as a change in mean or frequency, or a set of properties is greater than a threshold, e.g., \textcolor{myblue}{low} to \textcolor{mygreen}{high} frequency - \includegraphics[height=2.5ex, valign=m]{walking_jogging.png}.
+  \item \textbf{Peak/Valley}: Peaks and valleys can typically be associated with significant physical changes, e.g., \gls{ecg} \textcolor{mygreen2}{peaks} like \includegraphics[height=3.5ex, valign=m]{high_peak_ecg.png}.
+  \item \textbf{Periodicity}: The starting points of each period in a periodic signal are considered relevant, e.g., \gls{abp} periods like \includegraphics[height=2.5ex, valign=m]{bvp_segment.png}.
+  \item \textbf{Recurrent pattern}: Re-occurrences of similar \textit{subsequences} with specific patterns should be of interest. Unlike \textit{periodicity}, \textit{recurrent} patterns do not have a temporal regularity.
+  \item \textbf{Anomaly}: Highly dissimilar \textit{subsequences} with particular patterns are of the reference value, e.g., \textcolor{myred}{noise} in a clean signal \includegraphics[height=3ex, valign=m]{ecg_noise_thumbnail.png}.
+\end{itemize}
+
+%Figures \ref{fig:event_search} and \ref{fig:event_type} are an illustrated summary of the two dimensions of the problem. Regarding the \textit{search} dimension, it is formed by three layers: \textit{(1) dimensionality}: the search can be made in one or multiple time series. In the multidimensional space, events can occur simultaneously in several time series, but other events can be specified for each of them (e.g. an accelerometer signal has 3 dimensions, but some gestures might be noticeable in only one of them); \textit{(2) time scale}: \textit{events} might occur in different time scales (e.g. when looking into a time series of 1 hour long, we might see some relevant events, but when looking for a \textit{subsequence} of 10 minutes (zooming-in), other events are revealed); \textit{(3) domain}: the search procedure might be made directly on the time series using time properties, a distance measure (e.g. \gls{ed}), or can be made on another representation level, such as the feature domain.
+%
+%In what regards the \textit{event} type, we show in Figure \ref{fig:event_type} examples of events that are considered significant in a time series: \textit{(1) Property change:} when the change of a property or set of properties is greater than a threshold, such as changes on the mean (FIND THUMBNAIL IMAGE) or frequency (\includegraphics[height=3.5ex, valign=m]{walking_jogging.png}), \textit{(2) Peak/Valley}: peaks and valleys can typically be associated with significant physical changes (e.g. the peaks of an \gls{ecg} signal \includegraphics[height=3.5ex, valign=m]{high_peak_ecg.png}), \textit{(3) Periodicity}: if a signal is periodic, the moment each period starts is considered relevant (e.g. the cycles of a BVP signal \includegraphics[height=2.5ex, valign=m]{bvp_segment.png}), \textit{(4) recurrent pattern}: re-occurrences of similar \textit{subsequences} with a certain shape or \textit{(5) anomaly}: very dissimilar \textit{subsequences} are relevant to indicate (e.g. noise in a clean signal \includegraphics[height=3ex, valign=m]{ecg_noise_thumbnail.png}).
 
 \subsection{Proposal}
 
-In order to fill as much ground as possible in this problem, we started by defining the search space considering that if the time series would be transformed in the feature space, any change in any of the features would be relevant, for instance, we might be searching for changes in the mean, standard deviation, mean frequency or other property. By characterizing the signal into the feature space, we can explore changes in all feature representations. Additionally, an event should separate two different behaviors. The notion of \textit{difference} in time series can be associated with \textit{distance/similarity}. This would enable us to find change points, recurrent patterns, anomalies, and periodic shapes. 
+In order to fill as many research gaps as possible, this study started by defining the search space, considering that if the time series is transformed in the feature space, any feature's change would be relevant. For instance, changes in the mean, standard deviation, frequency or other properties are all options worth searching for. By characterizing the signal into the feature space, we can explore changes in all feature representations. Additionally, an event should separate two different behaviours. The notion of \textit{difference} in time series can be associated with \textit{distance/similarity}, enabling finding segmentation points, recurrent patterns, anomalies, and periodic shapes.
+
+Therefore, we propose an unsupervised methodology that searches for events (1) in uni and multidimensional space, (2) with a fixed timescale and potential multi-timescale application opportunities, and (3) on an \gls{ssm} computed by a feature space representation of the time series. The events to be searched are any changes in the \gls{ssm} related to a segmentation point and/or a periodic event.
 \par
-Therefore, we propose an unsupervised methodology that searches for events in (1) uni and multi-dimensional space, (2) with a fixed time scale, but with potential to be used in multi-time scale, and (3) on a \gls{ssm} computed by a feature space representation of the time series. The events that will be searched are any relevant changes in the matrix related to a change point and/or periodic event.
-\par
-We provide evidence that the proposed method is reliable for the detection of the mentioned events, supporting our claims with several examples in multiple time series domains (it is type agnostic) and comparing the results with state-of-the-art methods. Besides, we highlight that these events are all extracted from the same source of information (\gls{ssm}), while also providing some insights into how this could be expanded for multi-time scale search, used for summarization and labeling.
+The proposed method's reliability for event detection will be evidenced by considerable experiments in various type-agnostic databanks of multiple time series domains and comparisons to the state-of-the-art methods. It should be highlighted that events in different datasets are extracted from the same information source, i.e., \gls{ssm}, which meanwhile provides insights into unsupervised automatic labelling.
+
     
 %IMPORTANT
 %Besides, at the feature level, we can very easily include the information of \textit{MTS}. The fact that features can be used for this purpose might help in targeting and fine-tuning the selection of features that work better for specific types of events or work domains (e.g. we might only be interested in changes related to the frequency and not mean fluctuations, therefore, frequency features should be chosen, making targeted event search).
@@ -113,13 +156,6 @@ Several strategies were applied on the \gls{ssm} to extract the mentioned inform
 \section{Information Retrieval}
 
 The \gls{ssm} is a powerful visual tool \textit{per se}, highlighting relevant information that could be missed if looking at the raw time series. However, being the information on the \gls{ssm}, it should be possible to retrieve it automatically. As presented in Figure \ref{fig:info_retrieval_topics}, here are explained 4 approaches for information retrieval on the \gls{ssm}, namely (1) novelty search (\textit{block} transitions), (2) periodic search of patterns (\textit{paths}), (3) similarity profiles (how similar are the \textit{subsequences}) and (4) how to use a query from the \gls{ssm} to search for specific \textit{subsequences}. 
-
-\begin{figure}
-\centering
-\includegraphics[width=0.75\linewidth]{information_retrieval_topics.pdf}
-\caption{Information retrieval topics explained in this section.}
-\label{fig:info_retrieval_topics}
-\end{figure}
 
 
 \subsection{Novelty Search}

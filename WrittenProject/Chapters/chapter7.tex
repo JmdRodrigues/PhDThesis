@@ -306,12 +306,12 @@ As was pointed out in Chapter \ref{cha:theory}, one of the reported issues of th
 
 Both the \gls{bow} and \gls{tfidf} models give a weight to each \textit{word} for each \textit{document}. This means that each time series document is vectorized into a distribution of weights for each \textit{word}, according to its presence on the time series document and, in case of the \gls{tfidf} model, all the other time series documents. The difference between the distribution of each time series document can be used as a distance measure to compare them. In Figure \ref{fig:distribution_dendogram} is showed the distribution of \textit{word's} weights for four different time series documents of the \textit{Trace} dataset, based on a \gls{tfidf} model. The x-axis of each distribution is the \textit{word} or \textit{n-gram} and the y-axis, the corresponding weight for a time series document.
 \par
-The reader can notice that each distribution is different and this provides a way of distancing time series based on them. On the right of the distribution, the reader can see a dendrogram of sorting examples from the \textit{Trace} dataset. We used the cosine distance between vectors of time series documents (RSVP) and compared it with the \gls{ed}. Surprisingly, the \gls{ed} misses a few matches. Although the example is very simple, it highlights well how this strategy can compensate for some mismatches that can occur with the \gls{ed}.
+The reader can notice that each distribution is different and this provides a way of distancing time series based on them. On the right of the distribution, the reader can see a dendrogram of sorting examples from the \textit{Trace} dataset. We used the cosine distance between vectors of time series documents (Symbolic Distance) and compared it with the \gls{ed}. Surprisingly, the \gls{ed} misses a few matches. Although the example is very simple, it highlights well how this strategy can compensate for some mismatches that can occur with the \gls{ed}.
 
 \begin{figure}
     \centering
     \includegraphics[width=\linewidth]{distribution_dendogram_ED_RSVP.pdf}
-    \caption{Comparing the clustering process of the \gls{ed} and the proposed symbolic method. In the proposed method, each signal has a word distribution vector, represented on the left. The signals are clustered based on these.}
+    \caption{Comparing the clustering process of the \gls{ed} and the proposed symbolic method (Symbolic Distance). In the proposed method, each signal has a word distribution vector, represented on the left. The signals are clustered based on these.}
     \label{fig:distribution_dendogram}
 \end{figure}
  

@@ -3,9 +3,12 @@ Tese - Comments
 Cap 1 -
 
 We - manter essa coerencia
+
 Reader - tentar mudar 
 
 Explaining the story originating the time series
+
+
 
 
 Pagina 3 - 
@@ -18,6 +21,12 @@ Biosinais
 
 Rever termo história (outra palavra).
 
+
+Rever também na introdução ou nos fundamentals, a identificação dos problemas que irão ser abordados e o que é proposto.
+
+
+
+
 Definições - Cap 2
 
 Definições que aparecem mais tarde que juntaria
@@ -29,6 +38,19 @@ confusão - desambiguar a questão do tempo da distância
 contrl+F - não usar
 
 Diagrama mais complexo do que explico (muitos termos que aparecem que não são explicados)
+
+
+My own comments:
+- I think it should have only biosignals with the examples I give. For instance:
+	- Fourier Transform, show ECG with different frequencies (maybe beat and respiration together)
+
+- For the Feature Representation as well, we should have an example where there is a change in one property to show
+how it is valuable
+
+- I think that for DTW it could be more interesting to perform motion comparison, where I can show two similar motions
+being aligned
+
+- 
 
 
 
