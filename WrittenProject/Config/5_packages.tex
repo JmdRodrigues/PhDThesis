@@ -56,6 +56,7 @@
 \usepackage{cancel}
 
 \usepackage{subcaption}
+
 \usepackage{array}
 
 \usepackage[T1]{fontenc}
@@ -66,7 +67,6 @@
 \usepackage{scalerel} % stretch images
 
 \usepackage{csquotes}
-
 
 \definecolor{myblue}{RGB}{83, 119, 209}
 \definecolor{myred}{RGB}{231, 95, 74}
@@ -105,6 +105,8 @@
 \newcommand*{\MinNumber}{0}%
 \newcommand*{\MaxNumber}{1}%
 
+%new math operators
+\DeclareMathOperator{\SSM}{SSM}
 
 \newcommand{\ApplyGradient}[1]{%
 \ifnum\fpeval{#1 > 0} = 1
@@ -112,6 +114,9 @@
     \textcolor{black!\PercentColor}{#1}
 \fi
 }
+
+\newcommand{\maxf}[1]{{\cellcolor[gray]{0.8}} #1}
+
 
 \newcolumntype{R}{>{\collectcell\ApplyGradient}{r}<{\endcollectcell}}
 

@@ -412,6 +412,7 @@ Both \gls{bow} and \gls{tfidf} are matrices that have a vector representation of
 Due to the probabilistic nature of the \gls{bow} and the fact that it contains discrete features, it is suitable to use in naive Bayes classifiers. In the other end, the \gls{tfidf} is typically used with linear \gls{svm} classifiers \cite{scikit-learn}.
 
 \subsection{Text Pattern Search}
+\label{subsec:regex_theory}
 
 When writing or reading a document, we often use shortcuts or other commands to speed up the task of searching for specific words or expressions. In some cases, we might not be searching specifically for a character or word, but rather for a text structure or text pattern (for example, one might be searching for all the emails available in a text document). This type of search is comparable to querying in time series, being the most convenient method to perform this type of search in text a \gls{regex}.
 \par
@@ -519,6 +520,7 @@ microR = \frac{\Sigma_{i=0}^c TP_i}{\Sigma_{i=0}^c TP_i + \Sigma_{i=0}^c FN_i}
 These metrics are typically supported with a \textit{confusion matrix}, which displays a 2D-map of the ground truth labels \textit{versus} predicted labels.
 
 \subsection{Event Detection}
+\label{subsec:event_metrics}
 
 Regarding event detection problems, the process involves finding the sample that corresponds to the ground truth event. Considering that it would not be fair to calculate the performance of an event detection algorithm only by searching if the ground truth sample is found, we calculate the \textit{TP}, \textit{FP} and \textit{FN} based on a tolerance margin. From these measures, metrics from Equations \ref{eq:precision}, \ref{eq:recall} and \ref{eq:f1_score} are calculated. The estimated events are considered one of the following categories:
 

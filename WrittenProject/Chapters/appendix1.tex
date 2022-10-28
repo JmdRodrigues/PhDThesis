@@ -8,9 +8,28 @@
 
 \typeout{NT FILE appendix1.tex}%
 
-\chapter{TSFEL Feature List}
+\chapter{TSFEL Feature List of Information Retrieval Experiments}
 \label{app:tsfel}
 
-\begin{table}
-\label{tab:tsfel_featurelist}
+\begin{table}[H]
+    \centering
+    \caption{Features applied in this work for creating the \gls{ssm}s. The Time Series Feature Extraction Library (TSFEL) is utilized for feature extraction.}
+    \begin{tabular}{l|l|l}
+    \toprule
+        \textbf{Temporal domain} &  \textbf{Statistical domain} & \textbf{Frequency domain}\\
+    \midrule
+        Absolute energy & Interquartile Range & Entropy\\
+        Area under the curve & Kurtosis & Fundamental frequency\\
+        Centroid & Maximum & Max frequency\\
+        Cumulative centroid & Mean & Roll off\\
+        Distance & Mean absolute deviation & Roll on \\
+        Maximum peak & Median & Spectral distance\\
+        Mean absolute difference & Minimum & Spectral kurtosis\\
+        Mean difference & Root mean square & Spectral skewness\\
+        Median absolute difference & Skewness & Spectral spread\\
+        Total energy & Standard deviation & \\
+         & Variance & \\
+    \bottomrule
+    \end{tabular}
+    \label{tab:tsfel_featurelist}
 \end{table}
