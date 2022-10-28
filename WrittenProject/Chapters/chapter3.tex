@@ -491,12 +491,12 @@ Recall (R) = \frac{TP}{TP+FN}
 
 \begin{equation}
 \label{eq:f1_score}
-F1-score (F1) = 2 \times \frac{P*F}{P+R}
+F1-score (F1) = 2 \times \frac{P*R}{P+R}
 \end{equation}
 
 \begin{equation}
 \label{eq:accuracy}
-F1 = \frac{TN+TP}{TN+TP+FP+FN}
+Accuracy (A) = \frac{TN+TP}{TN+TP+FP+FN}
 \end{equation}
 
 These measures were initially performed in binary classification problems, but can be adapted in multi-classification ones. For this, each class (the target class) is compared to all the other classes, being the target class the \textit{positive} and all the other classes \textit{negative}. All measures are calculated for each class, and a macro and micro average of these metrics is finally calculated (here $c$ represents the number of classes).
