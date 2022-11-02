@@ -12,13 +12,20 @@
 \label{cha:text_}
 %In ”Pattern Recognition: Human and Mechanical”, Satosi Watanabe defines a pattern as a vaguely defined entity that is the opposite of chaos, to which a name can be given \cite{watanabe}. The recognition of these entities immersed in chaos is well performed by the human brain by distinguishing or finding similarities in features that characterize a certain pattern, being an innate capability for decision-making. This capacity is also revealed in the search for patterns in time series, as data scientists can visually understand where these patterns occur with previous training and even express it linguistically. 
 
+\begin{figure}[h]
+\centering
+\includegraphics[width=\linewidth]{intro_chapter6.pdf}
+\caption{Four main topics will be covered in this Chapter, namely the novel symbolic approximation and how to use it for pattern search and classification. For these, we will introduce \gls{ssts} and \gls{hearts}. Finally, the search based on words and operators, close to natural language, will also be presented, introducing \gls{quots}.}
+\label{fig:l4tsdm}
+\end{figure}
+
 Human language is foremost a means of communication, in which the information is represented by sentences, composed of words that can then be broken into sequences of symbols. Time series are, in their turn, carriers of information about a physical measure, represented as a sequence of ordered real domain numerical data observed during a given temporal interval. Analysts can have a visual perception of the morphological behaviour of time series and can describe it in such a way that another person understands which segment of the time series he/she is referring to. As we mentioned in Chapter \ref{cha:introduction}, a physician may say "\textit{I am searching for the T-wave, that represents the} \texttt{large peak}" (\includegraphics[height=3.5ex, valign=m]{large_peak_ecg.png}) or "\textit{I am searching for the QRS complex, that looks like a} \texttt{sharp peak followed by a sharp valley} (\includegraphics[height=3.5ex, valign=m]{high_peak_ecg.png})". From this textual description of patterns, one can associate words with specific properties, such as \texttt{peak} can be related with \textit{slope} and \texttt{high} related with \textit{amplitude}.
 \par
 The text mining domain already has available well known approaches to search for specific words or patterns with text queries in traditional text editing softwares. \gls{regex} are an example of such querying mechanisms. Other existing mechanisms rely in keyword-based queries, such as the \textit{Google} search toolbar, which sorts web-pages according to how these match the set of keywords written. These are examples of the flexibility we find in tools available for query-based text search mechanisms. We imagined such tools could also be beneficial for time series query-based pattern search tasks.
 \par
-In this chapter, we provide evidence that it is possible to use such reasoning with time series and propose solutions that promote higher flexibility, cognitive speed, and expressiveness in searching for patterns in time series as we would typically do with text. As presented in Figure \ref{fig:language_topics}, two main strategies are proposed: (1) Synthatic Search on Time Series (\gls{ssts}) and (2) \textit{Quo} -\textit{where}- On Time Series (\gls{quots}). The first explains how to perform query-based search on a symbolic representation of the signal. A novel symbolic representation is introduced and the usage of \gls{regex} is proposed to search for patterns directly in this symbolic representation. We also show how this representation can be used in time series classification tasks with Human Readable Time Series (HeaRTS). The second method that is proposed uses a feature-based representation of the signal, being each feature assigned to one word, which can be used with additional \textit{operators} to search for the desired patterns with natural language.
+In this chapter, we provide evidence that it is possible to use such reasoning with time series and propose solutions that promote higher flexibility, cognitive speed, and expressiveness in searching for patterns in time series as we would typically do with text. As presented in Figure \ref{fig:l4tsdm}, two main strategies are proposed: (1) Synthatic Search on Time Series (\gls{ssts}) and (2) \textit{Quo} -\textit{where}- On Time Series (\gls{quots}). The first explains how to perform query-based search on a symbolic representation of the signal. A novel symbolic representation is introduced and the usage of \gls{regex} is proposed to search for patterns directly in this symbolic representation. We also show how this representation can be used in time series classification tasks with Human Readable Time Series (HeaRTS). The second method that is proposed uses a feature-based representation of the signal, being each feature assigned to one word, which can be used with additional \textit{operators} to search for the desired patterns with natural language.
 \par
-The chapter will start by detailing how \gls{ssts} works, more specifically the symbolic conversion and the search process. In addition, \gls{hearts} will be explained, namely how to use \gls{ssts} and its symbolic representation to find differences between time series and ultimately be used towards interpretable classification tasks. Finally, this chapter ends with \gls{quots} and how the analyst can use feature-words (keywords) with operators to search for patterns on time series more expressively and with words.
+The chapter will start by detailing how \gls{ssts} works, more specifically the symbolic conversion and the search process. In addition, \gls{hearts} will be explained, namely how to use \gls{ssts} and its symbolic representation to find differences between time series and ultimately be used towards interpretable classification tasks. Finally, this chapter ends with \gls{quots} and how the analyst can use feature-words (keywords) with operators to search for patterns on time series more expressively.
 
 
 
@@ -31,6 +38,7 @@ The chapter will start by detailing how \gls{ssts} works, more specifically the 
 
 
 \section{Syntactic Search on Time Series}
+\label{sec:ssts}
 
 \begin{figure}
 \centering
@@ -154,8 +162,8 @@ The symbolic connotation step of the exercise of Figure \ref{fig:ssts_intro} dem
 \begin{figure}
 \centering
 \includegraphics[width=\linewidth]{ssts_search_step.pdf}
-\label{fig:ssts_search}
 \caption{Step 3 of \gls{ssts}. Specific \textit{subsequences} of the time series can be searched with a \gls{regex}. In this case, the search is to find the moment a \texttt{plateau} starts to fall, which is found with the \gls{regex} \texttt{z1n}. Blue are the symbols for amplitude and red for the first derivative.}
+\label{fig:ssts_search}
 \end{figure}
 
 The last step of the process involves searching for the desired pattern in the generated symbolic time series with a \gls{regex}. This string is governed by the rules of \gls{regex} from the \textit{alternative \gls{regex} Python module} \cite{rgxPy} and benefits from all the functionalities and meta-characters typically used with this tool, which can be recalled from Chapter \ref{cha:theory} (see Section \ref{subsec:regex_theory}). The search procedure returns the intervals at which positive matches occurred. It is relevant to note that it has been decided to use \gls{regex}, although any other parser, conveniently combined with the previous steps, might be used for the same purposes.
@@ -165,12 +173,13 @@ In the example of Figure \ref{fig:ssts_intro}, the purpose is to determine when 
 In the next Chapter we will show several applications of this method for pattern search tasks. Next, we present how  to use it for classification purposes.
 
 \section{Towards Interpretable Time Series Classification with SSTS}
+\label{sec:hearts}
 
 \begin{figure}[b]
 \centering
 \includegraphics[width=\linewidth]{overall_interpretable.pdf}
-\label{fig:overall_interpretable}
 \caption{Steps of transforming time series into documents and corresponding \gls{bow} and \gls{tfidf} matrices for posterior classification. The steps are (1) \textit{sentence generation}: all time series are converted to time series \textit{documents} multiple \gls{ssts} queries (e.g. \texttt{Flat}, \texttt{Rise} and \texttt{Fall} from the derivative \textit{connotation}); (2) \textit{bag of words model}: each document is converted to a vector with the frequency of words in that document; and (3) \textit{tfidf model}: transforming the \gls{bow} to \gls{tfidf} and possibly searching for relevant segments of the time series. The human layer shows where the human can apply his/her knowledge, namely selecting the \gls{ssts} queries and interpreting the highlights on the signal.}
+\label{fig:overall_interpretable}
 \end{figure}
 
 The ability to transform a time series into a meaningful symbolic representation makes the usage of text-mining tools available for time series analysis. Profiting from such methods can result in different outcomes that can complement the ones resulting from current strategies, improve results or even open novel pathways for further research experiments in this domain.
@@ -235,7 +244,7 @@ In this section, we explain each step of the proposed strategy to perform time s
     \label{fig:SSTS_example}
 \end{figure}
 
-The generation of time series documents (See Section \ref{subsec:text_}) is made by converting samples of the signal to characters, search patterns that are tagged with specific words in which these samples are converted to, and order them by their time index. With this, the time series can be translated into sentences and be described as a text document.
+The generation of time series documents is made by converting samples of the signal to characters, search patterns that are tagged with specific words in which these samples are converted to, and order them by their time index. With this, the time series can be translated into sentences and be described as a text document.
 \par
 In order to perform this description, the words have to be associated with a specific \gls{ssts} query. Each query has the three stages of \gls{ssts} and searches for the patterns that match on the time series. The patterns that are matched are associated with the corresponding \textit{word}. As an example, the query \texttt{\{PP: Sm 25, C: D1 0.05, S: p+\}} searches for instances where the time series is increasing and attributes to these \textit{subsequences} the word \texttt{Rise}. A specific set of \gls{ssts} queries are used to build a full description of the signal dynamics in higher leveled structures, mostly related with amplitude and derivative \textit{connotations}. 
 
@@ -357,11 +366,11 @@ When a user opens any search toolbar (such as \textit{Google}, \textit{Safari}, 
 \begin{figure}
     \centering
     \includegraphics[width=0.85\linewidth]{quots_query.pdf}
-    \caption{Using our proposed query language, we can create short, intuitive natural language queries to rank the 100 exemplars in Trace, separating our sought class from the remaining data. Here \texttt{*} is \textit{anything}, \texttt{!} is \textit{not}, and \textit{square brackets} are a grouping operator (more details in Section 3).}
+    \caption{Using \gls{quots}, we can create short, intuitive natural language queries to rank the 100 exemplars in Trace, separating our sought class from the remaining data. Here \texttt{*} is \textit{anything}, \texttt{!} is \textit{not}, and \textit{square brackets} are a grouping operator (more details in Section 3).}
     \label{fig:query_cold_start}
 \end{figure}
 
-As we mentioned above, patterns can be described with \textit{words} by associating text with specific properties or the presence of specific shapes on the pattern. In that sense, we propose to create a search paradigm that relies on words represented by features extracted from the signal. Informally, if a user wishes to find examples of a particular behaviour, he/she can simply \textit{Google it}, by describing the data he/she expects to see, given that behaviour. For example, we considered the four-class Trace dataset (see Section \ref{sec:dat_ucr}), which has been studied in more than 1,000 papers. As Figure \ref{fig:trace_quots_example} shows, it is possible to use our system to create queries that can separate each of the four classes from the rest of the data. This separation is possible simply by describing with \textit{words} the presence/absence of structures. Further, we will explain in detail how the process is done, which are the operators that we designed, and how queries can be written. Still, for now, we will explain the meaning of each query in this example. For instance, signals from class 1 (\includegraphics[height=2.5ex, width=3.5ex, valign=m]{trace1.png}) match well with query \texttt{[peak *]}, which translates into \textit{has a peak on the first half and anything on the second half}. The method sorts the signals based on this query and gives a very low score for all signals that do not have a peak in the first half of the signal. The same happens for the other queries, used to sort the other classes. A similar result is achieved with the inverse query \texttt{[* peak}, which means \textit{anything on the first half and a peak on the second half}, as well as the query \texttt{!valley [* !peak]}, which translates into \textit{has not a valley and has no peak on the second half}.
+As we mentioned above, patterns can be described with \textit{words} by associating text with specific properties or the presence of specific shapes on the pattern. In that sense, we propose to create a search paradigm that relies on words represented by features extracted from the signal. Informally, if a user wishes to find examples of a particular behaviour, he/she can simply \textit{Google it}, by describing the data he/she expects to see, given that behaviour. For example, we considered the four-class Trace dataset (see Section \ref{dat:dat_ucr}), which has been studied in more than 1,000 papers. As Figure \ref{fig:query_cold_start} shows, it is possible to use our system to create queries that can separate each of the four classes from the rest of the data. This separation is possible simply by describing with \textit{words} the presence/absence of structures. Further, we will explain in detail how the process is done, which are the operators that we designed, and how queries can be written. Still, for now, we will explain the meaning of each query in this example. For instance, signals from class 1 (\includegraphics[height=2.5ex, width=3.5ex, valign=m]{trace1.png}) match well with query \texttt{[peak *]}, which translates into \textit{has a peak on the first half and anything on the second half}. The method sorts the signals based on this query and gives a very low score for all signals that do not have a peak in the first half of the signal. The same happens for the other queries, used to sort the other classes. A similar result is achieved with the inverse query \texttt{[* peak}, which means \textit{anything on the first half and a peak on the second half}, as well as the query \texttt{!valley [* !peak]}, which translates into \textit{has not a valley and has no peak on the second half}.
 
 \begin{figure}
 \centering

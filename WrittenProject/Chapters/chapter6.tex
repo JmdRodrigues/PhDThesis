@@ -11,10 +11,9 @@
 \chapter{Unveiling the \textit{Grammar} of Time Series}
 \label{cha:segmentation}
 
-
-\begin{figure}
+\begin{figure}[h]
 \centering
-\includegraphics[width=\linewidth]{ssm_topics.pdf}
+\includegraphics[width=\linewidth]{intro_chapter5.pdf}
 \caption{Information retrieval topics explained in this Chapter. Each of these topics is a result of analyzing the \gls{ssm}.}
 \label{fig:info_retrieval_topics}
 \end{figure}
@@ -40,7 +39,7 @@ From the definition of \textit{event} (see Chapter 2 Section \ref{sec:global}), 
 
 \subsection{Search Ranks}
 
-\begin{figure}[H]
+\begin{figure}
     \centering
     \includegraphics[width=0.8\linewidth]{event_search.pdf}
     \caption{Event search in different ranks of dimensionality, timescales, and representation.}
@@ -89,7 +88,7 @@ Besides the ranks mentioned above, the search procedure can be customized by con
 
 \subsection{Proposal}
 
-In order to fill as many research gaps as possible, this study started by defining the search space for the aforementioned topics, considering that if the time series is transformed in the feature space, we can have a multidimensional similarity analysis based on the features' behaviour. The notion of \textit{difference} in time series can be associated with \textit{distance/similarity}, enabling finding segmentation points, recurrent patterns, anomalies, and periodic shapes, which is ideal to perform all the approaches listed above. This feature-based multidimensional representation is already successfully used for time series' classification purposes \cite{tsfel} and is potentially applicable to all the mentioned topics. 
+In order to fill as many research gaps as possible, this study started by defining the search space for the aforementioned topics, considering that if the time series is transformed in the feature space, we can have a multidimensional similarity analysis based on the features' behaviour. The notion of \textit{difference} in time series can be associated with \textit{distance/similarity}, enabling finding segmentation points, recurrent patterns, anomalies, and periodic shapes, which is ideal to perform all the approaches listed above. This feature-based multidimensional representation is already successfully used for time series' classification purposes \cite{tsfel_2020} and is potentially applicable to all the mentioned topics. 
 For instance, any feature's change would be relevant for novelty segmentation, such that changes in the mean, standard deviation, frequency, or other properties are all options worth searching for. By characterizing the signal in the feature space, we can explore changes in all feature representations.
 
 We propose an unsupervised methodology that searches for events (1) in uni and multidimensional space, (2) with a fixed timescale and potential multi-timescale application opportunities, and (3) on an \gls{ssm} computed by a feature space representation of the time series. The events to be searched are any changes in the \gls{ssm} related to a segmentation point and/or a periodic event.
@@ -115,7 +114,7 @@ In this section, we explain the steps of the proposed method. The extraction of 
 
 \subsection{Feature Extraction}
 
-The structural information on the \gls{ssm} reflects how informative the feature set can translate the signal's changes and disruptions. Behavioural changes may be related to a variate set of features. As a feature can be sensitive to a particular type of change, the set of features should be diverse to identify a multivariate set of events and be agnostic to various signal types. We turned to the available features from the \textit{Time Series Feature Extraction Library} (TSFEL) \cite{tsfel} for Python, which has been proven effective and efficient in our previous work on \gls{har} and multimodal biosignal processing \cite{liu22pipeline, liu2021thesis}. We selected over 50\% of all TSFEL features in the statistical, temporal, and frequency domains with relatively lower computational costs, as listed in Table \ref{tab:tsfel_featurelist} in Appendix \ref{app:tsfel}, regarding our proposed method's high calculation resource consumption.
+The structural information on the \gls{ssm} reflects how informative the feature set can translate the signal's changes and disruptions. Behavioural changes may be related to a variate set of features. As a feature can be sensitive to a particular type of change, the set of features should be diverse to identify a multivariate set of events and be agnostic to various signal types. We turned to the available features from the \textit{Time Series Feature Extraction Library} (TSFEL) \cite{barandas_tsfel_2020} for Python, which has been proven effective and efficient in our previous work on \gls{har} and multimodal biosignal processing \cite{liu22pipeline, liu2021thesis}. We selected over 50\% of all TSFEL features in the statistical, temporal, and frequency domains with relatively lower computational costs, as listed in Table \ref{tab:tsfel_featurelist} in Appendix \ref{app:tsfel}, regarding our proposed method's high calculation resource consumption.
 
 The features are extracted with a moving window with size $w$, specified by the user, with an overlap percentage $o$. The selection of the two sizes significantly influences the results: $w$ defines the timescale at which features are extracted so that the wider the window, the more \textit{zoomed-out} the search will be. The second parameter defines the pixel resolution of the resulting feature series, increasing the amount of information with a larger overlap.
 
@@ -123,7 +122,7 @@ The extracted features are grouped into a feature matrix ($F_{M}$), where the ro
 
 \begin{figure}
 \includegraphics[width=\linewidth]{features_example.pdf}
-\caption{Example of feature vectors before and after normalization. Mean and Variance features are presented for the \gls{abp} signal from Dataset \ref{dat:abp}.}
+\caption{Example of feature vectors before and after normalization. Mean and Variance features are presented for the \gls{abp} signal from Dataset \ref{dat:dataset2}.}
 \label{fig:features_normalized}
 \end{figure}
 
@@ -232,6 +231,7 @@ The \textit{similarity profile} is computed column(row)-wise. Each column(row) $
 \centering
 \includegraphics[width=\linewidth]{profiles.pdf}
 \caption{Profiles computed for each segment of the example signal used in Figure \ref{fig:ssm_description}.}
+\label{fig:profiles}
 \end{figure}
 
 A general example of applying this process to the segmented time series based on the \textit{novelty function} is shown in Figure \ref{fig:profiles}. Each segment category ($A$, $B$ and $C$) extracted from the \gls{ssm} of Figure \ref{fig:ssm_description} is computed into a profile ($P_A$, $P_B$ and $P_C$) by averaging column-wise. These \textit{similarity profiles} show how similar the segment is with all the other \textit{subsequences} of the time series. All segments $A$ will have a similar $P_A$ while being very different from profiles $P_B$ and $P_C$. 
@@ -268,14 +268,14 @@ Experiments from multiple domains were carried on to validate the practicability
          \centering
         \includegraphics[width=0.85\textwidth]{use_case1_HAR_zoom_in.pdf}     
     \end{subfigure}
-    \caption{An \gls{ssm}-based novelty search strategy to detect segmentation events on a signal piece from Dataset 1 (see Section \ref{dat:har}). Top: $window_{size}$=250 samples, $kernel_{size}$=45 samples, and overlap=95\% on the activity sequence Standing $\xrightarrow[]{}$ Laying $\xrightarrow[]{}$ Walking $\xrightarrow[]{}$ Upstairs $\xrightarrow[]{}$ Downstairs $\xrightarrow[]{}$ Sitting $\xrightarrow[]{}$ Standing $\xrightarrow[]{}$ Laying $\xrightarrow[]{}$ Walking $\xrightarrow[]{}$ Upstairs
+    \caption{An \gls{ssm}-based novelty search strategy to detect segmentation events on a signal piece from Dataset 3 (see Section \ref{dat:dataset3}). Top: $window_{size}$=250 samples, $kernel_{size}$=45 samples, and overlap=95\% on the activity sequence Standing $\xrightarrow[]{}$ Laying $\xrightarrow[]{}$ Walking $\xrightarrow[]{}$ Upstairs $\xrightarrow[]{}$ Downstairs $\xrightarrow[]{}$ Sitting $\xrightarrow[]{}$ Standing $\xrightarrow[]{}$ Laying $\xrightarrow[]{}$ Walking $\xrightarrow[]{}$ Upstairs
     $\xrightarrow[]{}$ Downstairs $\xrightarrow[]{}$ Sitting $\xrightarrow[]{}$ Standing
     $\xrightarrow[]{}$ Laying; bottom left: signal change point detection on segment $A$ with a size of 5000 samples, an overlap of 75\%, and a kernel size of 25 samples; bottom right: further zooming in with a window size of 10 samples and an overlap of 95\%, to reveal more periodic details of segment $B$.}
     \label{fig:use_case1}
 \end{figure}
 
 
-Figure \ref{fig:use_case1}(top) exemplifies the \gls{ssm}'s usage on a record of an \gls{har} dataset (see Section \ref{dat:har}), where the data of all three accelerometer axes is applied. The \gls{ssm} was computed using a 250-sample window size, and a 95\% overlap. Along the diagonal, the novelty function generates block-wise references for estimating activity transition using a 45-sample kernel.
+Figure \ref{fig:use_case1}(top) exemplifies the \gls{ssm}'s usage on a record of an \gls{har} dataset (see Section \ref{dat:dataset3}), where the data of all three accelerometer axes is applied. The \gls{ssm} was computed using a 250-sample window size, and a 95\% overlap. Along the diagonal, the novelty function generates block-wise references for estimating activity transition using a 45-sample kernel.
 
 We can identify in Figure \ref{fig:use_case1}(top) that the detected segmentation points match the activity transitions. Although all transitions are visible on the novelty function, the transitions between similar activity patterns in the walking category (straightforward, upstairs, and downstairs) are more challenging to differentiate, as block $A$ suggests, which is plausible since the properties of these segments are morphologically similar.
 
@@ -304,7 +304,6 @@ Questions may arise at this point. Why is the signal periodicity of the three wa
     \label{fig:use_case2}
 \end{figure}
 
-
 Many biomedical signals, such as \gls{ecg}, \gls{abp}, and \gls{resp}, contain retrievable structural information like periodicities. Meanwhile, unexpected changes may occur during the acquisition due to physiological responses, medical disorders, or sensing problems like noise, interferences, artefacts, and electrode detachment. We visualize two examples of physiological changes in different types of periodic signals.
 
 The \gls{abp} signal can vary due to postural changes, as an available experiment at \textit{Physionet} confirms \cite{tilt, PhBank}. Figure \ref{fig:use_case2}(top) shows the process of segmenting the \gls{abp} signal based on postural changes, where the trapezoidal and the square wave tag the ground truth of slow and fast postural transitions. The proposed strategy well perceives the change points. Observably, the shape of the raw \gls{abp} signal in each regime is undistinguishable through the naked eye. Therefore, it is constructive to rely solely on the signal itself to implement postural change detection. It is important to point out that the periodicity of the signal is not visible on the matrix because the features were extracted with a window size of 5,000 samples, which is much larger than the period size. A smaller window size of 250 samples in the current scenario allows periodic segmentation, as Figure \ref{fig:use_case2}(bottom) illustrates, where the \gls{ssm} is computed on the first 10,000 samples of Dataset 5 (see Section \ref{sec:dataset}).
@@ -318,11 +317,11 @@ The \gls{ssm} of Figure \ref{fig:use_case2}(top) also shows which segments are s
 \begin{figure}
     \centering
     \includegraphics[width=0.9\linewidth]{5_ecg_example.pdf}
-    \caption{An \gls{ecg} signal with a \textit{pulsus paradoxus} condition starting at the $10,000^{th}$ sample from Dataset 6 (see Section \ref{dat:ecg_pulsus}). Left: the \gls{ssm} diagnoses two modes in the signal, whose patterns are zoomed in the circle thumbnails, respectively; right: zooming parts of the original signal can verify \gls{ssm}'s ability of automatic \gls{ecg} pattern change detection and contribution to segmentation.}
+    \caption{An \gls{ecg} signal with a \textit{pulsus paradoxus} condition starting at the $10,000^{th}$ sample from Dataset 6 (see Section \ref{dat:dataset15}). Left: the \gls{ssm} diagnoses two modes in the signal, whose patterns are zoomed in the circle thumbnails, respectively; right: zooming parts of the original signal can verify \gls{ssm}'s ability of automatic \gls{ecg} pattern change detection and contribution to segmentation.}
     \label{fig:use_case3}
 \end{figure}
 
-Another widely used biomedical signal, \gls{ecg}, also testifies to the feasibility of our proposed method. The \gls{ecg} signal in Figure \ref{fig:use_case3}(left) displays the presence of the condition called \textit{pulsus paradoxus}, an exaggerated fall (>10 mmHg) in the subject's blood pressure during inspiration \cite{pulsusparadoxus2}, which can also occur when the patient changes sleeping posture after heart surgery\cite{eamonn_segmentation}, as the following example relates. Similar to the \gls{abp} signal elucidated in Section \ref{dat:abp}, the human eye hardly perceives the change points in \gls{ecg} signals. Once again, our proposed strategy shows strength.
+Another widely used biomedical signal, \gls{ecg}, also testifies to the feasibility of our proposed method. The \gls{ecg} signal in Figure \ref{fig:use_case3}(left) displays the presence of the condition called \textit{pulsus paradoxus}, an exaggerated fall (>10 mmHg) in the subject's blood pressure during inspiration \cite{pulsusparadoxus2}, which can also occur when the patient changes sleeping posture after heart surgery\cite{eamonn_segmentation}, as the following example relates. Similar to the \gls{abp} signal elucidated in Section \ref{dat:dataset2}, the human eye hardly perceives the change points in \gls{ecg} signals. Once again, our proposed strategy shows strength.
 
 In addition to the novelty detection, segment \textbf{\textit{A}} previous to the pulsus paradoxus occurrence can be partially detailed again to reveal minor changes due to additional noise, verifying \gls{ssm}'s sensitivity to structural changes, as Figure \ref{fig:use_case3} (right) imparts.
 
@@ -330,14 +329,14 @@ In addition to the novelty detection, segment \textbf{\textit{A}} previous to th
 \label{sec:multi_example}
 
 The proposed method accepts both single- and multidimensional records. The difference regards the number of features extracted. As compared in Figure \ref{fig:use_case4}, the same set of features is extracted from each time series to build the $F_M$.
-Using a single or several time series of a multidimensional record is an option, depending on the purpose. In some cases, the use of non-complete dimensions may miss relevant events, as Figure \ref{fig:use_case4} instances the record ``Occupancy'' from Dataset 7 (see Section \ref{dat:alan_turing}). 
+Using a single or several time series of a multidimensional record is an option, depending on the purpose. In some cases, the use of non-complete dimensions may miss relevant events, as Figure \ref{fig:use_case4} instances the record ``Occupancy'' from Dataset 7 (see Section \ref{dat:dataset10}). 
 
 The record is a multidimensional time series that measures room occupancy based on temperature, humidity, light, and $CO_2$. By comparing the signals and formations in the left and the right parts of Figure \ref{fig:use_case4}, it can be understood that some events can be detected using the $CO_2$ series exclusively, but some are missed.
 
-\begin{figure}[H]
+\begin{figure}
     \centering
     \includegraphics[width=\textwidth]{use_case4_multi.pdf}
-    \caption{The proposed method applied on the \textit{Occupancy} record of Dataset 7 (see Section \ref{dat:alan_turing}). Left: calculations on the separate $CO_2$ time series only; right: calculations performed by extracting features on the complete four time series.}
+    \caption{The proposed method applied on the \textit{Occupancy} record of Dataset 7 (see Section \ref{dat:dataset10}). Left: calculations on the separate $CO_2$ time series only; right: calculations performed by extracting features on the complete four time series.}
     \label{fig:use_case4}
 \end{figure}
 
@@ -357,8 +356,8 @@ Strategies that are typically used to present information compactly are found in
 \par
 The proposed visualization strategy has several elements that can be used to transform the \gls{ssm} into a compact form of filtered information. The elements are  illustrated in Figure \ref{fig:summarize_steps} and listed as follows:
 \begin{itemize}
-	\item Novelty $N$ and Subsegment Layers $P$ - The novelty layer $N$ has the segments resulting from the novelty segmentation step, color-coded based on how similar each \textit{subsequence} is with the first segment. The subsegment layer $P$ partitions each novelty segment into single periods, when the \textit{subsequence} is periodic;
-	\item \textit{Chords} $C$ - Each novelty segment is connected to the most similar subsegment with a colored connector;
+	\item Novelty ($N$) and Subsegment Layers ($P$) - The novelty layer $N$ has the segments resulting from the novelty segmentation step, color-coded based on how similar each \textit{subsequence} is with the first segment. The subsegment layer $P$ partitions each novelty segment into single periods, when the \textit{subsequence} is periodic;
+	\item \textit{Chords} ($C$) - Each novelty segment is connected to the most similar subsegment with a colored connector;
 	\item Signal Layer - The original signal is located on top of the partitioned segments.
 \end{itemize}
 
@@ -374,7 +373,7 @@ The proposed visualization strategy has several elements that can be used to tra
 
 The steps are indicated in Figure \ref{fig:summarize_steps} for the \gls{abp} signal example. After computing the \gls{ssm}, it is firstly analyzed to segment the signal based on the \textit{nova} function. These segments are then compared based on the \textit{similarity profiles}. Additional layers can be created by performing an iterative and multi-scale segmentation. With this process, the time series is segmented (\textit{novelty layer}), subsegmented (\textit{subsegment layer}), each segment is connected to the nearest neighbor segment (\textit{nearest neighbor chords}) and the colors for each segment is given based on their similarity to the first segment. Figures \ref{fig:summarize_step1}, \ref{fig:summarize_step2} and \ref{fig:summarize_step3} show the step-by-step process to summarize the time series by analyzing the \gls{ssm}. 
 
-\begin{figure}[b]
+\begin{figure}
 \centering
 \includegraphics[width=0.85\linewidth]{summarize_step1.pdf}
 \caption{How to reach a standard format. This step applies the novelty search method to find the segmentation points. The signal is broken into A to G segments.}
@@ -394,7 +393,7 @@ Further, the segments are compared with the \textit{similarity profiles} of each
 \par
 The pairwise distance between profiles is also used to illustrate how the segments are ordered and clustered by the dendrogram of Figure \ref{fig:summarize_step2}. The dendrogram shows that there are three main clusters, being cluster one represented by segments A, C, E, and G; the second cluster has segment F and the third cluster groups segments B and D. It is important to note that typical distance measures, such as the \gls{ed} or \gls{dtw}, would not be able to directly sort these segments correctly. Using \textit{similarity profiles} is more robust and invariant to the size and time distortions. The illustrated dendogram also has distance measures between the novelty segments. We use the distance from each segment to the first segment ($A$) and select the corresponding color-code to be represented on the summarized layout. 
 
-\begin{figure}[b]
+\begin{figure}
 \centering
 \includegraphics[width=0.75\linewidth]{summarize_step3.pdf}
 \caption{After finding the first layer of the segmentation points, the periodicity of each segment can be checked and added as a sublayer of segments, adding layer P. In this case, segment A is the example.}

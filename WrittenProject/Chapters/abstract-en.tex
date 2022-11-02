@@ -8,26 +8,30 @@
 
 \typeout{NT FILE abstrac-en.tex}%
 
-Regardless of the language in which the dissertation is written, a summary is required in the same language as the main text and another summary in another language. It is assumed that the two languages in question are Portuguese and English.
+Biosignal-based technology has been increasingly available in our daily life, being a critical information source that has been widely applied in, among others, biometrics, sports, health care, rehabilitation assistance, and edutainment.
 
-The abstracts should appear first in the language of the main text and then in the other language. For example, if the dissertation is written in Portuguese the abstract in Portuguese will appear first, then the abstract in English, followed by the main text in Portuguese. If the dissertation is written in English, the abstract in English will appear first, then the abstract in Portuguese, followed by the main text in English. 
+Continuous data collection from biodevices, also motivated in industrial environments with Industry 4.0, provides a valuable volume of information, which also brings challenges, since datasets of this 
+size can no longer be handled by trivial means. These require now the expertise of data scientists in data mining and analysis, and machine learning. The usage of machine learning models and the quality of such methods is heavily dependent on well curated and prepared data, which is a sensitive and time consuming process. 
 
-In the \LaTeX\ version, the NOVAthesis template will automatically order the two abstracts taking into account the language of the main text. You may change this behaviour by adding
-\begin{verbatim}
-    \abstractorder(<MAIN_LANG>):={<LANG_1>,...,<LANG_N>}
-\end{verbatim}
-\noindent to the customization area in the document preamble, e.g.,
-\begin{verbatim}
-    \abstractorder(de):={de,en,it}
-\end{verbatim}
+In this thesis, we explore novel methods in time series analysis for fast, useful and meaningful information retrieval, that are also more expressive and intuitive. In this sense, we propose tools for (1 )a practical and manageable way to automatically segment and label single-channel or multimodal biosignal data using a self-similarity matrix (SSM) computed with a signals' feature-based representation; (2) more expressive and intuitive pattern search with (A) a novel symbolic representation of time series (SSTS), and (B) a word feature-vector used with operators (\textit{Quo}TS); and (3) classification of time series, based on the mentioned symbolic approach. In (1) it was applied to public biosignal datasets and it delivered lucid visual support in interpreting the biosignals with the SSM while performing accurate automatic segmentation of biosignals with the help of the novelty function and associating the segments grounded on their similarity measures with the similarity profiles. The proposed method had an overall F1-score of 0.9 in a series of automatic biosignal segmentation tasks, significantly outperforming the state-of-the-art algorithms. As in (2), the novel methods were applied in several use-cases to demonstrate that with the limited vocabulary, it was possible to find desired patterns with good accuracy, but also good intuition and expressiveness. Finally, it was demonstrated that using a text-based representation of signals for time series classification purposes is possible with competitive accuracies.
 
-The abstracts should not exceed one page and, in a generic way, should answer the following questions (it is essential to adapt to the usual practices of your scientific area):
+
+
+
 
 \begin{enumerate}
   \item What is the problem?
-  \item Why is this problem interesting/challenging?
-  \item What is the proposed approach/solution?
-  \item What results (implications/consequences) from the solution?
+Biosignal-based technology has been increasingly available in our daily life, being a critical information source. Such information has never been easier to gather with readily available wearable sensors, such as mobile phones,  smartwatches, hearables, wristbands, and other non-invasive wearable sensors that monitor many aspect of our life. In fact, these having been widely applied in, among others, biometrics, sports, health care, rehabilitation assistance, and edutainment. 
+
+\item Why is this problem interesting/challenging?
+
+Continuous data collection from biodevices provides a valuable volume of information, which also brings challenges, since datasets of this 
+size can no longer be handled by trivial means and call for engineers and data scientists with expertise in data mining, machine learning, and data analysis. This increase in wearable usage has also been seen in industrial environments, which is motivated by the current trend of Industry 4.0. The usage of machine learning models and the quality of such methods is heavily dependent on well curated and prepared data, which is a sensitive and time consuming process. 
+
+\item What is the proposed approach/solution?
+In this thesis, we explore novel methods in time series analysis for fast, useful and meaningful information retrieval, that are also more expressive and intuitive. This work proposes a practical and manageable way to automatically segment and label single-channel or multimodal biosignal data using a self-similarity matrix (SSM) computed with signals' feature-based representation. It also proposes a novel symbolic representation of time series for pattern search (SSTS) and classification (HeaRTS). Finally, it also proposes a method to use words and operators for pattern search (\textit{Quo}TS) as well.
+
+\item What results (implications/consequences) from the solution?
 \end{enumerate}
 
 % Palavras-chave do resumo em Inglês

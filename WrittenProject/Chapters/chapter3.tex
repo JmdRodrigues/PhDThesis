@@ -533,23 +533,23 @@ Regarding event detection problems, the process involves finding the sample that
     
 \end{itemize}
 
-Additionally, the distance of the \textit{TP} events from the ground-truth events can be calculated with several distance-based metrics, namely the \gls{mae}, the \gls{mse} and the \gls{Mse}:
-
-\begin{equation}
-    MAE = \sum^{k}_{i=1} \frac{|g_{i} - e_{i}|}{k}
-\end{equation}
-
-\begin{equation}
-    MSE = \frac{1}{k} \sum^{k}_{i=1} (g_{i} - e_{i})^2
-\end{equation}
-
-\begin{equation}
-    ME = \frac{1}{k} \sum^{k}_{i=1} (g_{i} - e_{i})
-\end{equation}
+%Additionally, the distance of the \textit{TP} events from the ground-truth events can be calculated with several distance-based metrics, namely the \gls{mae}, the \gls{mse} and the \gls{Mse}:
+%
+%\begin{equation}
+%    MAE = \sum^{k}_{i=1} \frac{|g_{i} - e_{i}|}{k}
+%\end{equation}
+%
+%\begin{equation}
+%    MSE = \frac{1}{k} \sum^{k}_{i=1} (g_{i} - e_{i})^2
+%\end{equation}
+%
+%\begin{equation}
+%    ME = \frac{1}{k} \sum^{k}_{i=1} (g_{i} - e_{i})
+%\end{equation}
 
 The precision measure is relevant to indicate if the method can only estimate events that belong to the ground-truth category, while the recall measure is an important indication of how many ground-truth events are missed in the estimation of the method. Both measures are combined in the F1-measure.
-\par
-The distance-based metrics evaluate how far are the TP from the corresponding ground-truth events (\gls{mae} and \gls{mse}) and which is the direction of estimation of events (if before or after the ground-truth events - \gls{Mse}).
+%\par
+%The distance-based metrics evaluate how far are the TP from the corresponding ground-truth events (\gls{mae} and \gls{mse}) and which is the direction of estimation of events (if before or after the ground-truth events - \gls{Mse}).
 
 \subsection{Evaluating Query Complexity}
 \label{subsec:complex}

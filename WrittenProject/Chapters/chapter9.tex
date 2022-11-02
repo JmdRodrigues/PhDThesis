@@ -8,9 +8,8 @@
 
 \typeout{NT FILE chapter10.tex}%
 
-\chapter{Conclusion}
+\chapter{Conclusion and Future Work}
 \label{cha:Conclusion}
-
 
 In this work, fundamental topics in time series data mining were researched. These topics were motivation by considering the need for tools that help analysts to better understand what happened during the recording process and find relevant instances on signals that can be related with specific occurrences in the physical world. These motivations are intrinsically related with tools that are more visually interpretable and search mechanisms that are more expressive and intuitive. The work developed contributed to each of these domains with relevant standard mechanisms that can be further developed into practical tools for real scenarios. Not only these tool can be practical, but the methods presented bring novelty into the state of the art, either by "borrowing" more traditional methods from other domains (such as the \gls{ssm} in audio information retrieval or \gls{nlp} techniques for text mining) or by introducing novel concepts, specially in terms of text representation of biosignals and text-based query search mechanisms.
 \par
@@ -76,7 +75,7 @@ A lot of focus has been given to occupational health scenarios during this thesi
 
 The methods studied and developed in this thesis are general and applicable to any type of time series. This means that these are applicable to direct measures from the occupational domain for information retrieval, as showed on the last section of the previous chapter. We showed that this context was always considered and highly influenced by problems from industry and office/desk jobs. 
 \par
-During this period, a complete understanding of occupational variables was made. This was essential to understand the sensors that could be interesting to use to monitor these variables. Only inertial variables were used to perform a motion capture of upper body segments, which would give most of the angular information needed to study postural variables present on \gls{eaws} (this was how Dataset \ref{data:vw_dataset} was acquired and more details can be found there.). The usage of direct measures in this context helped in understanding the level of risk a specific workstation represents for a worker. For instance, it is possible to understand for a specific working cycle, which percentage of time it has a high, medium and low risk (using standard ergonomic measures from \gls{rula}.). It was also possible to conclude that the same workstation is performed differently by workers with different anthropometric features, which means that a specific workstation should not be considered to have the same risk score for all workers. These conclusions can be found at \cite{sara}
+During this period, a complete understanding of occupational variables was made. This was essential to understand the sensors that could be interesting to use to monitor these variables. Only inertial variables were used to perform a motion capture of upper body segments, which would give most of the angular information needed to study postural variables present on \gls{eaws} (this was how dataset 14 - Section \ref{dat:dataset_industry} was acquired and more details can be found there.). The usage of direct measures in this context helped in understanding the level of risk a specific workstation represents for a worker. For instance, it is possible to understand for a specific working cycle, which percentage of time it has a high, medium and low risk (using standard ergonomic measures from \gls{rula}.). It was also possible to conclude that the same workstation is performed differently by workers with different anthropometric features, which means that a specific workstation should not be considered to have the same risk score for all workers. These conclusions can be found at \cite{sara}.
 \par
 The usage of direct measures in this context is therefore highly valuable, considering that standard methods can be used to (mostly) automatically calculate risk scores for each worker and each workstation. Using these measures, a specific workstation can be studied in detail, by means of understanding which processes contribute with the highest risk, for example. Another scenario involves studying how to adapt new workstations to improve productivity or reduce occupational risk. In either case, these direct measures can be used to measure the risk of the processes that were added/removed/modified to the workstation being proposed and understand if it truly is beneficial or not.
 \par
@@ -95,9 +94,10 @@ During the period of this thesis, the work developed has been disseminated \text
 \subsection{Journal Publications}
 
 \begin{itemize}
+
 \item M. L. Nunes et al., "Posture Risk Assessment in an Automotive Assembly Line Using Inertial Sensors," in IEEE Access, vol. 10, pp. 83221-83235, 2022, doi: 10.1109/ACCESS.2022.3196473.
 
-\item Mollaei N, Fujao C, Silva L, Rodrigues J, Cepeda C, Gamboa H. Human-Centered Explainable Artificial Intelligence: Automotive Occupational Health Protection Profiles in Prevention Musculoskeletal Symptoms. Int J Environ Res Public Health. 2022 Aug 3;19(15):9552. doi: 10.3390/ijerph19159552. PMID: 35954919; PMCID: PMC9368597.
+\item Mollaei N, Fujao C, Silva L, Rodrigues J, Cepeda C, Gamboa H. Human-Centered Explainable Artificial Intelligence: Automotive Occupational Health Protection Profiles in Prevention Musculoskeletal Symptoms. International Journal Environment Research and Public Health. 2022 Aug 3;19(15):9552. doi: 10.3390/ijerph19159552. PMID: 35954919; PMCID: PMC9368597.
 
 \item Assunção, Ana; Mollaei, Nafiseh; Rodrigues, João; Osório, Daniel; Veloso, António; Cautela, Filomena; Gamboa, Hugo. A genetic algorithm approach to design job rotation schedules ensuring homogeneity and diversity of exposure in the automotive industry, Heliyon, Volume 8, Issue 5, e09396 (2022). https://doi.org/10.1016/j.heliyon.2022.e09396.
 
@@ -140,13 +140,26 @@ During the period of this thesis, the work developed has been disseminated \text
 
 \end{itemize}
 
+\subsection{Planned Publications}
+
+\begin{itemize}
+\item J. Rodrigues et al., Feature-Based Information Retrieval of Multimodal Biosignals Using a Self-Similarity Matrix: Applications for Automatic Segmentation and Labelling - \textit{Submitted - Under Revision}.
+
+\item Novelty Function-Based Automatic Activity Segmentation of Multimodal Biosignals Acquired from Wearable Sensors (in partnership with the Cognitive Systems Lab - University of Bremen)
+
+\item HeaRTS - Human Readable Time Series Classification
+
+\item Towards Natural Language Search and Exploration of Automotive Telemetry (in partnership with University of California Riverside)
+
+\item LabLinking for Remote Motion Synchrony and Teaching (in partnership with the Cognitive Systems Lab - University of Bremen)
+
+\end{itemize}
+
 \subsection{Methods}
 
 In this thesis, we contributed to the state of the art with several methods, hereby listed.
 
 \begin{itemize}
-
-%\item Unsupervised Automatic Segmentation: Using the \gls{ssm} to search for segmentation points on any time series, including novelty segmentation and periodic segmentation.
 
 \item TSSummarize: Summarization of Time Series - Using the \gls{ssm} to provide relevant feedback on how the time series are structured and segments are related, towards automatic and unsupervised annotation of time series.
 
@@ -163,15 +176,25 @@ In this thesis, we contributed to the state of the art with several methods, her
 \subsection{Projects}
 
 \begin{itemize}
-\item Project Operator
-\item Project PrevoccupAI
+\item Project Operator (2020-2021): I was able to participate on the design of the proposal and contribute in several tasks. Most of my contributions involved (1) the research and investigation of sensing devices that could be beneficial for the monitoring of risk factors variables during work, (2) designing acquisition protocols with specific research questions, which involved to define the acquisition setup and which activities to perform, (3) participate in the acquisition sessions, and (4) suggesting possible paths for the analysis of the data.
+\item Project PrevoccupAI (2020-2021): I participated on the design of this proposal and gave contributions at the initial stages of the project. My involvement regarded (1) the research of sensing equipment to be used in desk occupational scenarios, (2) design acquisition protocols and (3) give advice in how to process motion and muscle signals.
 \end{itemize}
 
-\subsection{Revised Works}
+\subsection{Peer Reviewed Works}
 
 The content of this thesis used peer-reviewed sections of the listed publications above. The sections that used part of this text are listed as follows:
 
-Section 2 - Essential definitions use the text from paper X
+%\begin{table}
+%\centering
+%\begin{tabular}{ll}
+%\toprule
+%Section & Publication\\
+%\midrule
+%Section 2 & Essential definitions use the text from paper X\\
+%
+%\end{tabular}
+%\end{table}
+
 
 
 \subsection{Awards}
@@ -183,3 +206,57 @@ I was awarded in 2021 a Fullbright scholarship to pursue a research project at t
 \subsubsection{Best Paper Award}
 
 The best paper award for the category was awarded to the publication "MicroErgo: A Concept for Self-Assessment of Occupational Risk" at the Seventh International Conference on Biosignals, Images and Instrumentation conference, 2021.
+
+\section{Future Work}
+\subsection{Overall Improvements to compute the \gls{ssm} and Segmentation Process}
+
+The \gls{ssm} was computed by using the standard approach found at \cite{fmp1}. The results show promise in using this strategy for several tasks. We believe there are improvements that can be made in the feature extraction process, and contribute to a better \gls{ssm}. Currently, neither a dimensionality reduction method, such as Principal Component Analysis (PCA), nor a feature selection process, are performed prior to computing the \gls{ssm}. Performing these might be a way of improving the general matrix representation and remove features that do not contribute to explain the similarity between subsequences. Additionally, feature stacking has been proved to help in increasing the accuracy of feature-based classification of time series \cite{feature_stacking}. This means that it should better represent differences between subsequences and should be tested on the current approach.
+\par
+Another relevant improvement would be to find a way to minimize the number of parameters used for the novelty segmentation task. Currently, the size of the sliding window that extracts features and the size of the sliding kernel that computes the novelty function are independent. It would be interesting to reduce the number of variables by finding a relationship between the kernel and moving window, make the sizes adaptive based on a specific metric or perform a training process where these parameters are computed for a specific domain and kept the same for future iterations (as we showed the values of these parameters are close together for the same dataset and type of task).
+\par
+The general idea when this method was used, was that changes on the signal should be represented by a change in the overall set of features. This leads to the idea that different changes can be associated with a specific group of features. In the future, we should study which are the features that better describe a specific type of feature.
+
+\subsection{Unsupervised Automatic Segmentation and Labeling of Time Series}
+
+We have already mentioned in a previous chapter that the proposed methods help moving towards unsupervised and automatic segmentation and labeling of time series. We have showed that the segmentation process is well performed, but lacked the validation for automatic labeling. We believe that using the similarity profiles after a first segmentation process would provide this ability of automatically returning a completely segmented and annotated signal. In the future, we will test this approach on public datasets.
+
+%This methodology will be exemplified to identify instant repetitions of a given pre-specified time series' sub-sequence of the user's interest. For example, if the analyst wants to understand the contribution of a specific segment of the working cycle for the occupational risk, this sub-sequence could be used as a query to search all the other equal segments. Moreover, current risk evaluations of occupational exposure are made with the assistance of video. Such query-by-example methods could be integrated into a video system that let's the analyst select an interval of the video that corresponds to a specific part of a working cycle, and the algorithm segments the remaining other similar segments. This would increase the speed of analysis and/or labeling process.
+
+
+\subsection{Hierarchical Segmentation of Time Series}
+
+When analyzing a long time series visually, the user has to zoom-in and zoom-out to search for areas of interest. We believe that using the proposed segmentation method we could perform a hierarchical segmentation, that is, apply multiple segmentation stages, with different window lengths. This would provide a multi-layered set of information that can highlight the areas of interest  in different \textit{zoom} levels.
+\par
+As a pilot for this method, the user could define the number of hierarchies  and corresponding window sizes to perform this process, but ideally, the process would be performed with an adaptive sliding window, that alters the dimensions based on a specific metric. This process would be helpful for long time series, with highly variable information along time.
+
+\subsection{Periodic Segmentation}
+
+The current approach for periodic segmentation is not able to search for the off-diagonals (paths) that are used for this purpose. We believe a better approach could be performed if the paths were highlighted. For this purpose we can perform image processing filters and then extract the resulting paths. Identifying their beginning would be the best way to find the initial sample of a period. 
+
+\subsection{Online Unsupervised Segmentation}
+
+This work has not discussed the application of the proposed method for online purposes. We believe the method can be adapted for both novelty segmentation and periodic segmentation. Of course that if the entire \gls{ssm} is computed over time with continuous incoming data, the memory required for this process would not be enough and the algorithm would fail very quickly. For this purpose, the method should be adapted by only keeping samples from the segmentation point forward (with a fixed buffer size), and compare the next incoming samples with the kept ones until a relevant change is identified or a new off-diagonal starts. After this, the previous samples kept on a buffer up to the segmentation point can be erased and the method can search for the next relevant change point. In the future, an online version should be developed.
+
+\subsection{Tool for Time Series Profiling}
+
+Currently, we introduced \textit{TSSummarize}, which provides a summarization of the time series based on segmentation points and similarity profiles. We believe the development of an interactive tool that has an internal report on the time series, such as, statistical patterns on the segments, number of segments, how similar they are, percentage of time each segment is represented on the signal, level of periodicity, how many periods are there in each segment, presence of anomalies/discords or motifs, among other measures. In the future, this should be considered.
+
+\subsection{\gls{ssts} Improvements and Further Applications}
+
+%There is still room to improvement. In one end, \gls{regex} are very useful and can be used to design patterns to be searched, but in the other end, \gls{regex} patterns can be very complex and limited to express the textual patterns that are being searched, and the search process is very radical and brittle, in the sense that if the time series patterns do not match the \gls{regex}, no output will be given and the pattern will not be find. In this case, there is no distance measure that is continuous and this should be taken into consideration in a next iteration of the method
+
+
+The current \gls{ssts} method has several improvements to be made. Some of them have been introduced when developing \gls{hearts}, but others still require additional research. The fact that we are performing a symbolic representation gives the opportunity to use compression techniques typically used for text, such as the run length encoding (RLE). Having a compressed representation can make the search process faster. In combination with this, it would be interesting to include the higher level translation performed in \gls{hearts}, which has standard queries for standard structures (peaks, up, plateau, etc...). Using a compression of the time series can be beneficial for \gls{hearts} to speed up the text representation process and the hyperparameter tuning.
+A \gls{regex} query is a text pattern, which is convenient to express a general pattern. However, it is sometimes difficult to generalize. The fact that the \gls{regex} is not flexible makes this very brittle to patterns that we are looking for but have a slight difference with our text pattern. For now, this flexibility can be introduced with pre-processing/simplification of the data. In the future, a flexible search process, based on a meta-regex mechanism should be developed to perform a less brittle search.
+\par
+\gls{ssts} has a fertile ground where other domains can benefit from these ideas. We have showed applications regarding pattern search and classification, but we believe there are other approaches to explore with \gls{ssts}, namely for time series generation, editing, segmentation, among others. The fact that we are searching for patterns makes it convenient to perform interactive adaptations to the data. Several methods have been thought for the \textit{edition} of time series subsequences found with the text pattern, for instance \textit{ssts.annotate}, \textit{ssts.split}, \textit{ssts.modify}, \textit{ssts.replace}, \textit{ssts.reverse}, \textit{ssts.repeat}, \textit{ssts.recursive}. Some of these functions are inspired in text edition mechanisms, others are used for general edition processes. We find that having a tool that could be used to edit, search or adapt a signal could have its benefits, namely to generate datasets for \textit{toy} problems. There are even public libraries to generate pattern sequences based on \gls{regex} (e.g. \textit{Xeger} \cite{xeger}). If using a \gls{regex} pattern based on a specific signal, we could generate a multitude of different signals with small variations.
+\par
+We have showed that \gls{ssts} can be used in combination with existing \gls{nlp} methods for classification processes and pattern search. We believe that with the current rise in \gls{nlp} knowledge, a symbolic representation of time series can be useful to design novel ways of extracting information from time series. For instance, several methods are available for text topic modeling, such as \gls{lsa}, \gls{lda} or \gls{nmf}. These methods could be directly tested with the symbolic/textual representation of the time series. Other strategies, that rely in neural networks, such as \textit{bert} and \textit{transformers} could be explored for time series problems, namely for time series classification and generation. We believe these approaches can even be more relevant regarding interpretability and explainability. These are complex problems with time series, and having text as a medium of communication between analysts and the time series could improve current approaches on this domain. This was explored with \gls{hearts}, but the process was only evaluating the differences between the data and not explaining why the classifier selected a specific class.
+\par
+Regarding the topic of classification with \gls{hearts}, we believe it should be adapted to work with multidimensional data. This could be made by combining several classifiers for each dimension and then combine the classification results by a standard voting method. In addition, \gls{hearts} could be used in combination with other classifiers as it explores other properties that distances such as \gls{ed} and \gls{dtw} don't.
+
+\subsection{Further Developments for QuoTS}
+
+We have introduced a novel method for pattern search on time series with word-feature vectors. This approach is more expressive and provides an easy way to search for patterns. In the future, this expressiveness should be measured with a study group. A group should develop a solution for a problem without using \textit{quots}, and then use \gls{quots} to solve the same problem. The average time in solving the problem would be measured to associate with the expressiveness.  In the long run, this method should be considered for non-experts in time series as well, to understand what could be improved to make the process more expressive for non-experienced users.
+\par
+In terms of the method itself, more keywords and operators could be introduced. Some of the keywords could even be represented by several features that contribute for the used keyword. The fact that a static window is used, should be improved. For example, \gls{ssts} can find patterns with any size, while \gls{quots} searches for patterns on a fixed window size. Another improvement is related with the feedback given. \gls{quots} could have a set of methods that help get intuition over what the keywords mean in the time series. For instance, the user could highlight a segment of the time series and the keywords with higher value would be presented.
