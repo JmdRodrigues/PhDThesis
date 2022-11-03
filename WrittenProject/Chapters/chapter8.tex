@@ -14,7 +14,7 @@
 
 The previous chapters (Chapters \ref{cha:text_} and \ref{cha:segmentation}) introduced the methods developed in this thesis. For each topic, a few examples were presented to help understand and follow the explanation and description of the proposed methods. In this chapter, we go further into testing and validating the algorithms to provide evidence that these are relevant and contribute to the state-of-the-art in the time series data mining field. The performance was evaluated on public datasets, introduced in Chapter \ref{cha:data}.
 \par
-Considering the diversity of methods developed, this chapter will be divided into each contribution following the topics presented in the previous Chapters. Figure \ref{fig:chap8_struct} shows the content provided in this chapter, being divided in:
+Considering the diversity of methods developed, this chapter will be divided into each contribution following the topics presented in the previous Chapters:
 
 \begin{itemize}
 \item \textbf{Information Retrieval with the \gls{ssm}}:
@@ -38,13 +38,13 @@ In this section, we present several examples of how the novelty function (recall
 
 \subsubsection{Statistical Performance Evaluation}
 
-In order to evaluate the performance of our proposed method in general scenarios, we applied the algorithm to Datasets 3, 4, 5, 6, 7 and 8 (see Sections \ref{dat:dataset3}, \ref{dat:dataset4},\ref{dat:dataset5},\ref{dat:dataset6}, \ref{dat:dataset7} and \ref{dat:dataset8}). The evaluation was divided into \textit{biosignals-related applications}, and the general change point detection benchmark (Dataset \ref{dat:dataset10}). The biosignals experiments are associated with public datasets from Physionet, the \textit{UCI Machine Learning Repository} and the \textit{UCR Semantic Segmentation Benchmark}, involving different contexts (\gls{har}, hand posture, and noise detection) and sensor types (\gls{acc}, \gls{gyro}, \gls{emg}, \gls{abp} and \gls{ecg}).
+In order to evaluate the performance of our proposed method in general scenarios, we applied the algorithm to datasets 3, 4, 5, 6, 7 and 12 (see Sections \ref{dat:dataset3}, \ref{dat:dataset5},\ref{dat:dataset6},\ref{dat:dataset7}, \ref{dat:dataset8} and \ref{dat:dataset13}). The evaluation was divided into \textit{biosignals-related applications}, and the general change point detection benchmark (Dataset \ref{dat:dataset10}). The biosignals experiments are associated with public datasets from Physionet, the \textit{UCI Machine Learning Repository} and the \textit{UCR Semantic Segmentation Benchmark}, involving different contexts (\gls{har}, hand posture, and noise detection) and sensor types (\gls{acc}, \gls{gyro}, \gls{emg}, \gls{abp} and \gls{ecg}).
 
 The quantitative evaluation on biosignals' public datasets was made by accumulating true positive ($TP$), false positive ($FP$), and false negative ($FN$) values with a tolerance zone around the ground truth events. The applied reasonable tolerance was the ground truth wrapped by a window size of the \gls{ssm} computation, inside which a detected event was counted as a $TP$. The case that no estimated event was found inside the tolerance band was considered an $FN$. An estimated event outside the tolerance or duplicating to an already counted $TP$ were regarded as an $FP$. The F1-score based on the precision and recall values was calculated from $TP$, $FN$, and $FP$ values (recall definitions and equations from Section \ref{subsec:event_metrics}).
 
 In the evaluation of biosignal segmentation, the performance of our proposed method was compared with existing approaches available on the Python library \textit{ruptures}, namely the window-based segmentation ($WL$) and the binary segmentation ($BS$) \cite{review_2}. The benchmark evaluation referred to the best score obtained from the state-of-the-art methods available on repository  \cite{cpd_alan}. The evaluation procedure to detect $TP$, $FP$ and $FN$ was the one followed on \cite{cpd_alan}.
 
-The method has been computed in the same conditions and followed the same procedure for all datasets' records. The features used were the same for each record (see Appendixes \ref{app:tsfel} and  \ref{appendix:tables_detailed}), varying the timescale parameter, the overlap size of the sliding window, and the kernel size. The peak detection strategy based on a threshold mechanism is the same for all records, while the threshold value varies from record to record. Results for publicly available datasets are listed in Table \ref{tab:biosignals_results}, and Table \ref{tab:alanturing} expands the performance by F1-scores in detecting the change point events.
+The method has been computed in the same conditions and followed the same procedure for all datasets' records. The features used were the same for each record (see Appendix 1 - \ref{appendix:tables_detailed}), varying the timescale parameter, the overlap size of the sliding window, and the kernel size. The peak detection strategy based on a threshold mechanism is the same for all records, while the threshold value varies from record to record. Results for publicly available datasets are listed in Table \ref{tab:biosignals_results}, and Table \ref{tab:alanturing} expands the performance by F1-scores in detecting the change point events.
 
 \begin{table}[H]
     \centering
@@ -72,22 +72,22 @@ M.A. F1 & - & - & - & - & - & 0.89 &-&-&-&-&- & 0.75 &-&-&-&-&-& 0.64\\
 The illustrative examples provided in Section \ref{sec:use_cases_ssm} corroborate the proposed method's capability in segmenting real, complex, and multimodal biosignals datasets. As Table \ref{tab:biosignals_results} conveys, an overall macro-averaged 0.90 F1-score is achieved, while the competitors' overall F1-scores are 0.72 ($WL$), and 0.61 ($BS$), respectively.
 Tables \ref{tab:params_results_1}—\ref{tab:params_results_4} in Appendix \ref{appendix:tables_detailed} details the parameters of window sizes, kernel sizes, and thresholds applied to the signals in each dataset.
 
-For Datasets 3 and 6 (see Sections \ref{dat:dataset3} and \ref{dat:dataset6}), the window-based methods, \textit{novelty} and $WL$, performed much better than the $BS$ method, mainly because the sliding window algorithm with a full set of features comprehensively characterizes changes in the signal.
+For Datasets 3 and 5 (see Sections \ref{dat:dataset3} and \ref{dat:dataset6}), the window-based methods, \textit{novelty} and $WL$, performed much better than the $BS$ method, mainly because the sliding window algorithm with a full set of features comprehensively characterizes changes in the signal.
 The standard $WL$ uses cost functions searching for mean/variance value changes in the signal, which achieves a high F1-score in Dataset 3, even identifying transitions between dynamic activities, such as \textit{Walking}/\textit{Upstairs}.
 Our proposed method had a similar performance with a worse count in $FP$ values, where the added features did not improve the segmentation performance.
-In contrast, our proposed method, complemented by additional features, had a much better performance than the $WL$ method in Dataset 6.
+In contrast, our proposed method, complemented by additional features, had a much better performance than the $WL$ method in Dataset 5.
 Adding features enabled a more robust and sensitive detection of pattern changes, although it missed some changes between similar patterns, like \textit{Walking} and \textit{Upstairs/Downstairs} in Dataset 3, which are the primary source of the $FN$ value.
 Similar to the $FN$ values, the $FP$ values of our proposed method are mostly superior to other methods. It nonetheless leaves room for discussion. Some events are not marked as changes in specific activities, but the signal pattern actually changes. For example, Figure \ref{fig:use_case1}(bottom) exposes pattern changes during an \textit{Upstairs}/\textit{Downstairs} activity unlabelled in the ground truth, possibly due to a flight of stairs. The novelty function is sensitive to such pattern changes, which inevitably contributes to the $FP$ values during the comparison with the ground truth.
 Considering the good performance of both methods, further research should be made in other \gls{har} domains to better understand the differences in performance between them.
 
-For Dataset 8 (see Section \ref{dat:dataset8}) and, especially, Dataset 7 (see Section \ref{dat:dataset7}), the proposed method outperformed its competitors. Although \gls{ecg}-based jump artefact detection is fundamental, the $WL$ method could not find the segmentation borders, while the $BS$ method worked better. In Dataset 7 (see Section \ref{dat:dataset7}), the same \gls{ecg} signal was noised with different \gls{snr} levels to form a new set of resultant signals. Overall, our proposed method was able to detect the changes between noisy segments and clean segments with noise up to 18 dB. At 12 dB, the proposed method achieved an average F1-score of 0.84 with references of 0.43 ($WL$), and 0.69 ($BS$).
+For Dataset 7 (see Section \ref{dat:dataset8}) and, especially, Dataset 6 (see Section \ref{dat:dataset7}), the proposed method outperformed its competitors. Although \gls{ecg}-based jump artefact detection is fundamental, the $WL$ method could not find the segmentation borders, while the $BS$ method worked better. In Dataset 6 (see Section \ref{dat:dataset7}), the same \gls{ecg} signal was noised with different \gls{snr} levels to form a new set of resultant signals. Overall, our proposed method was able to detect the changes between noisy segments and clean segments with noise up to 18 dB. At 12 dB, the proposed method achieved an average F1-score of 0.84 with references of 0.43 ($WL$), and 0.69 ($BS$).
 
 \subsubsection{Segmentation Benchmark}
 
-In order to compare the proposed method with other state-of-the-art approaches, we used a benchmark provided by the Alan Turing Institute \cite{cpd_alan} (Dataset 10). The performance was evaluated by change point event detection in each time series available, summarized in Figure \ref{fig:cdd_alant}, where each referenced method applied its best score in the benchmark (see Tables \ref{tab:alanturing} and \ref{tab:params_results_alanT}).
+In order to compare the proposed method with other state-of-the-art approaches, we used a benchmark provided by the Alan Turing Institute \cite{cpd_alan} (Dataset 9). The performance was evaluated by change point event detection in each time series available, summarized in Figure \ref{fig:cdd_alant}, where each referenced method applied its best score in the benchmark (see Tables \ref{tab:alanturing} and \ref{tab:params_results_alanT}).
 
 \begin{table}
-    \caption{Comparison of the F1-scores between our proposed method (\textit{novelty}) and other algorithms' benchmarks in Dataset 10 (see Section \ref{dat:dataset10}). The calculation of all one-dimensional signals' average performance and all signal's average performance does not include columns with a gray background where no change point should be detected, or a signal error was present. Bold values represent the best F1-score for this specific dataset.
+    \caption{Comparison of the F1-scores between our proposed method (\textit{novelty}) and other algorithms' benchmarks in Dataset 9 (see Section \ref{dat:dataset10}). The calculation of all one-dimensional signals' average performance and all signal's average performance does not include columns with a gray background where no change point should be detected, or a signal error was present. Bold values represent the best F1-score for this specific dataset.
     T: timed out; F: failed compiling.}
     \label{tab:alanturing}
     \resizebox{\textwidth}{!}{
@@ -197,7 +197,7 @@ In order to compare the proposed method with other state-of-the-art approaches, 
 \begin{figure}
     \centering
     \includegraphics[width=\linewidth]{critical_distance_novelty.pdf}
-    \caption{Critical distance diagram comparing the methods used in \cite{cpd_alan} (except \textit{RBOCPDMS}) and the \textit{novelty function} on Dataset 10 (see Section \ref{dat:dataset10}). The performance measure corresponds to the F1-score for all single-dimension datasets of the benchmark, except for the ones identified in Table \ref{tab:alanturing} with a gray background. A thick horizontal line groups a set of classifiers that are not significantly different in the statistical test \cite{critical_dif}.}
+    \caption{Critical distance diagram comparing the methods used in \cite{cpd_alan} (except \textit{RBOCPDMS}) and the \textit{novelty function} on Dataset 9 (see Section \ref{dat:dataset10}). The performance measure corresponds to the F1-score for all single-dimension datasets of the benchmark, except for the ones identified in Table \ref{tab:alanturing} with a gray background. A thick horizontal line groups a set of classifiers that are not significantly different in the statistical test \cite{critical_dif}.}
     \label{fig:cdd_alant}
 \end{figure}
 
@@ -464,13 +464,13 @@ The threshold used to determine which peaks are considered as points of interest
 \label{fig:periodic_detection}
 \end{figure}
 
-The detection of periods onset was experimented on dataset 12 (see Section \ref{dat:dataset12}). It is a database with exclusively periodic data of activity signals. Twenty participant performed seventeen different activities, which are recorded in a multimodal time series. We exemplify the usage of a periodic search with the similarity function and the query-based segmentation on the \gls{ssm}. These experiments were evaluated based on ground-truth annotations of a push-button from the dataset, with the metrics previously explained (see Section \ref{subsec:event_metrics}). The ground truth indicates the onset of the activity. Results are presented in Table \ref{tab:periodic_results}.
+The detection of periods onset was experimented on dataset 11 (see Section \ref{dat:dataset12}). It is a database with exclusively periodic data of activity signals. Twenty participant performed seventeen different activities, which are recorded in a multimodal time series. We exemplify the usage of a periodic search with the similarity function and the query-based segmentation on the \gls{ssm}. These experiments were evaluated based on ground-truth annotations of a push-button from the dataset, with the metrics previously explained (see Section \ref{subsec:event_metrics}). The ground truth indicates the onset of the activity. Results are presented in Table \ref{tab:periodic_results}.
 
 Using the similarity function enhances the periodic nature of the time series when computed (see Section \ref{sec:periodic_search}). The results are displayed for all activities, summing \textit{TP}, \textit{FP} and \textit{FN} of all participants. The periodic search was made using the window size of one period. The tolerance window was half the period length. The \textit{similarity function} was smoothed by a smoothing function (see Section \ref{subsec:smooth}) with a window size equal to the window size used to extract the features. The smoothing function helps in making the valley detection on the resulting similarity function easier and preventing unwanted \textit{FP}.
 
 \begin{table}
 \centering
-\caption{Results in segmenting periodic data from dataset 12 (see Section \ref{dat:dataset12}). The results were computed with two different approaches on the \gls{ssm}: \textit{similarity function} and query-based search. \textit{TP}, \textit{FP}, \textit{FN }and resulting \textit{F1-score} were the metrics used. The total number of these metrics is presented on the last row.}
+\caption{Results in segmenting periodic data from dataset 11 (see Section \ref{dat:dataset12}). The results were computed with two different approaches on the \gls{ssm}: \textit{similarity function} and query-based search. \textit{TP}, \textit{FP}, \textit{FN }and resulting \textit{F1-score} were the metrics used. The total number of these metrics is presented on the last row.}
 \begin{tabular}{lcccccccc}
 \toprule
           & \multicolumn{4}{c}{Similarity function} & \multicolumn{4}{c}{Query-based search}\\
@@ -514,7 +514,7 @@ The current information era, in conjunction with technological developments, is 
 
 As we mentioned in Section \ref{sub:context2}, data preparation is an important part of any analysis or task that requires further deployment in supervised methods, namely the time-consuming segmentation and labelling processes. Hence, tools capable of segmenting time series to support and ease the labelling process of motion and posture data are highly valued and highly necessary for the risk analysis and the deployment of semi-supervised and/or supervised methods. In this case, motion data in real scenarios are even more complex since it is highly rich and diverse in behaviours. For instance, although cyclic and repetitive activities performed in industrial scenarios are mostly consistent from cycle to cycle, perfect conditions cannot be met all the time. Eventually, the working process can inadvertently be stopped or delayed. In addition, ergonomic risk assessment methods have to analyze each working cycle, which means that a previous segmentation of each one of these instances has to be made. Sub-activities that make the sequence of actions comprehended in the working cycle can also be sub-segmented for further recognition and association with risk measures. For instance, the \textit{ergonomist} might have an interest in understanding which actions from the working cycle have a significant association with a high or low risk measure, and adapt the working station with intervention strategies that could help prevent future disorders. 
 
-In this Section, we explore a few examples in using the \gls{ssm} for information retrieval in occupational motion data of collaborators performing specific workstations. The data was recorded at the \textit{Autoeuropa Volkswagen} production line in cooperation with this thesis (dataset 14 - see Section \ref{dat:dataset_industry}). The information provided by the \gls{ssm} supports the analysit in identifying the following events: 
+In this Section, we explore a few examples in using the \gls{ssm} for information retrieval in occupational motion data of collaborators performing specific workstations. The data was recorded at the \textit{Autoeuropa Volkswagen} production line in cooperation with this thesis (dataset 13 - see Section \ref{dat:dataset_industry}). The information provided by the \gls{ssm} supports the analysit in identifying the following events: 
 
 \begin{itemize}
 \label{items:occupational_detection}
@@ -548,7 +548,7 @@ In the second example, collaborator 2 was performing the same workstation  (\tex
 
 It is also relevant to mention that when the collaborator is in non-active periods (\textbf{P}), the \textit{similarity function} has a very low value. As we mentioned in Section \ref{sec:periodic_search}, a low similarity function value also corresponds to being very dissimilar to all the other \textit{subsequences} of the signal. In this case, it makes sense, considering that the majority of the signal is related with cyclic activities, being \textbf{P} instances less frequent and therefore less similar with all the other \textit{subsequences}. This happens in both examples.
 
-The \textit{novelty} and \textit{similarity} functions were used with the purpose of detecting the listed events (see List \ref{items:occupational_detection}) on Dataset 14 (see Section \ref{dat:dataset_industry}). For the sake of brevity, the results for both item one and two of the list are displayed in Appendix \ref{appendix:tables_detailed} (see Tables \ref{tab:auto_scores} and \ref{tab:wc_results}, respectively). The first step involved detecting changes between active and non-active periods of the working activity, which was performed with the novelty function. The periods were described as active or non-active based on a threshold on the similarity function. The results show the ability to segment the signals with an overall F1-score of 0.96 (see Table \ref{tab:auto_scores}). After identifying the active periods, working cycles were segmented. From the 157 working cycles, 154 cycles were detected (see Table \ref{tab:wc_results}). 
+The \textit{novelty} and \textit{similarity} functions were used with the purpose of detecting the listed events (see List \ref{items:occupational_detection}) on Dataset 13 (see Section \ref{dat:dataset_industry}). For the sake of brevity, the results for both item one and two of the list are displayed in Appendix \ref{appendix:tables_detailed} (see Tables \ref{tab:auto_scores} and \ref{tab:wc_results}, respectively). The first step involved detecting changes between active and non-active periods of the working activity, which was performed with the novelty function. The periods were described as active or non-active based on a threshold on the similarity function. The results show the ability to segment the signals with an overall F1-score of 0.96 (see Table \ref{tab:auto_scores}). After identifying the active periods, working cycles were segmented. From the 157 working cycles, 154 cycles were detected (see Table \ref{tab:wc_results}). 
 
 \subsubsection{Query-based Segmentation in Occupational Data}
 
@@ -819,13 +819,7 @@ In addition to these experiments, we performed an individual analysis of several
 
 \subsection{Classification Performance}
 
-%CV: 54 wins TFIDF-SVM VS 34 wins ED, 4 ties
-
-%Test: 47 wins TFIDF-SVM VS 44 wins ED, 1 tie
-
-
-
-Figure \ref{fig:distribution_dendogram} shows us how vectorized documents can be compared with the cosine distance to distinguish time series. Simply by using part of the \gls{ssts} queries, it is possible to generate \gls{tfidf} weights that are differently distributed based on ordered words on a time series document. Of course, the \textit{Trace} dataset used for this example is a simple dataset, with simple dynamics, but still challenging to classify well with the 1-NN \gls{ed} (only 76\% of accuracy). Therefore, to validate the ability of the proposed method to perform time series classification, it was computed on all available datasets of the UCR Benchmark and its performance compared with the standard 1-NN \gls{ed}. In order to perform this evaluation, we followed the indications provided by the authors of the dataset \cite{ucr}. As recommended, we used the reference \textit{train/test} split, and performed a cross-validation for hyperparameter tuning with the standard \textit{train} set.
+Figure \ref{fig:distribution_dendogram} showed us how vectorized documents can be compared with the cosine distance to distinguish time series. Simply by using part of the \gls{ssts} queries, it is possible to generate \gls{tfidf} weights that are differently distributed based on ordered words on a time series document. Of course, the \textit{Trace} dataset used for this example is a simple dataset, with simple dynamics, but still challenging to classify well with the 1-NN \gls{ed} (only 76\% of accuracy). Therefore, to validate the ability of the proposed method to perform time series classification, it was computed on all available datasets of the UCR Benchmark and its performance compared with the standard 1-NN \gls{ed}. In order to perform this evaluation, we followed the indications provided by the authors of the dataset \cite{ucr}. As recommended, we used the reference \textit{train/test} split, and performed a cross-validation for hyperparameter tuning with the standard \textit{train} set.
 
 As mentioned on Section \ref{sec:ssts}, the method translates the time series into text with \gls{ssts} queries from Table \ref{tab:ssts_queries}. These have pre-processing, connotation, and search steps. For each step, relevant parameters are necessary depending on the queries used. For this experiment, we used as pre-processing a simple smoothing, which requires a \textit{window size} ($w_s$). The derivative connotation steps also required a specific threshold ($thr$). In addition, the \gls{bow} and \gls{tfidf} models can be built with different \textit{n-gram} sizes:
 
@@ -837,47 +831,40 @@ n-gram \in [1, 2, 3, 4, 5, 6]\\
 \end{gathered}
 \end{equation}
 
-The cross-validation step for hyperparameter tuning was performed differently depending on the size of the dataset. For datasets with more than one hundred signals, we performed a 10 fold stratified (K-SF) cross validation, while on datasets with less than one hundred signals, a leave one out (LOO) cross validation was performed instead. The \textit{K-SF} cross-validation step was chosen on larger datasets because of its higher computational speed performance in comparison with the \textit{LOO}. In shorter datasets, using the \textit{K-SF} would reduce the training set size too much, and, as recommended by \cite{ucr} for these datasets, we used the \textit{LOO} instead. We then selected the parameters set with best average cross-validation accuracies for each dataset and performed the test classification on the \textit{test} set, which signals were not used during the cross-validation step.
+The cross-validation step for hyperparameter tuning was performed differently depending on the size of the dataset. For datasets with more than one hundred signals, we performed a 10 fold stratified (K-SF) cross validation, while on datasets with less than one hundred signals, a leave one out (LOO) cross validation was performed instead. The \textit{K-SF} cross-validation step was chosen on larger datasets because of its higher computational speed performance in comparison with the \textit{LOO}. In shorter datasets, using the \textit{K-SF} would reduce the training set size too much, and, as recommended by \cite{ucr}, we used the \textit{LOO} instead. We then selected the parameters set with best average cross-validation accuracies for each dataset and performed the test classification on the \textit{test} set, which signals were not used during the cross-validation step.
 
-We performed this experiment with several strategies and combinations, namely: \gls{bow} with Baysian Classifier (BoW+NB), \gls{bow} with \gls{svm} (BoW+SVM), \gls{tfidf} with Baysian Classifier (TF-IDF+NB) and \gls{tfidf} with \gls{svm}. The summary of the performance is presented on Figures \ref{fig:cd_diagram1} and \ref{fig:cd_diagram2}.
+We performed this experiment with several strategies and combinations, namely: \gls{bow} with Baysian Classifier (BoW+NB), \gls{bow} with \gls{svm} (BoW+SVM), \gls{tfidf} with Baysian Classifier (TF-IDF+NB) and \gls{tfidf} with \gls{svm}. The summary of the performance is presented on Figures \ref{fig:critical_distances}.
 
 \begin{figure}
-	\begin{subfigure}{\linewidth}
-    	\centering
-    	\includegraphics[width=\linewidth]{cd_diagram.pdf}
-    	\caption{Critical distance diagram for the methods that rely in a textual representation of the time series (\gls{bow} and \gls{tfidf}) and euclidean distance for the optimized parameter search.}
-    \label{fig:cd_diagram1}
-    \end{subfigure}
-	\begin{subfigure}{\linewidth}
-    	\centering
-    	\includegraphics[width=\linewidth]{critical_distance_hearts.pdf}
-    	\caption{Critical distance diagram for the methods that rely in a textual representation of the time series (\gls{bow} and \gls{tfidf}) and euclidean distance for the 10 fold cross-validation process.}
-    	    \label{fig:cd_diagram2}
-    \end{subfigure}
-
+    \centering
+    \includegraphics[width=\linewidth]{hearts_CriticalDistanceDiagram.pdf}
+    \caption{Critical distance diagram for the methods that rely in a textual representation of the time series (\gls{bow} and \gls{tfidf}) and euclidean distance for the 10 fold cross-validation process.}
+    \label{fig:critical_distances}
 \end{figure}
 
-As can be seen, the strategies that rely on a \gls{svm} classifier are more robust. The \gls{tfidf} turns out to not be reliable when used with the Bayesian Classifier, which was expected since this type of classifier is purely probabilistic, which is why it works better with the \gls{bow}. On the other end, the \gls{tfidf} model works well with \gls{svm} classifiers, being the best method studied. We then compared it in more detail with the 1-NN \gls{ed} classifier, as presented in Figures \ref{fig:cd_diagram1}, \ref{fig:cd_diagram2} and \ref{fig:comparison_1}.
+The performance was measured for both the cross-validation step and the test step. The overall results can be found in Appendix \ref{appendix:tables_detailed}, Section \ref{subsec:hearts_all_accuracies}. As can be seen, the strategies that rely on a \gls{svm} classifier are more robust. The \gls{tfidf} turns out to not be reliable when used with the \gls{nb} classifier, which has much better results when the \gls{bow} model is used instead. On the other end, the \gls{tfidf} model works well with the linear \gls{svm} classifier, being the method with highest average accuracy.
 
-\begin{figure}[h]
+\begin{figure}
     \centering
-    \includegraphics[width=0.95\linewidth]{Hearts_results_2.pdf}
+    \includegraphics[width=0.95\linewidth]{hearts_methods_comparisons.pdf}
     \caption{right) Classification accuracies for the Bag of Synthatic Patterns in comparison with the euclidean distance combined with 1-NN classifier (1-NN ED) with standard train and test; left) with a 10 fold cross validation.}
     \label{fig:comparison_2}
 \end{figure}
 
-The average accuracy for the total 107 datasets is 79\% for \gls{hearts} and 71\% for the 1-NN ED. Special cases are highlighted on Figure \ref{fig:comparison_2}.right. These indicate that the proposed method works poorly in problems with a high number of classes (\textit{Phoneme-39, Adiac-37, PigAirwayPressure-52}, etc...), although some exceptions are found, such as in \textit{PigArtPressure}. Both \textit{Haptics} and \textit{InlineSkate} are badly classified in general by state of the art methods. Binary problems that rely in shapes well described with the derivative properties, such as \textit{ShapeletSim}, \textit{BirdChicken}, \textit{BeetleFly} and \textit{Trace}, are typically better classified.
-\par
-The same conclusions are confirmed on the 10 fold cross-validation (Figure \ref{fig:comparison_2}.left. Surprisingly, the proposed solution with a \gls{tfidf} and \gls{svm} classifier is very consistent with the previous results, even increasing to 80\% the average accuracy for all datasets. What also is surprising is the improvement of the 1-NN \gls{ed} method, which increased its accuracy to 75\% on average. The critical distance for this performance is now less evident (Figure \ref{fig:cd_diagram2}, but the proposed solution is the overall best method. Even when compared to the other methods, it is overall better in most datasets of the benchmark. The only method that competes is the \gls{bow} with an \gls{svm} classifier, which has a very similar performance (upright scheme of Figure \ref{fig:comparison_1}. 
+Figure \ref{fig:critical_distances} also shows that there is a significant distance in performance between the TFIDF+SVM model in comparison with the 1-NN\gls{ed} method during the cross-validation step. However this significance is not as expressive in the test step. All these remarks are also highlighted in Figure \ref{fig:comparison_2}, where both models (\gls{bow} and \gls{tfidf}) and classifiers (\gls{svm} and \gls{nb}) were compared (left and right, respectively).  When comparing both models (\gls{bow} and \gls{tfidf}), we see that the best performances are similar, with a slightly better accuracy achieved with the \gls{tfidf} model. In regard to using the \gls{svm} or the \gls{nb}, as mentioned previously, better results are achieve when using the \gls{svm} classifier, for both models (TFIDF on the left, and BOW on the right, of the right graphs).
 
-\begin{figure}[h]
+We are now in position to compare the best text-based method (\gls{hearts}) with the 1-NN \gls{ed} classifier. This result is presented in Figure \ref{fig:comparison_2}, for both cross-validation and test steps.
+
+\begin{figure}
     \centering
-    \includegraphics[width=0.95\linewidth]{Hearts_results_.pdf}
-    \caption{Classification accuracies for all experimented methods versus the accuracies of the \gls{tfidf} method with an \gls{svm} classifier.}
-    \label{fig:comparison_1}
+    \includegraphics[width=0.95\linewidth]{hearts_comparison_with_ED_MAIN.pdf}
+    \caption{right) Classification accuracies for the Bag of Synthatic Patterns in comparison with the euclidean distance combined with 1-NN classifier (1-NN ED) with standard train and test; left) with a 10 fold cross validation.}
+    \label{fig:ed_comparison}
 \end{figure}
 
-We wanted to answer two main research questions: (1) can we solve time series classification tasks based on its textual representation following traditional \textit{NLP} methods and (2) could we use the words that describe time series as a readable explanation of the data and the differences between classes. Having evidence that the first point is achieved, we will look into the second point.
+The average accuracy for the total 93 datasets is 81\%/76\% for \gls{hearts} (with 54/47 wins) and 76\%/74\% for the 1-NN ED (with 34/44 wins). Analysing the results in more detail, we find that \gls{hearts} works poorly in problems with a high number of classes (e.g. \textit{Phoneme}, with 39 classes). Both \textit{Haptics} and \textit{InlineSkate} are badly classified in general by state of the art methods, and \gls{hearts} has similar results. Binary problems that rely in shapes well described with the derivative properties, such as \textit{ShapeletSim}, \textit{BirdChicken}, and \textit{Trace}, are typically better classified. Other datasets, such as \textit{GunPoint} or \textit{Plane}, have a more comprehensible pattern extraction, with structures that can be better described with the \gls{ssts} queries used. The ability to perform the separation will be as good as the richness in the characterization of the classes and their differences. In datasets where the queries might identify a \texttt{peak} as something else, might affect negatively the ability of the classifier to correctly learn the dynamics of the signal.
+
+We wanted to answer two main research questions: (1) can we solve time series classification tasks based on its textual representation following traditional \textit{NLP} methods and (2) could we use the words that describe time series as a readable explanation of the data and the differences between classes. Having evidence that the first point is achieved, we will look into the second question.
 
 \subsection{Interpretable Data Outputs}
 
@@ -922,13 +909,14 @@ Regarding the \textit{ShapeletSim} dataset, the data has also two classes. In on
 
 \subsection{Discussion}
 \label{sec:discussion_hearts}
+
 In this section, we wanted to answer two main research questions: (1) can we solve time series classification tasks based on their textual representation following traditional \textit{NLP} methods, and (2) could we use the words that describe the time series to hint about differences between classes of time series. For this purpose, we applied the proposed method on the \textit{UCR} classification benchmark and highlighted several relevant use-cases and the overall results achieved.
 \par
-The results provide evidence that it is possible to compare time series based on a textual representation and use traditional text-mining strategies for it. Not only is it possible to compare the vectors of time series document with the cosine distance (as we have seen on Figure \ref{fig:distribution_dendogram}, but \gls{bow} or \gls{tfidf} models can be used with a linear \gls{svm} to solve classification tasks.
+The results provide evidence that it is possible to compare time series based on a textual representation and use traditional text-mining strategies for classification purposes. Not only is it possible to compare the vectors of time series documents with the cosine distance (as we have seen on Figure \ref{fig:distribution_dendogram}, but \gls{bow} or \gls{tfidf} models can be used with a linear \gls{svm} to solve classification tasks.
 \par
 Additionally, the fact that words are weighted based on their relevance to distinguish each time series document from all the others, it is possible to highlight the \textit{subsequences} of the time series corresponding to these words and understand which parts of the signal are more relevant, being a step forward into interpretability of time series. The limited examples were still simple and intuitive and the process turns harder to understand in more complex data. In these cases, it is hard to truly find meaningful differences and explain why these classes are different, especially with words. This limits the further interpretability potential of this method because the differences might not be perceptible by the naked eye. On one end, the performance can be improved using a richer and correct set of textual descriptors. We mean richer because the differentiation is as good as the description performed, and we mean correct because the translation process from the numerical domain to the text domain is not error-proof, which means that a mistranslation may occur and make the results worse. On the other end, the words used might not be capable of expressing the differences between classes. Many cases with high accuracies can be highlighted, but their interpretability falls short. For instance, for the dataset \textit{BeetleFly}, a binary classification problem. The method has 1 as accuracy, but does not show expressively the difference between classes.
 \par
-The textual representation is valuable in the sense that text mining domain knowledge can be used on time series. Nevertheless, we can profit from this knowledge as much as the translation of the time series into text is rich, valuable, and domain-specific. With the current set of \gls{ssts} queries we can make a limited description that works well in simple signals described mostly by their derivative dynamics. The keywords extracted for these time series still have limited readability being even harder for more complex examples. However, if more expressive queries are used to make a more robust translation, the keywords extracted can be more valuable and relatable to the time series we are looking at. Therefore, a more diverse set of queries should be used to make possible the extraction of more relevant keywords. At some point, a reduction and selection of the most relevant keywords should be made, as it is performed with feature selection and dimensionality reduction.
+The textual representation is valuable in the sense that text mining domain knowledge can be used on time series. Nevertheless, we can profit from this knowledge as much as the translation of the time series into text is rich, valuable, and domain-specific. With the current set of \gls{ssts} queries we can make a limited description that works well in simple signals described mostly by their derivative dynamics. The keywords extracted for these time series still have limited readability being even harder for more complex examples. However, if more expressive queries are used to make a more robust translation, the keywords extracted can be more valuable and relatable to the time series we are looking at. Therefore, a more diverse set of queries should be used to make possible the extraction of more relevant keywords. At some point, a reduction and selection of the most relevant keywords should be made.
 
 \section{Pattern Search with QuoTS}
 
@@ -999,7 +987,7 @@ The second example corresponds to the arrhythmia of type F, characterized by a h
 
 \subsubsection{Pattern search on multimodal signals}
 
-In addition to searching for specific shapes on signals, \gls{quots} can be very useful for exploratory purposes in multivariate datasets. For instance, consider the following examples on a dataset acquired with the purpose to identify workload on drivers \cite{hci_car_dataset}. In this experiment, drivers physiological signals, such as \gls{ecg} and \gls{scr}, were monitored. Exploring this dataset with \gls{quots} led to discovering several interesting occurrences, as shown in Figure \ref{fig:quots_car_physio}. In this Figure are signaled specific events with road signs. We matched these signs' positions by finding their \textit{latitude} and \textit{longitude} on the map and matching them with the instant in time these coordinates occur on the dataset. In addition to this information, we recall the common terms used for auto telemetry, namely: Surge - breaking (peak) and accelerating (valley); and Sway - turning right (peak) or left (valley).
+In addition to searching for specific shapes on signals, \gls{quots} can be very useful for exploratory purposes in multivariate datasets. For instance, consider the following examples on a dataset acquired with the purpose to identify workload on drivers \cite{hcilab}. In this experiment, drivers physiological signals, such as \gls{ecg} and \gls{scr}, were monitored. Exploring this dataset with \gls{quots} led to discovering several interesting occurrences, as shown in Figure \ref{fig:quots_car_physio}. In this Figure are signaled specific events with road signs. We matched these signs' positions by finding their \textit{latitude} and \textit{longitude} on the map and matching them with the instant in time these coordinates occur on the dataset. In addition to this information, we recall the common terms used for auto telemetry, namely: Surge - breaking (peak) and accelerating (valley); and Sway - turning right (peak) or left (valley).
 
 \begin{figure}[h]
 \centering
@@ -1049,6 +1037,8 @@ We added the puppet data and the word \texttt{3pointturn} to our vocabulary. Sea
 %
 %%For instance, before showing an example of the occupational domain, let us show the reader an example of Dataset 4.
 %%
+
+
 %%\begin{figure}
 %%    \centering
 %%    \includegraphics[width=\linewidth]{Clustering_real_difficult_timeseries.pdf}

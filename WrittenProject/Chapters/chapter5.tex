@@ -30,7 +30,7 @@ A short description of each dataset is provided in this Section, highlighting th
 \subsection{Dataset 1 - UCR Classification Benchmark}
 \label{sec:dat_ucr}
 \textbf{Description}\hfill\\
-The University of California Riverside (UCR) Time Series Archive was introduced in 2002 and is one of the most used benchmarks for time series data mining tasks, specially for classification. The datasets are diverse in terms of data type, data domain, difficulty, number of classes and dimensionality\cite{ucr}. Several \textit{python} distributions make it available to download. In this thesis, all UCR archive datasets from the \textit{pyts} distribution were used for classification tasks. These represent 107 datasets from 18 different data types (audio, devices, \gls{ecg}, \gls{eog}, \gls{eeg}, \gls{har}, etc...), which also are from many different domains, such as medical, financial, motion, entomology, etc...\cite{ucr}. The list of datasets can be found on the following link \cite{ucr_site} and in Appendix \ref{app:datasets}.\\
+The University of California Riverside (UCR) Time Series Archive was introduced in 2002 and is one of the most used benchmarks for time series data mining tasks, specially for classification. The datasets are diverse in terms of data type, data domain, difficulty, number of classes and dimensionality\cite{ucr}. Several \textit{python} distributions make it available to download. In this thesis, all UCR archive datasets from the \textit{pyts} distribution were used for classification tasks. These represent 107 datasets from 18 different data types (audio, devices, \gls{ecg}, \gls{eog}, \gls{eeg}, \gls{har}, etc...), which also are from many different domains, such as medical, financial, motion, entomology, etc...\cite{ucr}. The list of datasets can be found on the following link \cite{ucr_site}.\\
 \textbf{Purpose}\hfill\\
 The UCR-C dataset is the benchmark used to validate \gls{hearts} for the classification task. Several signals from this dataset are used as examples as well to demonstrate the usage of \gls{quots} in query-based search tasks.\\
 \textbf{Ground Truth}\hfill\\
@@ -183,16 +183,16 @@ This dataset was used for \gls{quots} in pattern search. For the example present
 \textbf{Ground Truth}\hfill \\
 The dataset is not originally labelled. In this work, the signals were explored with the \gls{quots} tool to search for relevant patterns that could be associated with relevant occurrences during the driving experience. Although the videos were not available, the GPS data was provided and could be used to match the position of the car with the physiological signals.
 
-\subsection{Dataset 12 - CSL-Share Dataset}
+\subsection{Dataset 11 - CSL-Share Dataset}
 \label{dat:dataset12}
 \textbf{Description} \hfill \\
-The CSL-SHARE (Cognitive Systems Lab Sensor-based Human Activity REcordings) has twenty two types of activities of daily living and sports recorded in tewnty subjects. It contains multimodal data with two triaxial \gls{acc}, two triaxial \gls{gyro}, four surface \gls{emg} sensors, one biaxial \gls{gonio}, and one airborne microphone integrated into a knee bandage \cite{share}. Seventeen activities were used for this purpose, which were the following: \textit{Sit}, \textit{Sit-to-Stand}, \textit{Stand}, \textit{Stand-to-Sit}, \textit{Stair-Up}, \textit{Stair-Down}, \textit{Walk}, \textit{Curve-Left-Step}, \textit{Curve-Left-Spin}, \textit{Curve-Right-Step}, \textit{Curve-Right-Spin}, \textit{Run}, \textit{V-Cut-Left}, \textit{V-Cut-Right}, \textit{Lateral-Shuffle-Left}, \textit{Lateral-Shuffle-Right}, \textit{Jump-One-Leg}, \textit{Jump-Two-Leg}.\\
+The CSL-SHARE (Cognitive Systems Lab Sensor-based Human Activity REcordings) has twenty two types of activities of daily living and sports recorded in tewnty subjects. It contains multimodal data with two triaxial \gls{acc}, two triaxial \gls{gyro}, four surface \gls{emg} sensors, one biaxial \gls{gonio}, and one airborne microphone integrated into a knee bandage \cite{dataset_hui}. Seventeen activities were used for this purpose, which were the following: \textit{Sit}, \textit{Sit-to-Stand}, \textit{Stand}, \textit{Stand-to-Sit}, \textit{Stair-Up}, \textit{Stair-Down}, \textit{Walk}, \textit{Curve-Left-Step}, \textit{Curve-Left-Spin}, \textit{Curve-Right-Step}, \textit{Curve-Right-Spin}, \textit{Run}, \textit{V-Cut-Left}, \textit{V-Cut-Right}, \textit{Lateral-Shuffle-Left}, \textit{Lateral-Shuffle-Right}, \textit{Jump-One-Leg}, \textit{Jump-Two-Leg}.\\
 \textbf{Purpose}\\
 Each activity was performed multiple times in one record. This dataset was used for the onset periodic segmentation of each activity for each record of each subject.\\
 \textbf{Ground Truth}\\
-A ground-truth squared signal was generated with a push-button during the acquisitions \cite{share}. The transitions between null and positive square wave indicate the onset and offset of the activity of a record. These transitions were used as the ground-truth.
+A ground-truth squared signal was generated with a push-button during the acquisitions \cite{dataset_hui}. The transitions between null and positive square wave indicate the onset and offset of the activity of a record. These transitions were used as the ground-truth.
 
-\subsection{Dataset 13 - EN3BLES}
+\subsection{Dataset 12 - EN3BLES}
 \label{dat:dataset13}
 \textbf{Description}\\
 The ENABL3S dataset contains bilateral \gls{emg} and motion data from inertial wearable sensors positioned on joints and limbs. Ten subjects participated in the recording, which involved freely transitioning between sitting, standing, and five walking-related activities. In total, 23 sensors were used (14 \gls{emg}, 4 \gls{gonio}, 5 \gls{imu}) and 52 channels (14 \gls{emg}, 8 \gls{gonio}, 30 \gls{imu} - 5 triaxial \gls{acc} + 5 triaxial \gls{gyro}) \cite{enables}.\\
@@ -201,14 +201,14 @@ The dataset was used for the segmentation of activities, made by finding the bre
 \textbf{Ground Truth}\\
 The labels of each activity were available for each dataset. The segmentation points used as ground truth are the transitions between labels.
 
-\subsection{Dataset 14 - Industrial Job Dataset}
+\subsection{Dataset 13 - Industrial Job Dataset}
 \label{dat:dataset_industry}
 \textbf{Description}\hfill \\
 A private dataset was acquired at \textit{Volkswagen Autoeuropa} in the context of this thesis, a master thesis from \cite{santos2019} and project \textit{OPERATOR}, in partnership with Fraunhofer AICOS. This dataset used a wearable system with inertial sensors to record direct measures that could be used to calculate the occupational exposure to risk factors of workers during work. The technologycal setting consisted of four 9-\gls{dof} \gls{imu} sensors (composed internally by a triaxial \gls{acc}, triaxial \gls{gyro} and triaxial \gls{mag}) and an Android wireless communication system, which was responsible to record and allocate the data \cite{santos2019}.
 \par
 The acquisition was made in a \textit{Volkswagen Industrial} assembly line where twelve manufacturing collaborators performed their tasks while having attached the system in their dominant upper body segment (back of hand, wrist, elbow and trunk). The data was recorded in three different workstations from the \textit{Bodyshop assembly line}, which is one section where the cars' doors are assembled. The three workstations are designated: 1) Liftgate workstation, where back doors are mounted; 2) Fender workstation, involving front door tasks and 3) Doors workstation, which demanded tasks on the front doors and in the cars' hood \cite{santos2019}. A total of six operators performed at least two different workstations. All recordings were filmed for posterior visual evaluation. The videos and signals were synchronized by a simultaneous event visible in both video and inertial signals. The event corresponds to a sequence of poses: 1) neutral anatomic position, 2) T pose, 3) return to neutral anatomic position, to finally 4) jump.
 
-The mentioned study was centered on the ergonomic assessment of the dominant arm. For this reason, the \gls{imu}s  were attached in: 1) the posterior side of the hand, 2) posterior side of the forearm and 3) posterior side of the arm and a final one 4) placed in the anterior side of the thorax area. All of the devices were attached with elastic bands, in such a way that all had their Y-axis pointed up while in a neutral anatomical position \cite{sara2019}. Additionally, a Smartphone was attached to the trunk of the collaborators as well, working as an additional \gls{imu}, from which the position of the arm in regards to the body posture was calculated.
+The mentioned study was centered on the ergonomic assessment of the dominant arm. For this reason, the \gls{imu}s  were attached in: 1) the posterior side of the hand, 2) posterior side of the forearm and 3) posterior side of the arm and a final one 4) placed in the anterior side of the thorax area. All of the devices were attached with elastic bands, in such a way that all had their Y-axis pointed up while in a neutral anatomical position \cite{santos2019}. Additionally, a Smartphone was attached to the trunk of the collaborators as well, working as an additional \gls{imu}, from which the position of the arm in regards to the body posture was calculated.
 
 Some important notes regarding exceptions found in sensors:
 \begin{enumerate}
@@ -223,7 +223,7 @@ This database was used to study the application of the algorithm to detect (1) W
 \textbf{Ground Truth}\hfill \\
 The data was annotated based on video inspection. For this, first, the data of each individual sensors had to be aligned based on the reference event visible in all signals (T pose and jump). Afterwards, the annotations on the signals were made based on the events recorded on the video considering the common synchronous event.
 
-\subsection{Dataset 15 - UCR Semantic Segmentation Benchmark}
+\subsection{Dataset 14 - UCR Semantic Segmentation Benchmark}
 \label{dat:dataset15}
 
 \textbf{Description}\\
