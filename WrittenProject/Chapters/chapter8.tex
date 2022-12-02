@@ -36,15 +36,15 @@ The second proposed method for pattern search in time series will be evaluated w
 
 In this section, we present several examples of how the novelty function (recall Section \ref{sec:novelty_search}, retrieved from the \gls{ssm}, is useful for the segmentation of time series. We also provide a measure of the algorithm's performance considering ground truth events from public benchmarks, while also comparing our proposed solution with existing methods for change point detection from the \textit{Turing Change Point Detection Benchmark} \cite{cpd_alan}.
 
-\subsubsection{Statistical Performance Evaluation}
+\subsubsection{Quantiative Evaluation Metrics}
 
-In order to evaluate the performance of our proposed method in general scenarios, we applied the algorithm to datasets 3, 4, 5, 6, 7 and 12 (see Sections \ref{dat:dataset3}, \ref{dat:dataset5},\ref{dat:dataset6},\ref{dat:dataset7}, \ref{dat:dataset8} and \ref{dat:dataset13}). The evaluation was divided into \textit{biosignals-related applications}, and the general change point detection benchmark (Dataset \ref{dat:dataset10}). The biosignals experiments are associated with public datasets from Physionet, the \textit{UCI Machine Learning Repository} and the \textit{UCR Semantic Segmentation Benchmark}, involving different contexts (\gls{har}, hand posture, and noise detection) and sensor types (\gls{acc}, \gls{gyro}, \gls{emg}, \gls{abp} and \gls{ecg}).
+In order to evaluate the performance of our proposed method in general scenarios, we applied the algorithm to Datasets 3, 4, 5, 6, 7 and 12 (\textit{HAR1}, \textit{WISDM}, \textit{EMG}, \textit{ECG1}, \textit{ECG2}, and \textit{ENABL3S}, see Sections \ref{dat:dataset3}, \ref{dat:dataset5},\ref{dat:dataset6},\ref{dat:dataset7}, \ref{dat:dataset8} and \ref{dat:dataset13}). The evaluation was divided into \textit{biosignals-related applications}, and the general change point detection benchmark (Dataset 9 - \textit{ATCPD}, see Section \ref{dat:dataset10}). The biosignals experiments are associated with public datasets from Physionet, the \textit{UCI Machine Learning Repository} and the \textit{UCR Semantic Segmentation Benchmark}, involving different contexts (\gls{har}, hand posture, and noise detection) and sensor types (\gls{acc}, \gls{gyro}, \gls{emg}, \gls{abp} and \gls{ecg}).
 
 The quantitative evaluation on biosignals' public datasets was made by accumulating true positive ($TP$), false positive ($FP$), and false negative ($FN$) values with a tolerance zone around the ground truth events. The applied reasonable tolerance was the ground truth wrapped by a window size of the \gls{ssm} computation, inside which a detected event was counted as a $TP$. The case that no estimated event was found inside the tolerance band was considered an $FN$. An estimated event outside the tolerance or duplicating to an already counted $TP$ were regarded as an $FP$. The F1-score based on the precision and recall values was calculated from $TP$, $FN$, and $FP$ values (recall definitions and equations from Section \ref{subsec:event_metrics}).
 
-In the evaluation of biosignal segmentation, the performance of our proposed method was compared with existing approaches available on the Python library \textit{ruptures}, namely the window-based segmentation ($WL$) and the binary segmentation ($BS$) \cite{review_2}. The benchmark evaluation referred to the best score obtained from the state-of-the-art methods available on repository  \cite{cpd_alan}. The evaluation procedure to detect $TP$, $FP$ and $FN$ was the one followed on \cite{cpd_alan}.
+In the evaluation of biosignal segmentation, the performance of our proposed method was compared with existing approaches available on the Python library \textit{ruptures}, namely the window-based segmentation ($WL$) and the binary segmentation ($BS$) \cite{review_2}. For these methods, we used the \textit{normal} cost function, which accounts for mean and variance changes. The benchmark evaluation referred to the best score obtained from the state-of-the-art methods available on repository  \cite{cpd_alan}. The evaluation procedure to detect $TP$, $FP$ and $FN$ was the one followed on \cite{cpd_alan}.
 
-The method has been computed in the same conditions and followed the same procedure for all datasets' records. The features used were the same for each record (see Appendix 1 - \ref{appendix:tables_detailed}), varying the timescale parameter, the overlap size of the sliding window, and the kernel size. The peak detection strategy based on a threshold mechanism is the same for all records, while the threshold value varies from record to record. Results for publicly available datasets are listed in Table \ref{tab:biosignals_results}, and Table \ref{tab:alanturing} expands the performance by F1-scores in detecting the change point events.
+The method has been computed in the same conditions and followed the same procedure for all datasets' records. The features used were the same for each record (see Appendix 2 - \ref{appendix:tables_detailed}), varying the timescale parameter, the overlap size of the sliding window, and the kernel size. The peak detection strategy based on a threshold mechanism is the same for all records, while the threshold value varies from record to record. Results for publicly available datasets are listed in Tables \ref{tab:biosignals_results} and \ref{tab:biosignals_results2}, and Table \ref{tab:alanturing} expands the performance by F1-scores in detecting the change point events from a benchmark.
 
 \begin{table}[H]
     \centering
@@ -56,35 +56,60 @@ The method has been computed in the same conditions and followed the same proced
           & \multicolumn{6}{c}{Novelty} & \multicolumn{6}{c}{WL} & \multicolumn{6}{c}{BS}\\
 \midrule
   Dataset &     TP &   FP &   FN &    P &    R &   F1 &     TP &    FP &    FN &    P &    R &   F1 &    TP &    FP &    FN &    P &    R &   F1\\
-\cmidrule(lr){2-7} \cmidrule(lr){8-13} \cmidrule(lr){14-19}
-1 &  166 &  16 &  13 &  0.91 &  0.93 &  0.92 &  169 &    9 &   10 &  0.95 &  0.94 &  0.95 &  125 &   58 &   54 &  0.68 &  0.70 &  0.69 \\
-2 &   18 &   2 &   0 &  0.90 &  1.00 &  0.95 &    9 &    5 &    9 &  0.64 &  0.50 &  0.56 &   13 &   14 &    5 &  0.48 &  0.72 &  0.58 \\
-3 &  137 &  39 &  31 &  0.78 &  0.82 &  0.80 &   92 &   88 &   76 &  0.51 &  0.55 &  0.53 &  122 &   58 &   46 &  0.68 &  0.73 &  0.70 \\
-4 &  695 &  68 &  33 &  0.91 &  0.95 &  0.93 &  608 &  123 &  120 &  0.83 &  0.84 &  0.83 &  351 &  413 &  377 &  0.46 &  0.48 &  0.47 \\
-5 &  3433 &  469.0 &  366 &  0.88 &  0.90 &  0.89 &  2941 &  327.0 &  858 &  0.90 &  0.77 &  0.83 &  2618 &  1322.0 &  1181 &  0.66 &  0.69 &  0.68 \\
-6 &   771 &  194.0 &  105 &  0.80 &  0.88 &  0.84 &   672 &  201.0 &  204 &  0.77 &  0.77 &  0.77 &   646 &   280.0 &   230 &  0.70 &  0.74 &  0.72 \\
+\cmidrule(lr){1-1} \cmidrule(lr){2-7} \cmidrule(lr){8-13} \cmidrule(lr){14-19}
+HAR1 &  166 &  16 &  13 &  0.91 &  0.93 &  0.92 &  169 &    9 &   10 &  0.95 &  0.94 &  0.95 &  125 &   58 &   54 &  0.68 &  0.70 &  0.69 \\
+WISDM &   771 &  194.0 &  105 &  0.80 &  0.88 &  0.84 &   672 &  201.0 &  204 &  0.77 &  0.77 &  0.77 &   646 &   280.0 &   230 &  0.70 &  0.74 &  0.72 \\
+ECG1 &   18 &    1.0 &    0 &  0.95 &  1.00 &  0.97 &    13 &    5.0 &    5 &  0.72 &  0.72 &  0.72 &    16 &     2.0 &     2 &  0.89 &  0.89 &  0.89 \\
+ECG2 &  155 &    9.0 &   13 &  0.95 &  0.92 &  0.93 &   139 &   13.0 &   29 &  0.91 &  0.83 &  0.87 &   122 &    58.0 &    46 &  0.68 &  0.73 &  0.70 \\
+EMG &  695 &  68 &  33 &  0.91 &  0.95 &  0.93 &  608 &  123 &  120 &  0.83 &  0.84 &  0.83 &  351 &  413 &  377 &  0.46 &  0.48 &  0.47 \\
+Enabl3s &  3433 &  469.0 &  366 &  0.88 &  0.90 &  0.89 &  2941 &  327.0 &  858 &  0.90 &  0.77 &  0.83 &  2618 &  1322.0 &  1181 &  0.66 &  0.69 &  0.68 \\
 \midrule
-M.A. F1 & - & - & - & - & - & 0.89 &-&-&-&-&- & 0.75 &-&-&-&-&-& 0.64\\
+M.A. F1 & - & - & - & - & - & 0.91 &-&-&-&-&- & 0.83 &-&-&-&-&-& 0.69\\
 \bottomrule
 \end{tabular}}
 \end{table}
 
-The illustrative examples provided in Section \ref{sec:use_cases_ssm} corroborate the proposed method's capability in segmenting real, complex, and multimodal biosignals datasets. As Table \ref{tab:biosignals_results} conveys, an overall macro-averaged 0.90 F1-score is achieved, while the competitors' overall F1-scores are 0.72 ($WL$), and 0.61 ($BS$), respectively.
-Tables \ref{tab:params_results_1}—\ref{tab:params_results_4} in Appendix \ref{appendix:tables_detailed} details the parameters of window sizes, kernel sizes, and thresholds applied to the signals in each dataset.
 
-For Datasets 3 and 5 (see Sections \ref{dat:dataset3} and \ref{dat:dataset6}), the window-based methods, \textit{novelty} and $WL$, performed much better than the $BS$ method, mainly because the sliding window algorithm with a full set of features comprehensively characterizes changes in the signal.
-The standard $WL$ uses cost functions searching for mean/variance value changes in the signal, which achieves a high F1-score in Dataset 3, even identifying transitions between dynamic activities, such as \textit{Walking}/\textit{Upstairs}.
+\begin{table}[H]
+    \centering
+    \caption{Results to summarize the comparison between the methods tested. In this table, each record of each dataset is counted for each method as a win, draw or loss. The count is made for each dataset and finally, for all datasets altogether (W|D|L).}
+    \label{tab:biosignals_results2}
+    \resizebox{\textwidth}{!}{%
+    \begin{tabular}{crrrrrrrrr}
+\toprule
+          & \multicolumn{3}{c}{Novelty} & \multicolumn{3}{c}{WL} & \multicolumn{3}{c}{BS}\\
+\midrule
+  Dataset &     Wins &   Draws &   Loses & Wins &   Draws &   Loses & Wins &   Draws &   Loses\\
+\cmidrule(lr){1-1} \cmidrule(lr){2-4} \cmidrule(lr){5-7} \cmidrule(lr){8-10}
+HAR1 &  0 &  0 &  2 &  2 &  0 &  0 &  0 & 0 & 2\\
+WISDM &  35 &  6 &  10 &  8 &  5 &  38 &  2 & 1 & 48\\
+ECG1 &   2 &   7 &   0 &  0 &  4 &  5 & 0 & 6 & 3\\
+ECG2 &  10 &  1 &  1 &  0 &  0 &  12 &   1 &   1 & 10 \\
+EMG &  31 &  2 &  3 &  3 &  2 &  31 &  0 &  0 &  36 \\
+Enabl3s &  320 & 52 & 104 & 100 & 47 & 329 & 3 & 7 & 466\\
+\midrule
+Overall W|D|L & 5 & 0 & 1 & 1 & 0 & 5 & 0 & 0 & 6\\
+\bottomrule
+\end{tabular}}
+\end{table}
+
+The illustrative examples provided in Section \ref{sec:use_cases_ssm} corroborate the proposed method's capability in segmenting real, complex, and multimodal biosignals datasets. As Tables \ref{tab:biosignals_results} and \ref{tab:biosignals_results2} convey, an overall macro-averaged 0.91 F1-score is achieved, while the competitors' overall F1-scores are 0.83 ($WL$), and 0.69 ($BS$), respectively, with the proposed method winning in 5 of the 6 datasets in the overall F1-score ranking. An online repository is also available where the Tables with detailed parameter usage is presented, namely the window sizes, kernel sizes, and thresholds.
+
+
+{\LARGE{PUT ALL OF THIS IN A GITHUB...OTHERWISE, TOO DIFFICULT AND REDUCE WITH SOME PLOTS OF THE DISTANCE}}
+
+For Datasets 3, 4, 5 and 12 (HAR, WISDM, EMG and Enabl3s, see Sections \ref{dat:dataset3}, \ref{dat:dataset4}, \ref{dat:dataset6} and \ref{dat:dataset13}), the window-based methods, \textit{novelty} and $WL$, performed much better than the $BS$ method, mainly because the sliding window algorithm with a full set of features comprehensively characterizes changes in the signal.
+The standard $WL$ uses cost functions searching for mean/variance value changes in the signal, which achieves a high F1-score in most of the datasets explored, even identifying transitions between dynamic activities, such as \textit{Walking}/\textit{Upstairs}.
 Our proposed method had a similar performance with a worse count in $FP$ values, where the added features did not improve the segmentation performance.
-In contrast, our proposed method, complemented by additional features, had a much better performance than the $WL$ method in Dataset 5.
-Adding features enabled a more robust and sensitive detection of pattern changes, although it missed some changes between similar patterns, like \textit{Walking} and \textit{Upstairs/Downstairs} in Dataset 3, which are the primary source of the $FN$ value.
-Similar to the $FN$ values, the $FP$ values of our proposed method are mostly superior to other methods. It nonetheless leaves room for discussion. Some events are not marked as changes in specific activities, but the signal pattern actually changes. For example, Figure \ref{fig:use_case1}(bottom) exposes pattern changes during an \textit{Upstairs}/\textit{Downstairs} activity unlabelled in the ground truth, possibly due to a flight of stairs. The novelty function is sensitive to such pattern changes, which inevitably contributes to the $FP$ values during the comparison with the ground truth.
-Considering the good performance of both methods, further research should be made in other \gls{har} domains to better understand the differences in performance between them.
+In contrast, our proposed method, complemented by additional features, had a much better performance than the $WL$ method in Datasets 4, 5 and 6 (WISDM, EMG and Enabl3s, see Sections \ref{dat:dataset5}, \ref{dat:dataset6} and \ref{dat:dataset13}), having a higher F1-score in a total of 35(/45), 31(/34) and 320(/423) records for each corresponding dataset.
+Adding features enabled a more robust and sensitive detection of pattern changes, although it missed some changes between similar patterns, like \textit{Walking} and \textit{Upstairs/Downstairs} in Dataset 3 (HAR1, see Section \ref{dat:dataset3}), which are the primary source of the $FN$ value.
+Similar to the $FN$ values, the $FP$ values of our proposed method are mostly superior to other methods. It nonetheless leaves room for discussion. Some events are not marked as changes in specific activities, but the signal pattern actually changes. For example, Figure \ref{fig:use_case1}(bottom) exposes pattern changes during an \textit{Upstairs}/\textit{Downstairs} activity unlabelled in the ground truth, possibly due to a flight of stairs. The novelty function is sensitive to such pattern changes, which inevitably contributes to the $FP$ values during the comparison with the ground truth. The higher count in $FP$ might also be caused by the peak search strategy. Being based on a simple threshold, it might detect more peaks that are not relevant. Another strategy should be considered for this step.
 
-For Dataset 7 (see Section \ref{dat:dataset8}) and, especially, Dataset 6 (see Section \ref{dat:dataset7}), the proposed method outperformed its competitors. Although \gls{ecg}-based jump artefact detection is fundamental, the $WL$ method could not find the segmentation borders, while the $BS$ method worked better. In Dataset 6 (see Section \ref{dat:dataset7}), the same \gls{ecg} signal was noised with different \gls{snr} levels to form a new set of resultant signals. Overall, our proposed method was able to detect the changes between noisy segments and clean segments with noise up to 18 dB. At 12 dB, the proposed method achieved an average F1-score of 0.84 with references of 0.43 ($WL$), and 0.69 ($BS$).
+For Dataset 6 and 7 (ECG2 and ECG1, see Sections \ref{dat:dataset7} and \ref{dat:dataset8}) the proposed method was also superior. Although \gls{ecg}-based jump artefact detection is fundamental, the $WL$ method could not find all the segmentation borders, while the $BS$ method worked better. In Dataset 6 (ECG2, see Section \ref{dat:dataset7}), the same \gls{ecg} signal was noised with different \gls{snr} levels to form a new set of resultant signals. Overall, our proposed method was able to detect the changes between noisy segments and clean segments with noise down to 12 dB. At 6 dB, the proposed method achieved an F1-score of 0.67 with references of 0.64 ($WL$), and 0.34 ($BS$).
 
 \subsubsection{Segmentation Benchmark}
 
-In order to compare the proposed method with other state-of-the-art approaches, we used a benchmark provided by the Alan Turing Institute \cite{cpd_alan} (Dataset 9). The performance was evaluated by change point event detection in each time series available, summarized in Figure \ref{fig:cdd_alant}, where each referenced method applied its best score in the benchmark (see Tables \ref{tab:alanturing} and \ref{tab:params_results_alanT}).
+In order to compare the proposed method with other state-of-the-art approaches, we used a benchmark provided by the Alan Turing Institute \cite{cpd_alan} (dataset 9). The performance was evaluated by change point event detection in each time series available, summarized in Figure \ref{fig:cdd_alant}, where each referenced method applied its best score in the benchmark (see Tables \ref{tab:alanturing} and \ref{tab:params_results_alanT}).
 
 \begin{table}
     \caption{Comparison of the F1-scores between our proposed method (\textit{novelty}) and other algorithms' benchmarks in Dataset 9 (see Section \ref{dat:dataset10}). The calculation of all one-dimensional signals' average performance and all signal's average performance does not include columns with a gray background where no change point should be detected, or a signal error was present. Bold values represent the best F1-score for this specific dataset.
@@ -190,6 +215,13 @@ In order to compare the proposed method with other state-of-the-art approaches, 
     \midrule
 
     \textbf{Average F1-measure (ALL)} & \textbf{0.871} & n.a. & n.a. & 0.855 & 0.604 & n.a. & 0.797 & 0.683 & n.a. & n.a. & 0.343 & n.a. & n.a. & n.a. & 0.61\\
+
+    \midrule
+    
+	\textbf{WINS (ALL)} & 16 & 0 & 2 & 2 & 0 & 0 & 3 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\
+    
+    \textbf{DRAWS (ALL)} & 6 & 9 & 8 & 11 & 1 & 6 & 8 & 4 & 9 & 1 & 0 & 3 & 8 & 2 & 0\\
+    \textbf{LOSES (ALL)} & 12 & 25 & 24 & 21 & 33 & 28 & 23 & 30 & 25 & 33 & 34 & 31 & 26 & 32 & 34\\
     \bottomrule
     \end{tabular}}
 \end{table}
@@ -201,7 +233,8 @@ In order to compare the proposed method with other state-of-the-art approaches, 
     \label{fig:cdd_alant}
 \end{figure}
 
-As unfolded in Figure \ref{fig:cdd_alant}, the critical distance diagram ranks the proposed method second, suggesting no significant difference in performance among methods that only work in uni-dimensional datasets. The global average F1 measure of the proposed method is 0.87 for both uni and multidimensional datasets. The two null scores are because no change point was supposed to be found in the corresponding time series. The results obtained in this benchmark restate that our proposed method is promising, having a performance that competes with several state-of-the-art methods in the problem of novelty segmentation. It should be stressed that the proposed method applies to multidimensional time series, while two of the best-ranked methods in Figure \ref{fig:cdd_alant} do not. In addition, the proposed method retrieves not solely segmentation points but also higher-level information as periodic changes and cross-segment similarity measures, which is an advantage over the \textit{BOCPD}.
+As unfolded in Figure \ref{fig:cdd_alant}, the critical distance diagram ranks the proposed method second, suggesting no significant difference in performance among methods that only work in uni-dimensional datasets. The global average F1 measure of the proposed method is 0.87 for both uni and multidimensional datasets, with a higher F1-score than all other methods in 16 of the 34 datasets. In contrast, the \textit{BOCPD} method had an overall of 2 wins against all other methods. 
+The two null scores are because no change point was supposed to be found in the corresponding time series. The results obtained in this benchmark restate that our proposed method is promising, having a performance that competes with several state-of-the-art methods in the problem of novelty segmentation. It should be stressed that the proposed method applies to multidimensional time series, while two of the best-ranked methods in Figure \ref{fig:cdd_alant} do not. In addition, the proposed method retrieves not solely segmentation points but also higher-level information as periodic changes and cross-segment similarity measures, which is an advantage over the \textit{BOCPD}.
 
 \subsubsection{Time Complexity}
 \label{sec:time_complexity}
@@ -224,7 +257,24 @@ Several parameters affect the detection results of desired patterns, especially 
 With enough computational resources available, the overlap percentage can be maximized so that the \gls{ssm} can mirror the full details. Admittedly, such an operation is not necessary for many real applications, but reduces the variables to facilitate other parameters' tuning experiments, which is one of our subsequent research topics.
 The computational resource, i.e., the memory bandwidth and the calculation time (see Section \ref{sec:time_complexity}) is a limitation in this current stage, since the \gls{ssm} increases exponentially with the increase in the time series size. We ascertained that downsampling the time series with a lower overlap percentage is a valid option, advanced by a hierarchical search strategy for addressing the memory limitation, as exemplified in the walking-series instance in Section \ref{sec:acc_har}. Another potential efficiency-enhancing solution is to only compute the \gls{ssm}'s central diagonal with the kernel size corresponding to the interest areas of segmentation borders, which obtains efficiency gains in exchange for the sacrifice of periodicity and similarity measures between \textit{subsequences}.
 
-%NEW HUI
+A reasonable intuition based on the understanding of signal characteristics should help configure the parameters mentioned above that are fundamental for computing the \gls{ssm} and the novelty function, as Figure \ref{fig:intuition} demonstrates a starter example for segmentation purposes. The upper part of Figure \ref{fig:intuition} draws different \gls{ssm}s on the same \gls{ecg} record (A) from Dataset 2 (ECG1, see Section \ref{dat:ecg1}) computed with sequentially larger window lengths from 0.01 to 2 seconds.
+The appropriate window length depends on the purpose of the search:
+
+\begin{itemize}
+    \item If a small window length, e.g., 0.05 seconds, is chosen, the novelty function will mostly detail changes within a heartbeat.
+    \item If opting for a window length approximately equal to the \gls{ecg}'s \textit{PQRS} complex, each transition between complexes will be projected.
+    \item If even larger windows are applied, e.g., 1 or 2 seconds, the jump artefact will be more significant on the \gls{ssm} and be spotlighted on the novelty function. Hence, in such a case, the window length of 1 second should be appropriate for segmenting clean versus noisy ECG signals.
+\end{itemize}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.75\linewidth]{explaining_changes_in_time_scale.pdf}
+    \caption{Illustrative example of window length intuition on records of Dataset 6 (ECG1, see Section \ref{dat:dataset7}). Top: different \gls{ssm}s on the same \gls{ecg} record A computed with sequentially larger window lengths from 0.01 to 2 seconds. The novelty functions are calculated with a kernel size equal to the window size and an overlap of 95\%. Bottom: The 1-second window length is further applied as an example to indicate that parameters turned in the representation experiments can be generalized to all other records of the same dataset (B-I) to compute their corresponding \gls{ssm} representations and novelty functions.}
+    \label{fig:intuition}
+\end{figure}
+
+When using the same window length on all the other records of the same dataset, the \gls{ssm} is expected to highlight the same regions of interest. Figure \ref{fig:intuition}(bottom) characterizes that parameters can be identical when working on the same data type and purpose, but the peak selection on the novelty function is not a matter of convention, which depends on the preset threshold.
+
 The threshold used to determine which peaks are considered as points of interest is not relevant to the \gls{ssm} calculations but closely related to event detection and automatic segmentation. If the data is a black box, the choice of threshold is a matter of observation and speculation. With informed knowledge of the data, the threshold can be predetermined and experimented with rules based on ranking the detected peaks from highest to lowest:
 
 \begin{itemize}
@@ -233,236 +283,14 @@ The threshold used to determine which peaks are considered as points of interest
     \item Add sliding windows to the novelty function based on the known periodicity information of the time series, and define the number of points of interest expected to be present in each window as the threshold.
 \end{itemize}
 
-
-
-
-
-
-
-
-%
-%\par
-%This section is divided into three main categories: (1) Validation in segmentation datasets, (2) comparison with state-of-the-art art methods, and (3) discussion of the results obtained.
-%
-%\subsubsection{Performance on Public Datasets}
-%
-%The datasets that were used to test and validate this method have categorized labels that were used to generate ground-truth events. These include different contexts (\gls{har}, Hand Posture, Noise Detection, etc...) and different types of data (Inertial data, \gls{emg} and \gls{ecg}).
-%\par
-%The method has been computed in the same conditions and by following the same procedure for all records of all datasets. The features used have been the same for each record, varying the time scale parameter, the overlap size of the sliding window, and the kernel size. The peak detection strategy was the same for all records, which is based on a threshold mechanism. The threshold value varied for each record. Results for publicly available datasets are presented in Tables \ref{tab:overall_cpd} and \ref{tab:overall_cpd_dist}. Table \ref{tab:overall_cpd} indicates the performance in detecting the change point events. Overall results for each time series of each dataset can be checked in Appendix \ref{app:tables_detailed}
-%
-%\begin{table*}
-%	\begin{center}
-%		\begin{tabular}{lccccccccc}
-%			\toprule
-%			Dataset & Signals & \# Ch & Task & TP & FP & FN & Prec (\%) & Rec (\%) & F1 (\%) \\
-%			\toprule
-%			Dataset 1 & ACC & 3 & HACP & 98 & 16 & 16 & 0.860 & 0.860 & 0.860 \\
-%			Dataset 2 & ACC-GYR & 6 & HACP & 157 & 18 & 22 & 0.897 & 0.877 & 0.887 \\
-%			Dataset 3 & ACC-GYR & 6 & HACP & 1378 & 313 & 263 & 0.815 & 0.840 & 0.827 \\
-%			Dataset 4 & ACC-GYR & 12 & HACP & 499 & 71 & 38 & 0.875 & 0.929 & 0.902 \\
-%			Dataset 5 & \gls{emg} & 8 & Act/Rel & 309 & 0 & 0 & 1.000 & 1.000 & 1.000 \\
-%			Dataset 6  & \gls{ecg} & 1 & Noise & 132 & 25 & 10 & 0.841 & 0.930 & 0.883 \\
-%			Dataset 7  & \gls{ecg} & 4 & Noise & 21 & 2 & 3 & 0.913 & 0.875 & 0.894 \\
-%			\midrule
-%			Total & N.A. & N.A. & N.A. & 2629 & 465 & 352 & 0.850 & 0.882 & 0.866 \\
-%			\bottomrule
-%		\end{tabular}
-%	\end{center}
-%	\caption{Overall results for the performance of the method on novelty segmentation. The dimension of the records is presented on the column \textit{\# Ch}, as well as the types of signals used and the task in which  applied (HACP - Human Activity Segmentation; Act/Rel - Activation/Relaxation of the \gls{emg} and Noise detection). The overall measures of Recall and Precision were micro-averaged.}
-%	\label{tab:overall_cpd}
-%\end{table*}
-%
-%
-%\begin{table}
-%	\begin{center}
-%        \begin{tabular}{lccc}
-%            \toprule
-%			Dataset & $T_s$ (s) & $MAE/T_s$ & $MsE/T_s$ \\
-%			\toprule
-%			Dataset 1 & 5 & 0.53 & -0.12 \\
-%			Dataset 2 & 10 & 0.29 & -0.07 \\
-%			Dataset 3 & 1 & 0.34 & -0.04 \\
-%			Dataset 4 & 25 & 0.23 & -0.00 \\
-%			Dataset 5 & 1 & 1 & -0.13 \\
-%			Dataset 6 & 10 & 0.12 & -0.09 \\
-%			Dataset 7 & 1 & 0.17 & -0.06 \\
-%			\midrule
-%			Average & N.A. & 0.32 & -0.07 \\
-%			\bottomrule
-%		\end{tabular}
-%	\end{center}
-%	\caption{Distance error as a ratio of the time scale ($T_s$) for the detected TP.}
-%	\label{tab:overall_cpd_dist}
-%\end{table}
-%
-%The results and the examples provided in the previous Chapter show that the proposed method has a good performance in detecting events, in real, complex, multivariate, and diverse datasets. The results are consistent, supporting that the proposed method is reliable to use in multiple types of data and different contexts.
-%\par
-%The method achieved an overall macro-averaged 85.0\% of Precision, 87.2\% of Recall, and an F1 measure of 86.1\%. Individually, the worst performance was found on Dataset 3, although all the Datasets accounted for similar results. A more comprehensive discussion on \textit{FN} and \textit{FP} will be presented in a further section. More details are also provided regarding the time discrepancies between ground truth and estimated events.
-%
-%\subsubsection{Comparison with SOA Methods}
-%
-%In order to compare the proposed method with state of the art approaches, we used a benchmark provided by the Alan Turing Institute \cite{cpd_alan}. The performance was evaluated by computing the proposed method to search for change point events in each of the time series available. The time scale and threshold values for peak detection were selected empirically and available in Table \ref{tab:app_ati_parameters}. The results are summarized in Table \ref{tab:alanturing} and Figure \ref{fig:cdd_alant}. Both cases show the F1 score. The performance considered for other methods was selected as the best score of each method available on the benchmark \cite{cpd_alan}.
-%
-%\begin{table*}[h!]
-%\begin{adjustbox}{width=\textwidth}
-%    \begin{tabular}{l|c|cccccccccccccc}
-%    Dataset & \textsc{Nova} & \textsc{amoc} & \textsc{binseg} & \textsc{bocpd} & \textsc{bocpdms} & \textsc{cpnp} & \textsc{ecp} & \textsc{kcpa} & \textsc{pelt} & \textsc{prophet} & \textsc{rbocpdms} & \textsc{rfpop} & \textsc{segneigh} & \textsc{wbs} & \textsc{zero}\\
-%    \hline
-%    \cellcolor{gray!100}\verb+bank+ & \cellcolor{gray!100}0 & \cellcolor{gray!100}\textbf{1.000} & \cellcolor{gray!100}\textbf{1.000} & \cellcolor{gray!100}\textbf{1.000} & \cellcolor{gray!100}0.500 & \cellcolor{gray!100}0.054 & \cellcolor{gray!100}0.200 & \cellcolor{gray!100}0.333 & \cellcolor{gray!100}0.400 & \cellcolor{gray!100}\textbf{1.000} & \cellcolor{gray!100}T & \cellcolor{gray!100}0.015 & \cellcolor{gray!100}\textbf{1.000} & \cellcolor{gray!100}0.043 & \cellcolor{gray!100}\textbf{1.000}\\
-%    \verb+bitcoin+ & \cellcolor{SeaGreen!04}\textbf{0.694} & 0.507 & 0.690 & 0.733 & 0.533 & 0.611 & 0.625 & 0.665 & 0.735 & 0.446 & T & 0.284 & 0.735 & 0.690 & 0.450\\
-%    \verb+brent_spot+ & \cellcolor{blue!20}\textbf{0.861} & 0.465 & 0.670 & 0.609 & 0.239 & 0.607 & 0.636 & 0.553 & 0.586 & 0.249 & T & 0.521 & 0.586 & 0.564 & 0.315\\
-%    \verb+businv+ & \cellcolor{blue!40}\textbf{0.927} & 0.588 & 0.588 & 0.588 & 0.455 & 0.386 & 0.370 & 0.294 & 0.490 & 0.275 & 0.370 & 0.261 & 0.588 & 0.289 & 0.588\\
-%    \verb+centralia+ & \cellcolor{SeaGreen!01}0.984 & 0.909 & \textbf{1.000} & \textbf{1.000} & \textbf{1.000} & \textbf{1.000} & 0.909 & \textbf{1.000} & \textbf{1.000} & 0.763 & 0.846 & \textbf{1.000} & \textbf{1.000} & 0.556 & 0.763\\
-%    \verb+children_per_woman+ & \cellcolor{blue!16}\textbf{0.879} & 0.678 & 0.663 & 0.712 & 0.405 & 0.344 & 0.551 & 0.525 & 0.637 & 0.310 & 0.504 & 0.246 & 0.637 & 0.500 & 0.507\\
-%    
-%    \verb+co2_canada+ & \cellcolor{SeaGreen!07}0.851 & 0.544 & 0.856 & \textbf{0.924} & 0.479 & 0.642 & 0.875 & 0.867 & 0.670 & 0.482 & 0.542 & 0.569 & 0.872 & 0.681 & 0.361\\
-%    
-%    \verb+construction+ & \cellcolor{blue!23}0.933 & 0.696 & 0.709 & 0.709 & 0.410 & 0.602 & 0.709 & 0.634 & 0.709 & 0.324 & 0.340 & 0.185 & 0.709 & 0.523 & 0.696\\
-%    
-%    \verb+debt_ireland+ & \cellcolor{SeaGreen!01}0.974 & 0.760 & \textbf{1.000} & \textbf{1.000} & 0.892 & 0.958 & 0.980 & \textbf{1.000} & \textbf{1.000} & 0.469 & 0.748 & 0.824 & \textbf{1.000} & 0.538 & 0.469\\
-%    
-%    \verb+gdp_argentina+ & \cellcolor{SeaGreen!02}\textbf{0.968} & 0.889 & 0.947 & 0.947 & 0.583 & 0.818 & 0.889 & 0.800 & 0.947 & 0.615 & 0.452 & 0.615 & 0.947 & 0.421 & 0.824\\
-%    
-%    \verb+gdp_croatia+ & \textbf{1.000} & \textbf{1.000} & 0.824 & \textbf{1.000} & 0.583 & \textbf{1.000} & 0.824 & 0.583 & 0.824 & 0.824 & 0.824 & 0.400 & 0.824 & 0.167 & 0.824\\
-%    
-%    \verb+gdp_iran+ & \cellcolor{SeaGreen!06}0.921 & 0.696 & 0.652 & 0.862 & 0.492 & 0.620 & 0.824 & 0.734 & 0.808 & 0.652 & 0.737 & 0.636 & 0.808 & 0.576 & 0.652\\
-%    
-%    \verb+gdp_japan+ & \textbf{1.000} & \textbf{1.000} & 0.889 & \textbf{1.000} & 0.615 & 0.667 & \textbf{1.000} & 0.500 & 0.889 & 0.889 & 0.889 & 0.222 & 0.889 & 0.222 & 0.889\\
-%    
-%    \verb+global_co2+ & \cellcolor{SeaGreen!30}0.625 & 0.929 & 0.929 & 0.889 & 0.458 & 0.667 & \textbf{0.929} & 0.667 & 0.929 & 0.463 & 0.547 & 0.293 & 0.929 & 0.250 & 0.846\\
-%    
-%    \verb+homeruns+ & \cellcolor{blue!10}\textbf{0.933} & 0.812 & 0.829 & 0.829 & 0.650 & 0.650 & 0.829 & 0.829 & 0.812 & 0.723 & 0.397 & 0.661 & 0.812 & 0.664 & 0.659\\
-%    
-%    \verb+iceland_tourism+ & \cellcolor{SeaGreen!40}0.652 & 0.947 & 0.947 & 0.947 & 0.486 & 0.391 & \textbf{1.000} & 0.486 & 0.643 & 0.220 & 0.667 & 0.200 & 0.947 & 0.200 & 0.947\\
-%    
-%    \verb+jfk_passengers+ & \cellcolor{blue!20}\textbf{0.978} & 0.776 & 0.776 & 0.776 & 0.650 & 0.602 & 0.651 & 0.437 & 0.776 & 0.354 & T & 0.491 & 0.776 & 0.437 & 0.723\\
-%    
-%    \verb+lga_passengers+ & \cellcolor{SeaGreen!01}0.885 & 0.561 & 0.620 & 0.704 & 0.563 & 0.606 & \textbf{0.892} & 0.526 & 0.537 & 0.366 & T & 0.592 & 0.537 & 0.674 & 0.535\\
-%    
-%    \cellcolor{gray!100}\verb+measles+ & \cellcolor{gray!100}0 & \cellcolor{gray!100}\textbf{0.947} & \cellcolor{gray!100}\textbf{0.947} & \cellcolor{gray!100}\textbf{0.947} & \cellcolor{gray!100}0.486 & \cellcolor{gray!100}0.118 & \cellcolor{gray!100}0.080 & \cellcolor{gray!100}0.281 & \cellcolor{gray!100}0.153 & \cellcolor{gray!100}0.391 & \cellcolor{gray!100}F/T & \cellcolor{gray!100}0.030 & \cellcolor{gray!100}\textbf{0.947} & \cellcolor{gray!100}0.041 & \cellcolor{gray!100}\textbf{0.947}\\
-%    
-%    \verb+nile+ & \textbf{1.000} & \textbf{1.000} & \textbf{1.000} & \textbf{1.000} & 0.800 & \textbf{1.000} & \textbf{1.000} & 0.824 & \textbf{1.000} & 0.824 & 0.667 & \textbf{1.000} & \textbf{1.000} & \textbf{1.000} & 0.824\\
-%    
-%    \verb+ozone+ & \cellcolor{SeaGreen!0}0.857 & 0.776 & 0.723 & 0.857 & 0.778 & 0.750 & \textbf{1.000} & 0.667 & \textbf{1.000} & 0.723 & 0.651 & 0.429 & \textbf{1.000} & 0.286 & 0.723\\
-%    
-%    \verb+quality_control_1+ & \textbf{1.000} & \textbf{1.000} & \textbf{1.000} & \textbf{1.000} & 0.667 & 0.667 & \textbf{1.000} & 0.667 & \textbf{1.000} & 0.500 & 0.286 & 0.667 & \textbf{1.000} & 0.667 & 0.667\\
-%    
-%    \verb+quality_control_2+ & \textbf{1.000} & \textbf{1.000} & \textbf{1.000} & \textbf{1.000} & 0.667 & \textbf{1.000} & \textbf{1.000} & \textbf{1.000} & \textbf{1.000} & 0.750 & .429 & \textbf{1.000} & \textbf{1.000} & \textbf{1.000} & 0.750\\
-%    
-%    \verb+quality_control_3+ & \textbf{1.000} & \textbf{1.000} & \textbf{1.000} & \textbf{1.000} & 0.766 & 0.571 & \textbf{1.000} & \textbf{1.000} & \textbf{1.000} & 0.667 & T & 0.800 & \textbf{1.000} & \textbf{1.000} & 0.667\\
-%    
-%    \verb+quality_control_4+ & \cellcolor{blue!10}0.974 & 0.810 & 0.873 & 0.787 & 0.561 & 0.658 & 0.726 & 0.658 & 0.780 & 0.780 & T & 0.241 & 0.780 & 0.608 & 0.780\\
-%    
-%    \cellcolor{gray!100}\verb+quality_control_5+ & \cellcolor{gray!100}0 & \cellcolor{gray!100}\textbf{1.000} & \cellcolor{gray!100}\textbf{1.000} & \cellcolor{gray!100}\textbf{1.000} & \cellcolor{gray!100}0.500 & \cellcolor{gray!100}\textbf{1.000} & \cellcolor{gray!100}\textbf{1.000} & \cellcolor{gray!100}\textbf{1.000} & \cellcolor{gray!100}\textbf{1.000} & \cellcolor{gray!100}\textbf{1.000} & \cellcolor{gray!100}0.500 & \cellcolor{gray!100}\textbf{1.000} & \cellcolor{gray!100}\textbf{1.000} & \cellcolor{gray!100}\textbf{1.000} & \cellcolor{gray!100}\textbf{1.000}\\
-%    
-%    \verb+rail_lines+ & \cellcolor{SeaGreen!06}\textbf{0.909} & 0.846 & 0.846 & 0.966 & 0.889 & 0.966 & {0.966} & 0.800 & 0.846 & 0.537 & 0.730 & 0.615 & 0.889 & 0.205 & 0.537\\
-%    
-%    \verb+ratner_stock+ & \cellcolor{blue!07}0.933 & 0.776 & 0.824 & 0.868 & 0.559 & 0.396 & 0.776 & 0.754 & 0.824 & 0.280 & T & 0.203 & 0.824 & 0.378 & 0.571\\
-%    
-%    \verb+robocalls+ & \cellcolor{blue!01}0.979 & 0.800 & 0.966 & 0.966 & 0.750 & 0.862 & 0.966 & 0.966 & 0.966 & 0.636 & 0.846 & 0.714 & 0.966 & 0.714 & 0.636\\
-%    
-%    \verb+scanline_126007+ & \cellcolor{SeaGreen!04}0.887 & 0.710 & 0.920 & \textbf{0.921} & 0.829 & 0.906 & 0.870 & 0.838 & 0.889 & 0.644 & T & 0.649 & 0.889 & 0.818 & 0.644\\
-%    
-%    \verb+scanline_42049+ & \cellcolor{blue!01}\textbf{0.977} & 0.485 & 0.879 & 0.962 & 0.889 & 0.713 & 0.910 & 0.908 & 0.910 & 0.269 & T & 0.460 & 0.910 & 0.650 & 0.276\\
-%    
-%    \verb+seatbelts+ & \cellcolor{SeaGreen!20}0.659 & 0.824 & \textbf{0.838} & 0.683 & 0.583 & 0.735 & 0.683 & 0.621 & 0.683 & 0.452 & 0.383 & 0.563 & 0.735 & 0.583 & 0.621\\
-%    
-%    \verb+shanghai_license+ & \cellcolor{blue!01}\textbf{0.979} & 0.966 & 0.868 & 0.868 & 0.605 & 0.600 & 0.868 & 0.465 & 0.868 & 0.532 & 0.389 & 0.357 & 0.868 & 0.385 & 0.636\\
-%    
-%    \cellcolor{gray!100}\verb+uk_coal_employ+ & \cellcolor{gray!100}F & \cellcolor{gray!100}F & \cellcolor{gray!100}F & \cellcolor{gray!100}F & \cellcolor{gray!100}0.617 & \cellcolor{gray!100}F & \cellcolor{gray!100}0.513 & \cellcolor{gray!100}0.513 & \cellcolor{gray!100}F & \cellcolor{gray!100}\textbf{0.639} & \cellcolor{gray!100}F & \cellcolor{gray!100}F & \cellcolor{gray!100}F & \cellcolor{gray!100}F & \cellcolor{gray!100}0.513\\
-%    
-%    \verb+unemployment_nl+ & \cellcolor{SeaGreen!07}0.820 & 0.742 & \textbf{0.889} & 0.876 & 0.592 & 0.747 & 0.755 & 0.744 & 0.788 & 0.566 & F/T & 0.628 & 0.788 & 0.801 & 0.566\\
-%    
-%    \verb+us_population+ & \cellcolor{SeaGreen!40}0.636 & \textbf{1.000} & 0.889 & \textbf{1.000} & 0.615 & 0.232 & 0.471 & 0.276 & 0.500 & 0.159 & T & 0.889 & 0.889 & 0.113 & 0.889\\
-%    
-%    \verb+usd_isk+ & \cellcolor{blue!20}0.914 & 0.785 & 0.704 & 0.785 & 0.678 & 0.674 & 0.785 & 0.601 & 0.657 & 0.489 & 0.510 & 0.462 & 0.678 & 0.636 & 0.489\\
-%    
-%    \verb+well_log+ & \cellcolor{SeaGreen!10}0.814 & 0.336 & 0.914 & 0.832 & 0.743 & 0.822 & \textbf{0.928} & 0.776 & 0.873 & 0.149 & T & 0.923 & 0.873 & 0.832 & 0.237\\
-%    
-%    \hline
-%    
-%    \verb+apple+ & \cellcolor{blue!03}\textbf{0.949} &  &  & 0.916 & 0.445 &  & 0.745 & 0.634 &  &  & F/T &  &  &  & 0.594\\
-%    
-%    \verb+bee_waggle_6+ & \cellcolor{SeaGreen!28}0.657 &  &  & \textbf{0.929} & 0.481 &  & 0.233 & 0.634 &  &  & 0.245 &  &  &  & \textbf{0.929}\\
-%    
-%    \verb+occupancy+ & \cellcolor{blue!02}0.953 &  &  & 0.919 & 0.735 &  & \textbf{0.932} & 0.812 &  &  & F/T &  &  &  & 0.341\\
-%    
-%    \verb+run_log+ & 0.994 &  &  & \textbf{1.000} & 0.469 &  & 0.990 & 0.909 &  &  & 0.380 &  &  &  & 0.446\\
-%    
-%    \bottomrule
-%    
-%    \textbf{Average F1-measure (1D)} & \cellcolor{blue!05}\textbf{0.845} & 0.739 & 0.798 & 0.822 & 0.596 & 0.651 & 0.784 & 0.657 & 0.766 & 0.482 & 0.354 & 0.517 & 0.797 & 0.517 & 0.599\\
-%    
-%    \bottomrule
-%    
-%    \textbf{Average F1-measure (ALL)} & \cellcolor{blue!05}\textbf{0.871} & n.a. & n.a. & 0.855 & 0.604 & n.a. & 0.797 & 0.683 & n.a. & n.a. & 0.343 & n.a. & n.a. & n.a. & 0.61
-%    \end{tabular}
-%\end{adjustbox}
-%    \caption{Comparison of performance between the proposed method (\textit{Nova}) and other algorithms. The colors indicate if the other algorithms were better (Green) or worse (Blue) in performance than the \textit{Nova} method for a specific dataset. Time series from \textit{apple}, \textit{bee\_waggle\_6}, \textit{occupancy} and \textit{run\_log} are multivariate. The average results are grouped on the last row. Averages did not considered the gray columns, since these would imply that no change point should be detected, or an error on the signal was present. \textit{T} appears when the method timedout, \textit{M} and \textit{F} when the method failed in compiling}.
-%    \label{tab:alanturing}
-%\end{table*}
-%
-%As presented in Figure \ref{fig:cdd_alant}, the critical distance diagram ranks the proposed method in the top four, without a significant difference in performance (considering methods that only work in uni-dimensional datasets). The average F1 measure is 79.6\% for both uni and multi-dimensional datasets. Two of the F1 measures are null because, in these two time series, no change point was supposed to be found, but the proposed method is not yet prepared to return no results. 
-%\par
-%The results obtained in this benchmark demonstrate that this method is promising, having a performance that competes with several state-of-the-art methods in the problem of novelty segmentation. We highlight that the proposed method applies to multi-dimensional time series, while two of the best ranked methods in Figure \ref{fig:cdd_alant} are not. In addition, this method is not solely focused on retrieving segmentation points, but also provides additional layers of information, namely periodic changes and the level of similarity between segments, which is an advantage over the \textit{BOCPD}.
-%
-%\begin{figure}
-%    \centering
-%    \includegraphics[width=\linewidth]{critical_distance_novelty.pdf}
-%    \caption{Critical distance diagram comparing the methods used in \cite{cpd_alan} (except \textit{RBOCPDMS}) and the \textit{novelty function} (\textit{nova} - highlighted in SeaGreen). The performance measure corresponds to the F1-score for all single-dimension datasets of the benchmark (except the ones highlighted in gray in Figure \ref{tab:alanturing}).}
-%    \label{fig:cdd_alant}
-%\end{figure}
-%
-%\subsubsection{Insights on FN and FP}
-%
-%In this section, we present a more comprehensive discussion regarding the \textit{FN} and \textit{FP} counts. Regarding \textit{FP} counts, these were found in several datasets to be mostly associated with changes on the signal that were not labeled. Since our proposed approach is \textit{unsupervised}, most changes that appear significant will be detected, even if not explicitly labeled. This is visible, for example, in Figure \ref{fig:use_case1}, where the subject was climbing stairs but something happened during the acquisition that makes the signal change dramatically. We found the same type of mislabeled data on Datasets 2, 3, and 4, with Dataset 3 having the worst rate of \textit{FP}. Specifically, in this case, part of these \textit{FP} were due to subsequences that were not annotated, for instance, in Figure \ref{fig:har1_dataset} we highlighted in light yellow areas where something happened but no label is given. As most of these datasets were used for classification purposes, some labels were not given, but our method, being unsupervised and not focused on classification tasks, can find these occurrences. The method also has a worse rate of \textit{FN} for this dataset. We can explain these by the difficulty of the method in finding the labeled transitions between static positions (sit-to-stand, stand-to-sit, stand-to-laying, etc...). The method was able to find these as one segment but was not able to find the start and end of each of these transitions, as it was labeled. Detecting the start and end of these would require smaller window sizes.
-%\par
-%For datasets with categorized events, which are a transition between one categorized \textit{subsequence} to another, we can evaluate from which categories the events were missed. Then, identify if specific types of events were the cause of the \textit{FN} count rate. Figure \ref{fig:fn_dataset2} indicates the F1-score of the \textit{nova} function in detecting the different transition categories of events using the color and size of circles associated with each event category. The activities before and after change point events are sorted in columns. Each row is associated with a specific event category and corresponding circle, which color indicates the detection's accuracy, while the size indicates the percentage of events associated with the corresponding event category.
-%
-%%\begin{wrapfigure}{r}{0.5\linewidth}
-%%    \centering
-%%    \includegraphics[width=\linewidth]{FN_example.pdf}
-%%    \caption{F1-score in detecting each of the categories of event transition from Dataset 2. \textbf{Pre CP} - activity performed before the change point event; \textbf{Pos CP} - activity performed after the change point. The performance in detecting each transition is showed by the circles color.}
-%%    \label{fig:fn_dataset2}
-%%\end{wrapfigure}
-%
-%As the results illustrated in Figure \ref{fig:fn_dataset2}, the F1-score is lower in cases of activities with similar characteristics on time series. In this case, the transition between $Walking \xrightarrow[]{} Walking Upstairs$ has the lowest accuracy rate. However, transitions between $Walking \xrightarrow[]{} Walking up/downstairs$, as well as transitions between $Sitting \xrightarrow[]{} Standing$, are more difficult to detect. These results are supported by Figure \ref{fig:fn_dataset2}, where peaks in the \textit{nova} function are smaller for these transitions. Although a significant portion of these events have been missed, the problem is not necessarily that the \gls{ssm} has not the checkerboard pattern. In these cases, these more subtle changes were overshadowed by very significant changes, such as $Walking \xrightarrow[]{} Standing$. Nevertheless, a re-normalization of the \gls{ssm} segment of interest can help better visualize the differences that were initially hidden. 
-%\par
-%An example of the enhancement process is better seen on Figure \ref{fig:example1_zoom} from Chapter \ref{cha:segmentation}. The block $A$ is highlighted, showing clearly the three modes of the time series. Now that we only focus on that segment, we can perceive these transitions. This example demonstrates that this tool has the potential of enhancing the detection of several transitions in a hierarchical process by re-normalizing segments of an initial segmentation. This would come without a significant extra computational cost since these measures of the \gls{ssm} are already computed. Nevertheless, there is the potential of finding extra undesired events depending on the threshold level.
-%
-%\subsubsection{Comparisons to Related Work}
-%
-%We will now look for specific datasets from the \textit{TCPD} benchmark that should be highlighted considering the results obtained. In Table \ref{tab:alanturing}, we notice that datasets, such as \textit{global\_co2}, \textit{iceland\_tourism}, \textit{lga\_passenger} and \textit{us\_population}, have a lower score when compared to the best methods. In the other end, the proposed method was better than the best methods in datasets \textit{bitcoin}, \textit{brent\_spot}, \textit{busivn} and \textit{jfk\_passenger}. From these results, we notice that the proposed method is more fragile when events occur as a slight change in the trend of a signal, such as the case of \textit{global\_co2} or \textit{us\_population} records, while it is better for more significant changes in a pattern, amplitude or other property.
-%\par
-%The results show that this method is highly competitive in performing event detection in time series, with high performance scores in real-world datasets. From all methods tested in the \textit{TCPD benchmark}, only the \textit{BOCPD} method was able to obtain similar results (Figure \ref{fig:cdd_alant} and Table \ref{tab:alanturing}), considering also multidimensional datasets, but it does so with an optimization of many parameters. The proposed method is being computed with several parameters as well but has the potential to accept only one.
-%\par
-%One of the other great advantages of the proposed method is that it also provides rich visual feedback, which can be perfect to support the analyst in interpreting a time series. The content of the \gls{ssm} goes beyond change point detection, providing relevant information about periodicity and similarity.
-%
-%\subsubsection{Effects of Window Size and Overlap}
-%
-%Several parameters affect the ability to detect the desired patterns. These are the window size, the overlap percentage, and the kernel size. Although in this work we used all three parameters, these can potentially be combined into a single one. We only considered entry parameters on the method that affect the visual output and novelty function. We do not consider the parameters for the threshold-based peak strategy used.
-%\par
-%These parameters can be explained with the analogy of a camera. The window size works like the \textit{zoom function}, defining the scale of interest in the time series. Larger windows correspond to lower \textit{zoom values} and will compute the similarity of larger \textit{subsequences}, while smaller windows are like a \textit{zoom-in} function on the time series, searching for any small detail that might be a change. The overlap percentage is the \textit{camera sensor}, which defines the pixel resolution of the image and works as a downsampler of the time series. A full resolution of the \gls{ssm} is only achieved with total overlap, and the lower the overlap percentage, the less accurate are the highlighted changes.
-%\par
-%These two parameters are fundamental for the success of the event detection process. This is most evident in some of the datasets where we applied the proposed method, since the larger the time scale used, the larger the \gls{mae} in the detected events. For instance, in \textit{Dataset 4}, the time series are very large (3 minutes for each of the 18 activities, at 20 Hz), which due to computation time and memory allocation constraints, we used a larger time window with a lower overlap percentage. The result was an increase in the \gls{mae}. Still, this error was also affected by delays in the ground truth, as explained in the previous section.
-%\par
-%On the other hand, the sliding kernel computes the sharpness of the changes detected with the novelty function. The larger it is, the smoother will be the resulting function. Potentially, even with a small decrease in accuracy, the kernel size could be calculated as a ratio of the window size. The overlap percentage should be maximized and based on the memory available to perform the \gls{ssm} computation. With this, we could define the window size as the sole parameter of this algorithm.
-%\par
-%In addition to this, there is the fact that the parameters can be configured for the type of problem and dataset. For instance, looking at the detailed tables presented in Appendix \ref{app:tables_detailed}, the window size and overlap size are in most cases the same for the same dataset, while the kernel size varies in the same order of values.
-%\par
-%In terms of computation time, the algorithm performs (1) a sliding window to extract features, which is \textit{O(n)} complexity and (2) performs the dot product between matrices, which is traditionally \textit{O($m^2n$)} (recall that \textit{r} is the number of features and \textit{n} is the size of the inputted signal). Finally, the correlation of a kernel on the \gls{ssm}'s diagonal has a complexity of $O(nM^2)$ (recall that $M=2L+1$, being the size of the sliding kernel).
-%\par
-%The memory bandwidth is a drawback in this current stage since the \gls{ssm} increases exponentially with the increase in the time series size. We showed that downsampling the time series with a lower overlap percentage is a valid option, while also pursuing a hierarchical search strategy (\textit{recall the example of walking patterns}) can help in searching for the events in multiple steps, reducing the memory limitation. Another potential solution is the computation of only the central diagonal of the \gls{ssm} with the size of the kernel, which corresponds to the area of interest to detect segmentation points. This procedure would reduce the broad applications that the \gls{ssm} can provide, namely the periodic segmentation and the similarity measure between \textit{subsequences}.
-
 \subsection{Periodic and Query-based Segmentation}
 
-
-\begin{figure}
+\begin{wrapfigure}{l}{0.5\linewidth}
 \centering
-\includegraphics[width=0.75\linewidth]{periodic_detection_example.pdf}
-\caption{Computing the \gls{ssm} of the periodic signal from subject 1, activity 0 (see Section \ref{dat:dataset12}). The ground truth is showed in orange (the first signal). The similarity function and distance profile from the query-based search are showed below the \gls{ssm}. The \gls{ssm} was computed with a window size of 5290 samples, and an overlap of 85\%.}
+\includegraphics[width=\linewidth]{periodic_detection_example.pdf}
+\caption{Computing the \gls{ssm} of the periodic signal from subject 1, activity 0 (see Section \ref{dat:dataset12}). The ground truth is shown in orange (the first signal). The similarity function and distance profile from the query-based search are showed below the \gls{ssm}. The \gls{ssm} was computed with a window size of 5290 samples, and an overlap of 85\%.}
 \label{fig:periodic_detection}
-\end{figure}
+\end{wrapfigure}
 
 The detection of periods onset was experimented on dataset 11 (see Section \ref{dat:dataset12}). It is a database with exclusively periodic data of activity signals. Twenty participant performed seventeen different activities, which are recorded in a multimodal time series. We exemplify the usage of a periodic search with the similarity function and the query-based segmentation on the \gls{ssm}. These experiments were evaluated based on ground-truth annotations of a push-button from the dataset, with the metrics previously explained (see Section \ref{subsec:event_metrics}). The ground truth indicates the onset of the activity. Results are presented in Table \ref{tab:periodic_results}.
 
@@ -512,7 +340,7 @@ It is also important to mention that this problem is not particularly complex fo
 
 The current information era, in conjunction with technological developments, is promoting a shift in the way industries and companies manage and perform their work. With the inclusion of sensing devices, dashboards and machine learning algorithms, many tasks can be better evaluated with direct quantitative measures. This can be made for machines to prevent breakdowns and optimize their performance, but can also be used for humans, specially to evaluate their occupational health, and prevent work-related disorders. This prevention implies a specialized intervention to perform changes in the workplace, the collaborator's training process and/or other organizational strategies. The process of deciding a need for intervention implies a previous risk evaluation of the collaborator's or team's routines. However, before the actual ergonomic risk evaluation, a considerable number of steps in preparing the data are needed. 
 
-As we mentioned in Section \ref{sub:context2}, data preparation is an important part of any analysis or task that requires further deployment in supervised methods, namely the time-consuming segmentation and labelling processes. Hence, tools capable of segmenting time series to support and ease the labelling process of motion and posture data are highly valued and highly necessary for the risk analysis and the deployment of semi-supervised and/or supervised methods. In this case, motion data in real scenarios are even more complex since it is highly rich and diverse in behaviours. For instance, although cyclic and repetitive activities performed in industrial scenarios are mostly consistent from cycle to cycle, perfect conditions cannot be met all the time. Eventually, the working process can inadvertently be stopped or delayed. In addition, ergonomic risk assessment methods have to analyze each working cycle, which means that a previous segmentation of each one of these instances has to be made. Sub-activities that make the sequence of actions comprehended in the working cycle can also be sub-segmented for further recognition and association with risk measures. For instance, the \textit{ergonomist} might have an interest in understanding which actions from the working cycle have a significant association with a high or low risk measure, and adapt the working station with intervention strategies that could help prevent future disorders. 
+As we mentioned in Section \ref{sub:context2}, data preparation is an important part of any analysis or task that requires further deployment in supervised methods, namely the time-consuming segmentation and labelling processes. Hence, tools capable of segmenting time series to support and ease the labelling process of motion and posture data are highly valued and highly necessary for the risk analysis and the deployment of semi-supervised and/or supervised methods. In this case, motion data in real scenarios are even more complex since it is highly rich and diverse in behaviours. For instance, although cyclic and repetitive activities performed in industrial scenarios are mostly consistent from cycle to cycle, perfect conditions cannot be met all the time. Eventually, the working process can inadvertently be stopped or delayed. In addition, ergonomic risk assessment methods have to analyse each working cycle, which means that a previous segmentation of each one of these instances has to be made. Sub-activities that make the sequence of actions comprehended in the working cycle can also be sub-segmented for further recognition and association with risk measures. For instance, the \textit{ergonomist} might have an interest in understanding which actions from the working cycle have a significant association with a high or low risk measure, and adapt the working station with intervention strategies that could help prevent future disorders. 
 
 In this Section, we explore a few examples in using the \gls{ssm} for information retrieval in occupational motion data of collaborators performing specific workstations. The data was recorded at the \textit{Autoeuropa Volkswagen} production line in cooperation with this thesis (dataset 13 - see Section \ref{dat:dataset_industry}). The information provided by the \gls{ssm} supports the analysit in identifying the following events: 
 
@@ -529,17 +357,17 @@ In this Section, we explore a few examples in using the \gls{ssm} for informatio
 \subsubsection{Novelty and Periodic Segmentation in Occupational Data}
 
 \begin{figure}
-  \centering
-      \includegraphics[width=0.85\textwidth]{AE_example1.pdf}
-  \caption{Illustrative example that shows how to use the \gls{ssm} for information retrieval in motion data of occupational scenarios. A set of signals, presented as \textit{Acc X, Y} and \textit{Gyr Z} show a sample of the data used (Acc is the \gls{acc} and Gyr is the \gls{gyro} data). The data from the wrist and elbow were used for this analysis. The segments are illustrated and labelled below the \gls{ssm} with \textit{\textbf{P} - interruption/pause in the production line}, \textit{\textbf{A} - active working period}, and \textit{\textbf{C} - working cycle}. The novelty and similarity functions are presented to show the match with the segmentation labels.}
+ \begin{subfigure}{0.45\linewidth}
+      \includegraphics[width=\textwidth]{AE_example1.pdf}
+  \caption{}
   \label{fig:ae_example1}
-\end{figure}
-
-\begin{figure}
-  \centering
-      \includegraphics[width=0.85\textwidth]{AE_example2.pdf}
-  \caption{Illustrative example that shows how to use the \gls{ssm} for information retrieval in motion data of occupational scenarios. A set of signals, presented as \textit{Acc X, Y} and \textit{Gyr Z} show a sample of the data used (Acc is the \gls{acc} and Gyr is the \gls{gyro} data). The data from the wrist and elbow were used for this analysis. The segments are illustrated and labelled below the \gls{ssm} with \textit{\textbf{P} - interruption/pause in the production line}, \textit{\textbf{A} - active working period for workstation 1} and \textit{\textbf{C} - working cycle, and \textbf{B} - active working period for workstation 2 and \textbf{D} - working cycle}. The novelty and similarity functions are presented to show the match with the segmentation.}
+ \end{subfigure}
+ \begin{subfigure}{0.45\linewidth}
+      \includegraphics[width=\textwidth]{AE_example2.pdf}
+  \caption{}
   \label{fig:ae_example2}
+  \end{subfigure}
+\caption{Illustrative examples that show how to use the \gls{ssm} for information retrieval in motion data of occupational scenarios. In both figures, a set of signals, presented as \textit{Acc X, Y} and \textit{Gyr Z} show a sample of the data used (Acc is the \gls{acc} and Gyr is the \gls{gyro} data). The data from the wrist and elbow were used for this analysis. The segments are illustrated and labelled below the \gls{ssm} with \textit{\textbf{P} - interruption/pause in the production line}, \textit{\textbf{A} - active working period}, \textit{\textbf{C} - working cycle}, \textit{\textbf{B} - active working period for workstation 2} and \textit{\textbf{D} - working cycle 2}. The novelty and similarity functions are presented to show the match with the segmentation labels. In (a), the signal represent a collaborator performing one workstation with interruptions, while in (b) a collaborator working in two different workstations.}
 \end{figure}
 
 In Figures \ref{fig:ae_example1} and \ref{fig:ae_example2} we present two different examples of data acquired while the collaborators. In Figure \ref{fig:ae_example1}, collaborator 1 was performing the cyclic task 1, while in Figure \ref{fig:ae_example2}, collaborator 2 was performing two different tasks (1 and 2). It is clear in both Figures that the \gls{ssm} provides a visual feedback that highlights moments where the signal change (\textit{blocks}), as well as where cycles occur (\textit{paths}). In the first case, the collaborator waited (\textbf{P}) to start the task (\textbf{A}), up until the collaborator was interrupted several times by a stoppage on the production line to then continue his/her tasks. The novelty function is able to detect all of these main transitions, while the similarity function highlights where the working cycles (\textbf{C}) are.
@@ -599,11 +427,11 @@ The signal is initially pre-processed to ease the identification of the subject'
 \par
 The string is a sequence of primitives composed of two connotation methods (\textbf{A} in blue, \textbf{D1} in red). Based on these methods, the samples of the signal with amplitudes greater than \textit{40}\% of the range amplitude are transcribed into $1$, while the remaining turn into $0$; the slopes are converted into $p$, $z$ and $n$, when rising, being stationary and falling, respectively.
 \par
-The solution involves detecting each minimum with an amplitude inferior to the threshold level. The morphological representation of a minimum can be reduced to a negative slope followed by a positive one, which in the symbolic representation is defined by the second connotation method as the transition from \texttt{n} to \texttt{p} or \texttt{z} to \texttt{p}. Regarding the amplitude requirement, it is assigned by the first connotation method, in which any value lower than the threshold level is \texttt{0}. The regular expression used to find this minimum was \texttt{0z0p}, which implies that: (1) the amplitude has to be \texttt{0}; and (2) the derivative is \texttt{z} and then \texttt{p}. The detection is highlighted in green in the last plot of Fig. \ref{fig:Exercise2}.
+The solution involves detecting each minimum with an amplitude inferior to the threshold level. The morphological representation of a minimum can be reduced to a negative slope followed by a positive one, which in the symbolic representation is defined by the second connotation method as the transition from \texttt{n} to \texttt{p} or \texttt{z} to \texttt{p}. Regarding the amplitude requirement, it is assigned by the first connotation method, in which any value lower than the threshold level is \texttt{0}. The \gls{regex} used to find this minimum was \texttt{0z0p}, which implies that: (1) the amplitude has to be \texttt{0}; and (2) the derivative is \texttt{z} and then \texttt{p}. The detection is highlighted in green in the last plot of Fig. \ref{fig:Exercise2}.
 
 \subsubsection{Example 3 - Dicrotic notch detection in ABP signals}
 
-The \gls{abp} waves are morphologically represented by a high positive slope that corresponds to the systolic uptake and ends at the peak of the systolic pressure. After this behavior, follows the systolic decline, which ends with the aortic valve closure, named the \textit{dicrotic notch} in the signal representation~\cite{abpSignal}.
+The \gls{abp} waves are morphologically represented by a high positive slope that corresponds to the systolic uptake and ends at the peak of the systolic pressure. After this behaviour, follows the systolic decline, which ends with the aortic valve closure, named the \textit{dicrotic notch} in the signal representation~\cite{abpSignal}.
 \par
 These types of signals are commonly affected by low-frequency noise that modulates the signal and is contaminated with high-frequency noise of low amplitude. The typical procedure is to bandpass the \gls{abp} signal to remove both types of noise. Fig. \ref{fig:Exercise3} depicts how a band pass filter that cuts frequencies under 1 Hz and above 20 Hz (BP) is applied to the signal to remove both types of noise. The modulation removal is shown with the linear regression in both original and pre-processed signals, which in the first case has a positive slope and after the pre-processing is approximately zero.
 
@@ -616,10 +444,10 @@ These types of signals are commonly affected by low-frequency noise that modulat
 
 In the symbolic connotation step, the reasoning follows the signal morphological description and uses two methods for the symbolic representation. The first, AD (represented in blue), detects all rising and falling slopes that are higher than a specific threshold (in this case 30\% of the amplitude range of the signal) and transcribes the sample values to \texttt{1}, while the remaining values are converted to $0$. The second method (represented in red) uses the derivative, as mentioned in the previous examples.
 \par
-The first connotation method is necessary to distinguish between the rising slope that occurs at the beginning of the pressure wave and the one after the \textit{dicrotic notch}. With this distinction, it is possible to find the beginning of the \gls{abp} wave as a high positive slope (\texttt{1p}) and find the \textit{dicrotic notch} when the lower slope starts (\texttt{0.}). In order to find this area of the \gls{abp} wave, the regular expression has to start with the first \texttt{1p} primitive and end with the first \texttt{0.} primitive. 
+The first connotation method is necessary to distinguish between the rising slope that occurs at the beginning of the pressure wave and the one after the \textit{dicrotic notch}. With this distinction, it is possible to find the beginning of the \gls{abp} wave as a high positive slope (\texttt{1p}) and find the \textit{dicrotic notch} when the lower slope starts (\texttt{0.}). In order to find this area of the \gls{abp} wave, the \gls{regex} has to start with the first \texttt{1p} primitive and end with the first \texttt{0.} primitive. 
 
 \par
-The example is solved with the following regular expression: \texttt{(1p).*?(0.)}. This string means that the search will match anything (represented by "\texttt{.*?}") between the first "\texttt{1p}" primitive and the first "\texttt{0.}" primitive.
+The example is solved with the following \gls{regex}: \texttt{(1p).*?(0.)}. This string means that the search will match anything (represented by "\texttt{.*?}") between the first "\texttt{1p}" primitive and the first "\texttt{0.}" primitive.
 
 \subsubsection{Example 6 - Stable lifting detection in accelerometer signals}
 
@@ -638,7 +466,7 @@ Fig. \ref{fig:Hard} demonstrates how the example is solved. In both pre-processi
 \par
 Regarding the symbolic connotation step, the first method AD (represented in blue) turns all sample values of the first signal that are higher than the threshold level into \texttt{1}, while the remaining samples are converted to \texttt{0}. The second set is applied to the second signal and uses the derivative of the signal D1(represented in red). Both symbolic connotations merge into a sequence of primitives, in which the first element inspects if the exercise has already started (\texttt{1.})  or not (\texttt{0.}), and the second infers the sectioning of the lifting steps, that is if the sample of the signal is increasing (\texttt{.p}), stationary (\texttt{.z}) or decreasing (\texttt{.n}).
 \par
-The regular expression written to solve the example is \texttt{(?<=1.\{15000,\})(n1p)(.*?)}\texttt{(n1p)}. Decomposing this expression in the two steps of the example results in: (1) \texttt{(?<=1.{15000,})} and (2)\texttt{(n1p)(.*?)(n1p)}. In (1), a \textit{lookbehind} operator (recall rules from Table \ref{tab:regex} in Section \ref{subsec:regex_theory}) is used, therefore, the compiler will search ahead of the first match inside the operator, i.e., the search will match the expression "\texttt{1.\{15000,\}}" and search ahead of it. This method aims to handle the temporal dependence between events in the string, in which the number \texttt{15000} is calculated by the number of characters that correspond to 5 seconds in the string. This calculation was achieved by multiplying the sampling frequency, the number of connotations in each primitive, and the desired time, in this case: 1000 Hz, 3 connotations, and 5s, respectively.
+The \gls{regex} written to solve the example is \texttt{(?<=1.\{15000,\})(n1p)(.*?)}\texttt{(n1p)}. Decomposing this expression in the two steps of the example results in: (1) \texttt{(?<=1.{15000,})} and (2)\texttt{(n1p)(.*?)(n1p)}. In (1), a \textit{lookbehind} operator (recall rules from Table \ref{tab:regex} in Section \ref{subsec:regex_theory}) is used, therefore, the compiler will search ahead of the first match inside the operator, i.e., the search will match the expression "\texttt{1.\{15000,\}}" and search ahead of it. This method aims to handle the temporal dependence between events in the string, in which the number \texttt{15000} is calculated by the number of characters that correspond to 5 seconds in the string. This calculation was achieved by multiplying the sampling frequency, the number of connotations in each primitive, and the desired time, in this case: 1000 Hz, 3 connotations, and 5s, respectively.
 
 \subsubsection{Summary of all examples}
 
@@ -726,7 +554,7 @@ pks = peakdelta(s, delta=np.percentile(s, 70) - np.percentile(s, 30))
 \item \textbf{List of Distinct Operands}: '\textit{s}', '\textit{delta=np.percentile(s, 70) - np.percentile(s, 30)}', '\textit{np.percentile(s, 70)}', '\textit{np.percentile(s, 30)}',  '\textit{70}' and '\textit{30}'
 \end{itemize}
 
-In the second case, both \textbf{connotation} step and \textbf{search} procedure will be inspected for the \textbf{difficulty} measures. Regarding the \textbf{connotation} step, the evaluation will be made similarly to the previous method for inspecting functions, in which the function is set as an operator and its corresponding arguments as operands. For the \textbf{search} procedure, the set of instructions typically used in \gls{regex} (except the "." character) is defined as operators\cite{regex}. These can be revisited in the second section. The remaining characters of the regular expression string, except the parenthesis, will be set as operands. In this are included the "." operator that matches any character, and the "\textbackslash d" and "\textbackslash w" that matches all digits and alphabetical characters respectively. Regarding the parenthesis, when occurring ("\{\}" or "[]"), will be set as one operator. For example:\\
+In the second case, both \textbf{connotation} step and \textbf{search} procedure will be inspected for the \textbf{difficulty} measures. Regarding the \textbf{connotation} step, the evaluation will be made similarly to the previous method for inspecting functions, in which the function is set as an operator and its corresponding arguments as operands. For the \textbf{search} procedure, the set of instructions typically used in \gls{regex} (except the "." character) is defined as operators\cite{regex}. These can be revisited in the second section. The remaining characters of the \gls{regex} string, except the parenthesis, will be set as operands. In this are included the "." operator that matches any character, and the "\textbackslash d" and "\textbackslash w" that matches all digits and alphabetical characters respectively. Regarding the parenthesis, when occurring ("\{\}" or "[]"), will be set as one operator. For example:\\
 
 {\centering
 \textbf{$Connotation: $} $Sm$ 500  $A$ 0.8 $D1$ 0.05\\
@@ -831,18 +659,18 @@ n-gram \in [1, 2, 3, 4, 5, 6]\\
 \end{gathered}
 \end{equation}
 
-The cross-validation step for hyperparameter tuning was performed differently depending on the size of the dataset. For datasets with more than one hundred signals, we performed a 10 fold stratified (K-SF) cross validation, while on datasets with less than one hundred signals, a leave one out (LOO) cross validation was performed instead. The \textit{K-SF} cross-validation step was chosen on larger datasets because of its higher computational speed performance in comparison with the \textit{LOO}. In shorter datasets, using the \textit{K-SF} would reduce the training set size too much, and, as recommended by \cite{ucr}, we used the \textit{LOO} instead. We then selected the parameters set with best average cross-validation accuracies for each dataset and performed the test classification on the \textit{test} set, which signals were not used during the cross-validation step.
+The cross-validation step for hyperparameter tuning was performed differently depending on the size of the dataset. For datasets with more than one hundred signals, we performed a 10 fold stratified (K-SF) cross validation, while on datasets with less than one hundred signals, a leave one out (LOO) cross validation was performed instead. The \textit{K-SF} cross-validation step was chosen on larger datasets because of its higher computational speed performance in comparison with the \textit{LOO}. In shorter datasets, using the \textit{K-SF} would reduce the training set size too much and with unbalanced training samples for certain classes, and, as recommended by \cite{ucr}, we used the \textit{LOO} instead. We then selected the parameters set with best average cross-validation F1-scores for each dataset and performed the validation on the \textit{test} set, to which the model was \textit{blind} to.
 
-We performed this experiment with several strategies and combinations, namely: \gls{bow} with Baysian Classifier (BoW+NB), \gls{bow} with \gls{svm} (BoW+SVM), \gls{tfidf} with Baysian Classifier (TF-IDF+NB) and \gls{tfidf} with \gls{svm}. The summary of the performance is presented on Figures \ref{fig:critical_distances}.
+We performed this experiment with several strategies and combinations, namely: \gls{bow} with Bayesian Classifier (BoW+NB), \gls{bow} with \gls{svm} (BoW+SVM), \gls{tfidf} with Bayesian Classifier (TF-IDF+NB) and \gls{tfidf} with \gls{svm}. The summary of the performance is presented in Figure \ref{fig:critical_distances}.
 
 \begin{figure}
     \centering
     \includegraphics[width=\linewidth]{hearts_CriticalDistanceDiagram.pdf}
-    \caption{Critical distance diagram for the methods that rely in a textual representation of the time series (\gls{bow} and \gls{tfidf}) and euclidean distance for the 10 fold cross-validation process.}
+    \caption{Critical distance diagram for the methods that rely in a textual representation of the time series (\gls{bow} and \gls{tfidf}) and euclidean distance for: \textbf{Top)} the cross-validation stage; and \textbf{Bottom)} the validation step. The closer to \textbf{1} is the method, the better it is. Thick lines between methods indicate that these have not a significant performance difference.}
     \label{fig:critical_distances}
 \end{figure}
 
-The performance was measured for both the cross-validation step and the test step. The overall results can be found in Appendix \ref{appendix:tables_detailed}, Section \ref{subsec:hearts_all_accuracies}. As can be seen, the strategies that rely on a \gls{svm} classifier are more robust. The \gls{tfidf} turns out to not be reliable when used with the \gls{nb} classifier, which has much better results when the \gls{bow} model is used instead. On the other end, the \gls{tfidf} model works well with the linear \gls{svm} classifier, being the method with highest average accuracy.
+The performance was measured for both the cross-validation step and the validation step. The overall results can be found in Appendix \ref{appendix:tables_detailed}, Section \ref{subsec:hearts_all_accuracies}. As can be seen, the strategies that rely on a \gls{svm} classifier are more robust. The \gls{tfidf} turns out to not be reliable when used with the \gls{nb} classifier, which has much better results when the \gls{bow} model is used instead. On the other end, the \gls{tfidf} model works well with the linear \gls{svm} classifier, being the method with highest average accuracy.
 
 \begin{figure}
     \centering
@@ -851,7 +679,7 @@ The performance was measured for both the cross-validation step and the test ste
     \label{fig:comparison_2}
 \end{figure}
 
-Figure \ref{fig:critical_distances} also shows that there is a significant distance in performance between the TFIDF+SVM model in comparison with the 1-NN\gls{ed} method during the cross-validation step. However this significance is not as expressive in the test step. All these remarks are also highlighted in Figure \ref{fig:comparison_2}, where both models (\gls{bow} and \gls{tfidf}) and classifiers (\gls{svm} and \gls{nb}) were compared (left and right, respectively).  When comparing both models (\gls{bow} and \gls{tfidf}), we see that the best performances are similar, with a slightly better accuracy achieved with the \gls{tfidf} model. In regard to using the \gls{svm} or the \gls{nb}, as mentioned previously, better results are achieve when using the \gls{svm} classifier, for both models (TFIDF on the left, and BOW on the right, of the right graphs).
+Figure \ref{fig:critical_distances} also shows that there is a significant distance in performance between the TFIDF+SVM model in comparison with the 1-NN \gls{ed} method during the cross-validation step. However this significance is not as expressive in the validation step. All these remarks are also highlighted in Figure \ref{fig:comparison_2}, where both models (\gls{bow} and \gls{tfidf}) and classifiers (\gls{svm} and \gls{nb}) were compared (left and right, respectively).  When comparing both models (\gls{bow} and \gls{tfidf}), we see that the best performances are similar, with a slightly better accuracy achieved with the \gls{tfidf} model. In regard to using the \gls{svm} or the \gls{nb}, as mentioned previously, better results are achieve when using the \gls{svm} classifier, for both models (TFIDF on the left, and BOW on the right, of the right graphs).
 
 We are now in position to compare the best text-based method (\gls{hearts}) with the 1-NN \gls{ed} classifier. This result is presented in Figure \ref{fig:comparison_2}, for both cross-validation and test steps.
 
@@ -875,7 +703,7 @@ Besides the fact that this approach can be used for classification tasks, we exp
 \begin{figure}[h]
     \centering
     \includegraphics[width=0.95\linewidth]{interpretable_umd_bme.pdf}
-    \caption{Interpretable results with highlighted shapes for the \textit{UMD} and \textit{BME} datasets. The \textit{UMD} dataset was classified with with an accuracy of 99.3\%, computed with a $w_s=10$, $thr=0.05$ and a $2-gram$. The \textit{BME} was classified with an accuracy of 100.0\% with a $w_s=10$, $thr=0.05$ and a $2-gram$}
+    \caption{Interpretable results with highlighted shapes for the \textit{UMD} and \textit{BME} datasets. The \textit{UMD} dataset was classified with with an accuracy of 100\%, computed with a $w_s=10$, $thr=0.05$ and a $2-gram$. The \textit{BME} was classified with an accuracy of 100.0\% with a $w_s=10$, $thr=0.05$ and a $2-gram$}
     \label{fig:interpretable1}
 \end{figure}
 
@@ -897,7 +725,7 @@ The \textit{TwoPatterns} dataset is also intuitive to understand and fits the pr
 \begin{figure}[h]
     \centering
     \includegraphics[width=0.95\linewidth]{interpretable_gunpoint_shapeletsim.pdf}
-    \caption{Interpretable results with highlighted shapes for the \textit{Gunpoint} and \textit{ShapeletSim} datasets. The GunPoint dataset was classified with with an accuracy of 99.0\%, computed with a $w_s=10$, $thr=0.05$ and a $2-gram$. The \textit{ShapeletSim} was classified with an accuracy of 99.4\% with a $w_s=1$, $thr=0.05$ and a $1-gram$}
+    \caption{Interpretable results with highlighted shapes for the \textit{Gunpoint} and \textit{ShapeletSim} datasets. The GunPoint dataset was classified with with an accuracy of 96.0\%, computed with a $w_s=10$, $thr=0.05$ and a $2-gram$. The \textit{ShapeletSim} was classified with an accuracy of 99.0\% with a $w_s=1$, $thr=0.05$ and a $1-gram$}
     \label{fig:interpretable3}
 \end{figure}
 
@@ -914,7 +742,9 @@ In this section, we wanted to answer two main research questions: (1) can we sol
 \par
 The results provide evidence that it is possible to compare time series based on a textual representation and use traditional text-mining strategies for classification purposes. Not only is it possible to compare the vectors of time series documents with the cosine distance (as we have seen on Figure \ref{fig:distribution_dendogram}, but \gls{bow} or \gls{tfidf} models can be used with a linear \gls{svm} to solve classification tasks.
 \par
-Additionally, the fact that words are weighted based on their relevance to distinguish each time series document from all the others, it is possible to highlight the \textit{subsequences} of the time series corresponding to these words and understand which parts of the signal are more relevant, being a step forward into interpretability of time series. The limited examples were still simple and intuitive and the process turns harder to understand in more complex data. In these cases, it is hard to truly find meaningful differences and explain why these classes are different, especially with words. This limits the further interpretability potential of this method because the differences might not be perceptible by the naked eye. On one end, the performance can be improved using a richer and correct set of textual descriptors. We mean richer because the differentiation is as good as the description performed, and we mean correct because the translation process from the numerical domain to the text domain is not error-proof, which means that a mistranslation may occur and make the results worse. On the other end, the words used might not be capable of expressing the differences between classes. Many cases with high accuracies can be highlighted, but their interpretability falls short. For instance, for the dataset \textit{BeetleFly}, a binary classification problem. The method has 1 as accuracy, but does not show expressively the difference between classes.
+Additionally, the fact that words are weighted based on their relevance to distinguish each time series document from all the others, it is possible to highlight the \textit{subsequences} of the time series corresponding to these words and understand which parts of the signal are more relevant, being a step forward into interpretability of time series. The limited examples were still simple and intuitive and the process turns harder to understand in more complex data. In these cases, it is hard to truly find meaningful differences and explain why these classes are different, especially with words. This limits the further interpretability potential of this method because the differences might not be perceptible by the naked eye. On one end, the performance can be improved using a richer and correct set of textual descriptors. We mean richer because the differentiation is as good as the description performed, and we mean correct because the translation process from the numerical domain to the text domain is not error-proof, which means that a mistranslation may occur and make the results worse. This fact can also contribute to the lack in ability to generalize the model from the cross-validation to the validation steps, with an evident decrease in performance.
+
+Another relevant point is the fact that words used might not be capable of expressing the differences between classes. Many cases with high accuracies can be highlighted, but their interpretability falls short. For instance, for the dataset \textit{ECGFiveDays}, a binary classification problem. The method has 0.96 of accuracy, but does not show expressively the difference between classes.
 \par
 The textual representation is valuable in the sense that text mining domain knowledge can be used on time series. Nevertheless, we can profit from this knowledge as much as the translation of the time series into text is rich, valuable, and domain-specific. With the current set of \gls{ssts} queries we can make a limited description that works well in simple signals described mostly by their derivative dynamics. The keywords extracted for these time series still have limited readability being even harder for more complex examples. However, if more expressive queries are used to make a more robust translation, the keywords extracted can be more valuable and relatable to the time series we are looking at. Therefore, a more diverse set of queries should be used to make possible the extraction of more relevant keywords. At some point, a reduction and selection of the most relevant keywords should be made.
 
@@ -965,7 +795,7 @@ In this section, we present several examples of where \gls{quots} can be used in
 
 \begin{figure}
 \includegraphics[width=\linewidth]{Quots_ecg.pdf}
-\caption{\gls{ecg} use case to identify noisy sections, as well as specific segments of the \gls{ecg} pattern. The queries are written in text boxes. On the side, an example of a match is showed as a larger pattern.}
+\caption{\gls{ecg} use case to identify noisy sections, as well as specific segments of the \gls{ecg} pattern. The queries are written in text boxes. On the side, an example of a match is shown as a larger pattern.}
 \label{fig:ecg_use_case1}
 \end{figure}
 
@@ -1010,9 +840,9 @@ We believe that \gls{quots} can be developed to be intuitive enough to allow mos
 \label{fig:quots_3pointturn}
 \end{figure}
 
-Figure \ref{fig:quots_3pointturn} is showed the search for a 3-point turn on a signal acquired with a smartphone inside a car while performing several driving exercises in a parking lot. Details of the experiment can be found at the Github repository \footnote{\url{https://github.com/Anonymous14151/QuoTS}}. The query used to match this event is very intuitive, being \texttt{[peak peak peak]}, which is exactly what this pattern is (\includegraphics[height=2.5ex, valign=m]{3pointturn.pdf}). 
+Figure \ref{fig:quots_3pointturn} shows the search for a 3-point turn on a signal acquired with a smartphone inside a car while performing several driving exercises in a parking lot. Details of the experiment can be found at the Github repository \footnote{\url{https://github.com/Anonymous14151/QuoTS}}. The query used to match this event is very intuitive, being \texttt{[peak peak peak]}, which is exactly what this pattern is (\includegraphics[height=2.5ex, valign=m]{3pointturn.pdf}). 
 \par
-Having found the desired pattern with text, we thought that it would also be possible to find it using a specific pattern and give it a name, to use on \gls{quots}. In this case, the pattern was acquired with a toy model car, on which a smartphone was attached (as indicated in Figure \ref{fig:puppeteering}) and acquired inertial data while mimicking a 3-point turn event on a table. The resulting shape is illustrated in \textit{puppet data}. We believe this can be used in two ways: for the user to gain intuition as to how a motion/\textit{manoeuver} is illustrated on motion data or how the inertial data from the motion/manoeuver can be used as a template on \gls{quots}: \\
+Having found the desired pattern with text, we thought that it would also be possible to find it using a specific pattern and give it a name to use on \gls{quots}. In this case, the pattern was acquired with a toy model car, on which a smartphone was attached (as indicated in Figure \ref{fig:puppeteering}) and acquired inertial data while mimicking a 3-point turn event on a table. The resulting shape is illustrated in \textit{puppet data}. We believe this can be used in two ways: for the user to gain intuition as to how a motion/\textit{manoeuver} is illustrated on motion data or how the inertial data from the motion/\textit{manoeuver} can be used as a template on \gls{quots}: \\
 •	\textbf{Shape Intuition:} A user might not know what the shape of a 3-point turn looks like. By using a model car, he/she can mimic the motion and gain intuition over what the query should be (in this case, \texttt{[peak peak peak]}). \\
 •	\textbf{MASS template:} As mentioned above, we have a special shape word, which corresponds to a shape template given by the user, to which a word can be assigned. We then can use the word in our language to match desired patterns with the MASS distance profile as a word feature vector.  
 

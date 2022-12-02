@@ -11,19 +11,19 @@
 \chapter{Time Series Fundamentals}
 \label{cha:theory}
 
-The content of this thesis is diverse and covers several different topics. Therefore, the reader will appreciate that we set the foundations that are necessary to fully capture the essence of this work. For this, we introduce the concepts and topics covered and addressed, provide the definitions and define the used notation in this work. We start by explaining global definitions related to \textit{time series}, which is the data of interest in this work. Then, examples of \textit{time series}, in particular biosignals, are given. Further, standard pre-processing methods, representation forms, and distance measures are also explained.
+The content of this thesis is diverse and covers several different topics. Therefore, we will start by setting the foundations that are necessary to fully capture the essence of this work. For this, we introduce the concepts and topics covered, and provide the necessary definitions and corresponding notation used in this work. Let us begin by explaining global definitions related to \textit{time series}, which is the data type of interest in this work. Then, examples of \textit{time series}, in particular \textit{biosignals}, are given. Further, standard pre-processing methods, representation forms, and distance measures are also explained.
 \par
-Additionally, as this work makes a strong connection between time series and their textual nature, the association between text and time series is introduced in this chapter. Finally, we also explain the standard validation metrics used to validate the proposed methods.
+Additionally, as this work makes a strong connection between time series and their textual nature, the association between text and time series is introduced in this chapter. Finally, we also explain the standard quantitative metrics used to show the results and validate the proposed methods.
 
 \section{Global Definitions}
 \label{sec:global}
 
 The information gathered by sensors is a physical quantity that varies with time. These are called \textit{time series} and are the main topic of this work.\\\\
 \textbf{Time Series:} A \textit{time series} is a sequence of real values ordered in time with length $n \in \mathbb{N}$: $T = (t_1, t_2, ..., t_n)$. A \textit{biosignal} is a category of \textit{time series}.
-Several data domains rely on the \textit{multidimensional time series} acquisition from one sensor's multiple axes, such as an accelerometer's three directions, or multiple sources, such as an IMU that fuses three different sensors.\\\\
+Several data domains rely on the \textit{multidimensional time series} acquisition from one sensor's multiple axes, such as an accelerometer's three directions, or multiple sources, such as an \gls{imu} that fuses three different sensors.\\\\
 \textbf{Multidimensional Time Series:} A \textit{multidimensional time series} is a set of $k \in \mathbb{N}$ \textit{time series} belonging to the same acquisition: $\{T_1, T_2, ..., T_k\}$. Segments of interest, called \textit{subsequences}, are often searched inside a \textit{time series}.\\\\
 \textbf{Subsequence:} A \textit{subsequence} is a segment of a (\textit{multidimensional}) \textit{time series} with size $w \in \mathbb{N}$, starting from a given position \textit{i} and ending at position \textit{i+w}. Therefore, two instants, defined as \textit{events}, delimit a \textit{subsequence} in time.\\\\
-\textbf{Event:} An \textit{event} is an instant in time \textit{e} that indicates the presence of a relevant occurrence in the \textit{time series}. Multiple \textit{events} segment the time series into several \textit{subsequences} of different lengths. Hence, \textit{event} detection is often considered \textit{time series} segmentation or change point detection\cite{cpd_alan}. To be clear, we will use the terms \textit{event detection} and \textit{segmentation} when discussing our methods, but can eventually use the term change point detection when comparing with other methods. A common strategy used in time series data mining to find relevant \textit{subsequences} or \textit{events} is  the moving window.\\\\
+\textbf{Event:} An \textit{event} is an instant in time \textit{e} that indicates the presence of a relevant occurrence in the \textit{time series}. Multiple \textit{events} segment the time series into several \textit{subsequences} of different lengths. Hence, \textit{event} detection is often considered \textit{time series} segmentation or change point detection\cite{cpd_alan}. To be clear, we will use the terms \textit{event detection} and \textit{segmentation} when discussing our methods, but can eventually use the term change point detection when comparing with other methods. A common strategy used in time series data mining to find relevant \textit{subsequences} or \textit{events} is the \textit{moving window}.\\\\
 \textbf{Moving Window:} A \textit{moving window} is a process of sliding along a time series $T$ to apply a specific method on each \textit{subsequence} it hovers, a common strategy used in \textit{time series} data mining to find relevant \textit{subsequences} and \textit{events}.
 The window has, similar to the \textit{subsequence}, a predefined size $w \in \mathbb{N}$, which starts at a given position \textit{i} and ends at position \textit{i+w}.
 The process of \textit{moving windows} is iterative, and windows can overlap each other. The next window will start at \textit{i+o}, where  \textit{o} $\in [1, w]$ is the overlapping size ($o=1$ for total overlap and $o=w$ for no overlap).
@@ -43,7 +43,7 @@ Having introduced essential concepts for the understanding of the next few secti
 %    
 %\textbf{Definition 3 - \gls{sT}:} A \gls{sT} is a segment of the time series with size $w \in \mathbb{N}$ and starting from a given position \textit{i} and ending at position \textit{i+w} from the \gls{T} or \gls{MT}. A \gls{sT} is delimited by two instants in time. This sample that segments a \gls{sT} can be considered an \textit{event}.\\
 %    
-%\textbf{Definition 4 - Event (E):} Following the definitions of \cite{event_def1, event_def2}, which state that "\textit{an event is a dynamic phenomenon whose behavior changes enough over time to be considered a qualitatively significant change}" and "characterized by an interval of measurements that differs significantly from some underlying baseline", we consider that an \textit{event} is an instant in time \textit{e} that indicates the presence of a relevant occurrence in the time series. Multiple \textit{events} segment the time series into several \textit{subsequences} of different lengths. Therefore, \textit{event} detection is often considered time series segmentation or change point detection\cite{cpd_alan}. To be clear, we will use the terms \textit{event detection} and \textit{segmentation} when discussing our methods, but can eventually use the term change point detection when comparing with other methods.
+%\textbf{Definition 4 - Event (E):} Following the definitions of \cite{event_def1, event_def2}, which state that "\textit{an event is a dynamic phenomenon whose behaviour changes enough over time to be considered a qualitatively significant change}" and "characterized by an interval of measurements that differs significantly from some underlying baseline", we consider that an \textit{event} is an instant in time \textit{e} that indicates the presence of a relevant occurrence in the time series. Multiple \textit{events} segment the time series into several \textit{subsequences} of different lengths. Therefore, \textit{event} detection is often considered time series segmentation or change point detection\cite{cpd_alan}. To be clear, we will use the terms \textit{event detection} and \textit{segmentation} when discussing our methods, but can eventually use the term change point detection when comparing with other methods.
 %    
 %
 %
@@ -70,6 +70,7 @@ Time series have multiple sources of disturbance. This disturbance is usually ca
 
 \subsection{Spectral Filtering}
 \label{subsec:spec_filt}
+
 Several methods can be used to reduce the influence of noise in the analysis. Standard filtering methods, such as low-pass, band-pass, and high-pass filters can be used to reduce the presence of specific frequency bandwidths that are not relevant. There are many configurations for these types of filters, being one commonly used the \textit{Butterworth} filter, with the following frequency response:
 
 \begin{equation}
@@ -82,7 +83,7 @@ where $n$ is the order of the filter, $\omega$ the frequency ($\omega=2\pi f$), 
 \subsection{Smoothing}
 \label{subsec:smooth}
 
-Another method often used to reduce the presence of noise and is a variant of a low-pass filter is the smoothing technique. Several variations of this technique exist, being the simplest one a moving average, which uses a moving window, to calculate the mean in each iteration. Other approaches also convolve the signal with a specific window ($H$) (e.g. \textit{Hanning window}), which instead of giving the same weights to all the samples of the moving window (moving average), attributes a higher weight to the moving window's central samples.
+Another method, often used to reduce the presence of noise and is a variant of a low-pass filter, is the smoothing technique. Several variations of this method exist, being the simplest one a moving average, which uses a moving window to calculate the mean in each iteration. Other approaches also convolve the signal with a specific window ($H$) (e.g. \textit{Hanning window}), which instead of giving the same weights to all the samples of the moving window (moving average), attributes a higher weight to the moving window's central samples.
  
 \begin{equation}
 Tm_i = \Sigma_{j=a}^{a+w} T_jH_{j-a},
@@ -98,7 +99,7 @@ Another type of disturbance on the data that is usually removed is a wandering b
 \section{Normalization} 
 \label{sec:normalize}
 
-Normalization of data is an important step in any data mining process. It is essential for data uniformization and scaling while keeping the morphology and shape of the time series. Several methods can be used for this purpose, namely:
+Normalization of data is an important step in any data mining process. It is essential for data standardization and scaling while keeping the morphology and shape of the time series. Several methods can be used for this purpose, namely:
 
 \begin{equation}
 \overline{T} = \frac{T}{max(|T|)},
@@ -120,7 +121,6 @@ Another normalization method, called \textit{z-normalization}, is very commonly 
 \end{equation}
 
 where the time series $T$ is subtracted by its mean, $\mu_T$ and scaled by its standard deviation, $\sigma_T$. The resulting values represent how many standard deviations the signal is away from the mean.
-
 
 \section{Transformation} 
 \label{sec:transform}
@@ -151,7 +151,7 @@ The frequency domain opens new possibilities for the analysis of the time series
 \label{fig:feature_intro}
 \end{figure}
 
-The process of feature extraction is also a transformation method commonly employed and is performed by a \textit{moving window}, resulting, for each feature, in a feature series (see Section \ref{sec:global}). On Figure \ref{fig:feature_intro} is showed a time series from which the average (moving mean) and standard deviation (moving \textit{std}) are computed with a moving widow of size $w=100$ and an overlap $o=100\%$. The feature is a characterization of the signal for that specific extracted property and is commonly used in machine learning tasks. In this thesis we will present two main applications of the feature representation of time series.
+The process of feature extraction is also a transformation method commonly employed and is performed by a \textit{moving window}, resulting, for each feature, in a feature series (see Section \ref{sec:global}). In Figure \ref{fig:feature_intro} is shown a time series from which the average (moving mean) and standard deviation (moving \textit{std}) are computed with a moving widow of size $w=100$ and a total overlap $o=100\%$. The feature is a characterization of the signal for that specific extracted property and is commonly used in machine learning tasks. In this thesis we will present two main applications of the feature representation of time series.
 
 \subsection{Piecewise Aggregate Approximation}
 \label{subsec:paa}
@@ -169,7 +169,7 @@ Another common used transformation method to simplify a time series and reduce i
 \overline{t_i} = \frac{N}{n} \sum^{\frac{n}{N}i}_{j=\frac{n}{N}(i-1)+1} t_j.
 \end{equation}
 
-An example is showed in Figure \ref{fig:paa}, where a \gls{abp} signal is transformed into a \gls{paa} with sizes 2 and 20, respectively.
+An example is shown in Figure \ref{fig:paa}, where a \gls{abp} signal is transformed into a \gls{paa} with sizes 2 and 20, respectively.
     
 \subsection{Symbolic Aggregate Approximation}
 \label{subsec:sax}
@@ -181,9 +181,9 @@ An example is showed in Figure \ref{fig:paa}, where a \gls{abp} signal is transf
 \label{fig:sax}
 \end{figure}
 
-From this method, a new representation technique was born, transforming the signal from the numerical to the symbolic domain. It is called \gls{sax} \cite{sax}. This method applies \gls{paa} to a z-normalized time series and indexes a \textit{character} to each sample of the simplified signal based on the distribution of its amplitude values. The signal's amplitude values are separated in bins with equal probability. The number of bins is equal to the size of the symbolic \textit{alphabet} chosen. Figure \ref{fig:sax} shows an example of the signal transformed into a string with 3 letters in its alphabet. Such as the \gls{dft}, \gls{sax} opens doors to analyze time series in a completely different manner, profiting from the much-acquired knowledge in text mining.
+From this method, a new representation technique was born, transforming the signal from the numerical to the symbolic domain. It is called \gls{sax} \cite{sax}. This method applies \gls{paa} to a z-normalized time series and indexes a \textit{character} to each sample of the simplified signal based on the distribution of its amplitude values \cite{sax}. The signal's amplitude values are separated in bins with equal probability. The number of bins is equal to the size of the symbolic \textit{alphabet} chosen. Figure \ref{fig:sax} shows an example of the signal transformed into a string with 3 letters in its alphabet. Such as the \gls{dft}, \gls{sax} brings novel ways of analising time series in a completely different manner, profiting from the much-acquired knowledge in text mining.
 
-This representation method is relevant to be introduced as it was a strong inspiration for the proposed novel symbolic representation technique for time series used for expressive pattern search and classification. 
+This representation method is relevant to be introduced as it was a strong inspiration for the proposed novel symbolic representation technique for time series. Ultimately used for expressive pattern search and classification. 
 
 In order to perform pattern search or classification tasks, we have to calculate the difference/similarity between two time series or \textit{subsequences}.
 
@@ -248,7 +248,7 @@ The cumulative distance $\gamma(i,j)$ is calculated as $d(q_i,c_j)$ of the curre
 \gamma(i,j) = d(q_i,c_j)+min\{\gamma(i-1,j-1), \gamma(i-1, j), \gamma(i, j-1)\}.
 \end{equation} 
 
-When two time series with the same length have a linear warping path, such that $w_k=(i,j)_k, i=j=k$, we have a special case of the \gls{ed}. \gls{dtw} has a time and space complexity of $O(nm)$ while the \gls{ed} has linear complexity ($O(n)$). Figure \ref{fig:dtw_intro} shows an example of applying the \gls{ed} and \gls{dtw} on two different PQRS complexes from different \gls{ecg}s. 
+When two time series with the same length have a linear warping path, such that $w_k=(i,j)_k, i=j=k$, we have a special case of the \gls{ed}. \gls{dtw} has a time and space complexity of $O(nm)$ while the \gls{ed} has linear complexity ($O(n)$). Figure \ref{fig:dtw_intro} shows an example of applying the \gls{ed} and \gls{dtw} on two different \textit{PQRS} complexes from different \gls{ecg}s. 
 
 \subsection{Complexity Invariant Distance}
 \label{subsec:complexity}
@@ -265,7 +265,7 @@ The $CF$ is defined as \cite{complexity}:
 CF = \frac{max\{CE(Q),CE(C)\}}{min\{CE(Q),CE(C)\}},
 \end{equation}
 
-where $CE$ represents the complexity estimate of a time series. This estimate is calculated based on the intuition that if we could  "stretch" a time series until it becomes a straight line, this line would be as long as the complexity of the signal. It can be computed as the sum of the $n-th$ discrete differences along the time series\cite{complexity}:
+where $CE$ represents the complexity estimate of a time series. This estimate is calculated based on the intuition that if we could  "stretch" a time series until it becomes a straight line, this line would be as long as the complexity of the signal. It can be computed as the sum of the $n-th$ discrete differences along the time series \cite{complexity}:
 
 \begin{equation}
 \label{eq:complexity}
@@ -294,7 +294,7 @@ being $||\vec{f_A}||$ and $||\vec{f_B}||$ the euclidean norm of each feature vec
 \section{Applying Distance Measures}
 \label{sec:dist_measures}
 
-Measuring distances between any time series give the ability to compare them. It is the fundamental instrument for most time series data mining tasks. With a distance measure, we can compare groups of time series for classification purposes or compare \textit{subsequences} with a query template to find if it occurs in the time series. Another relevant application of distance measures is its usefulness to retrieve relevant structural information of a time series by comparing each of its \textit{subsequences} to all other \textit{subsequences}. In this subsection, relevant methods applied with the help of the presented distance measures are explained to retrieve information from a time series. We will start with distance/similarity profiles.
+Measuring distances between time series allows to compare them. It is the fundamental instrument for most time series data mining tasks. With a distance measure, we can compare groups of time series for classification purposes or compare \textit{subsequences} with a query template to find if it occurs in the time series. Not only can we compare different time series, but also compare the time series with subsequences of itself. By comparing each of its \textit{subsequences} to all other \textit{subsequences}, relevant structural information becomes available. In this subsection, relevant methods applied with the help of the presented distance measures are explained to retrieve information from a time series. We will start with distance/similarity profiles.
 
 \subsection{Distance Profile}
 \label{subsec:matrixprofile}
@@ -311,7 +311,7 @@ Recently, a strategy was proposed to compute a one-dimensional distance \textit{
 \begin{figure}
 \centering
 \includegraphics[width=0.85\linewidth]{Chap2Sec362.pdf}
-\caption{Self-Distance Matrix (SDM) representation of the \gls{abp} signal. The matrix was computed using the cosine distance between the feature representation of the signal. The main structures that can be highlighted are \textit{blocks} along the main diagonal of the matrix, \textit{paths} that parallel to the main diagonal, and \textit{cross-paths} that are perpendicular to the main diagonal. The signal comes from a public dataset (see Section \ref{dat:dataset2}).}
+\caption{Self-Distance Matrix (SDM) representation of the \gls{abp} signal. The matrix was computed using the cosine distance between the feature representation of the signal. The main structures that can be highlighted are \textit{blocks} along the main diagonal of the matrix, \textit{paths} that are parallel to the main diagonal, and \textit{cross-paths} that are perpendicular to the main diagonal. The signal comes from a public dataset (see Section \ref{dat:dataset2}).}
 \label{fig:ssm_pre}
 \end{figure}
 
@@ -326,7 +326,7 @@ SDM(i,j)= d(x_i, x_j),
 
 being $d$ a distance measure between elements $x_i, x_j \in X$ for $i, j \in [1:N]$. $SDM(i,j)$ represents a cell of $SDM$ that contains the distance value. When $i=j$ the distance should be zero, therefore the diagonal of $SDM$ has the lower values. Besides the main diagonal, other relevant structures can be found in $SDM$. These include \textit{homogeneous blocks} and \textit{paths} \cite{fmp1, fmp2}, as can be seen in Figure \ref{fig:ssm_pre}.
 
-Areas with lower distance and block structure along the diagonal are highlighted as \textit{homogeneous} segments. These give an indication of \textit{homogeneity} and \textit{novelty}. \textit{Homogeneity} because a \textit{block} along the diagonal means that the time series has a constant behavior during the segment delimited by the \textit{block}. \textit{Novelty} because when $SDM$ has multiple \textit{blocks} along the diagonal, it shows that the time series shifted its behavior/regime. The moment there is a transition between \textit{blocks} is a potential segmentation point. In Figure \ref{fig:ssm_pre}, changes in the \gls{abp} signal are visible as blocks. In total, seven regimes are present on the signal, and seven blocks can be counted along the main diagonal.
+Areas with lower distance and block structure along the diagonal are highlighted as \textit{homogeneous} segments. These give an indication of \textit{homogeneity} and \textit{novelty}. \textit{Homogeneity} because a \textit{block} along the diagonal means that the time series has a constant behaviour during the segment delimited by the \textit{block}. \textit{Novelty} because when $SDM$ has multiple \textit{blocks} along the diagonal, it shows that the time series shifted its behaviour/regime. The moment there is a transition between \textit{blocks} is a potential segmentation point. In Figure \ref{fig:ssm_pre}, changes in the \gls{abp} signal are visible as blocks. In total, seven regimes are present on the signal, and seven blocks can be counted along the main diagonal.
 
 \begin{figure}
 \centering
@@ -337,14 +337,14 @@ Areas with lower distance and block structure along the diagonal are highlighted
 
 Repeating \textit{subsequences} in the time series are represented by \textit{paths} on $SDM$. \textit{Paths} are observed on the $SDM$ because of matching \textit{subsequences} during the sliding process, which computes consecutive low distance values represented in a diagonal form on the matrix. If the \textit{subsequences} being compared are exactly the same, the diagonal is perfect, but differences might be found, which results in a distorted diagonal. In Figure \ref{fig:sdm_periods} we show an example of an $SDM$ with a chirp signal that has a continuously increasing frequency. A \textit{subsequence} of the signal is compared with itself (Figure \ref{fig:sdm_periods}.left) and with the entire chirp signal (Figure \ref{fig:sdm_periods}.right). We highlighted the relevant \textit{paths} in orange. When comparing the signal with itself only, the \textit{path} is a perfect straight line, but when compared with the entire signal, the \textit{paths} are continuously more distorted and shorter. These show where each period of the sine wave occurs, and the distortion results from the increasing frequency of the signal. In the $SDM$ from Figure \ref{fig:ssm_pre}, \textit{paths} are visible on the matrix, indicating the presence of periodicity. The \textit{cross-paths} indicate the same periodic behaviour, but also that the \textit{subsequence} is symmetric.
 
-It is relevant to highlight that as distance matrices can be computed, similarity matrices can as well, following the same equation \ref{eq:sdm}, but using a similarity measure ($s$) instead of $d$. Further, we will only mention the similarity matrix, which will be called \gls{ssm}, as the proposed method uses the cosine similarity.
+It is relevant to highlight that as distance matrices can be computed, similarity matrices can as well, by following the same equation \ref{eq:sdm}, but using a similarity measure ($s$) instead of $d$. Further in this manuscript, we will only mention the similarity matrix, which will be called \gls{ssm}, as the proposed method uses the cosine similarity.
 
 \subsection{Template-based Search}
 \label{subsec:query_based_search}
 
 The presented distances can also be used to retrieve a distance profile from a \textit{template}. This type of mechanism belongs to the class of query-based search problems. The process to compute this distance profile involves sliding the template along the signal and applying a distance measure to each iteration. The result should indicate which \textit{subsequences} are more (dis)similar to the used template.
 \par
-An example of using a query-based search is illustrated in Figure \ref{fig:query_based}, where a PQRS complex of an \gls{ecg} is used as a template to search for all the other complexes. The distance computed is the z-normalized \gls{ed}. The result shows a distance profile from which \textit{minima} indicates the match with the template.
+An example of using a query-based search is illustrated in Figure \ref{fig:query_based}, where a \textit{PQRS} complex of an \gls{ecg} is used as a template to search for all the other complexes. The distance computed is the z-normalized \gls{ed}. The result shows a distance profile from which \textit{minima} indicates the match with the template.
 
 \begin{figure}
 \includegraphics[width=\linewidth]{2_10_dist_profile_byquery.pdf}
@@ -358,19 +358,19 @@ Other methods can be used to perform query-based search tasks, even using other 
 
 Having distance measures we can compare signals for several purposes, namely classification. One traditional supervised algorithm for this purpose is the k-\gls{nn}. The assumption of this method is fairly straightforward: new examples will be classified based on the class of their \gls{nn}, that is, the class of the example is the average of the class of its k-\gls{nn}. The process has two steps: (1) finding the k-\gls{nn} and (2) choosing the class of the example based on the neighbors \cite{knn}.
 \par
-To find the \gls{nn}, the distance from the example to all the time series of the training set has to be computed. The k-\gls{nn} are the $k$ training examples with the lowest distance. Having the \gls{nn}, the next stage is the determination of the example's class, which can be made with several strategies, such as majority voting, or distance-weighted voting \cite{knn}.
+In order to find the \gls{nn}, the distance from the example to all the time series of the training set has to be computed. The k-\gls{nn} are the $k$ training examples with the lowest distance. Having the \gls{nn}, the next stage is the determination of the example's class, which can be made with several strategies, such as majority voting, or distance-weighted voting \cite{knn}.
 \par
 In this work, we will propose a novel method for time series classification that will have its performance compared with a 1-\gls{nn} based on the z-normalized \gls{ed}. The proposed method is from the text-domain. As we have been mentioning in this manuscript, parts of the work developed are tightly connected with text mining methods by making a bridge between time series and text. It is then relevant to explain this relationship and how we can use it for time series data mining applications. 
 
 \section{Text Mining on Time Series}
 \label{sec:text_time}
 
-%The representation of a time series into the symbolic domain makes possible the usage of text mining methods to analyze time series. The reader will appreciate that an association regarding time series and text is made, and are also introduced relevant methods as the text mining domain, used in this work.
+%The representation of a time series into the symbolic domain makes possible the usage of text mining methods to analise time series. The reader will appreciate that an association regarding time series and text is made, and are also introduced relevant methods as the text mining domain, used in this work.
 
 \subsection{Time Series Textual Abstraction}
 \label{subsec:text_abstraction}
 
-In \gls{sax} (see Section \ref{subsec:sax}), the signal is transformed into a sequence of symbols. For this, each sample of the \gls{paa} representation is converted into a \textit{character}, which can then form \textit{words} and \textit{sentences}. As a novel symbolic representation of time series is proposed in this work, it is relevant to give the general background that helps make the association between the original time series, how it can be transformed into a symbolic time series, and the text notation that can be used for this purpose. Note that this is an introductory explanation that will be further contextualized when needed throughout this manuscript. We start with a few fundamental definitions.\\\\
+In \gls{sax} (see Section \ref{subsec:sax}), the signal is transformed into a sequence of symbols. For this, each sample of the \gls{paa} representation is converted into a \textit{character}, which can then form \textit{words} and \textit{sentences}. As a novel symbolic representation of time series is proposed in this work, it is relevant to give the general background that helps make the association between the original time series, how it can be transformed into a symbolic time series, and the text notation that can be used for this purpose. Note that this is an introductory explanation that will be further contextualized when needed throughout this manuscript. We start with fundamental definitions.\\\\
 \textbf{Character:} A \textit{character}, $c$, is an unit symbolic element belonging to the vocabulary $V$ that represents a sample or \textit{subsequence} of a time series, such that $c \in V$. Each sample of a time series is transformed into a \textit{character} to form a \textit{symbolic time series}.\\\\
 \textbf{Symbolic Time Series:} A \textit{symbolic time series} is a sequence of \textit{characters} ordered in time generated from the parent time series. It has length $n \in \mathbb{N}$: $ST = (st_1, st_2, ..., st_n)$, with $st_i = c \in V$. A specific sequence of \textit{characters} of a \textit{symbolic time series} can form a \textit{word}.\\\\
 \textbf{Word:} A \textit{word} can be a single character or the concatenation of a sequence of \textit{characters}, giving a textual representation of a \textit{subsequence}, such that $W = (w_1, w_2, ..., w_u)$, with $u \in \mathbb{N}$, $w_i = c \in V$ and $W \in V$. Putting \textit{words} together forms a \textit{sentence}.\\\\
@@ -389,10 +389,10 @@ Here are introduced traditional methods applied for feature extraction of text d
     bow(t,d) = tf_{t, d} = \frac{f_{t,d}}{\sum\limits_{t'\in d} f_{t',d}}, 
 \end{equation}
 
-being \textit{t} the term that exists in a document, \textit{d} the document and \textit{t'} the term that belongs to document \textit{d}. Here $t$ can be a single a \textit{word} or an \textit{n-gram}.\\\\
-\textbf{N-gram:} It is a span of followed \textit{words} that are counted in the \gls{bow}/\gls{tfidf}. As an example, a possible \textit{2-gram} from Figure \ref{fig:sax} would be \texttt{aa}, \texttt{ca} or \texttt{ac}. This strategy resembles a \textit{moving window} with total overlap on time series, but for text. It can make the \gls{bow}/\gls{tfidf} model more robust since it relies in more than single \textit{word} statistics. It also has a very good fit for time series, considering that it can take into account time dependencies between \textit{words}, which reflects the time dependency seen in time series between \textit{subsequences} (e.g. it might be more meaningful to say that a signal has a \texttt{peak} next to a \texttt{valley} than just saying that it has a peak and a valley).\\
+being \textit{t} the term that exists in a document, \textit{d} the document and \textit{t'} the term that belongs to document \textit{d}. Here $t$ can be a single \textit{word} or an \textit{n-gram}.\\\\
+\textbf{N-gram:} It is a span of followed \textit{words} that are counted in the \gls{bow}/\gls{tfidf}. As an example, a possible \textit{2-gram} from Figure \ref{fig:sax} would be \texttt{aa}, \texttt{ca} or \texttt{ac}. This strategy resembles a \textit{moving window} with total overlap on time series, but for text. It can make the \gls{bow}/\gls{tfidf} model more robust since it relies in more than single \textit{word} statistics. It also has a very good fit for time series, considering that it can take into account time dependencies between \textit{words}, which reflects the time dependency seen in time series between \textit{subsequences} (e.g. it might be more meaningful to say that a signal has a \texttt{peak} next to a \texttt{valley} than just saying that it has a \texttt{peak} and a \texttt{valley}).\\
 
-The \gls{bow} is commonly used to vectorize the textual representation of each symbolic time series, but there is common knowledge in the text mining community that if a \textit{term} occurs in all \textit{documents}, then it is less relevant. To counteract this possible limitation, the \gls{tfidf} matrix is used.\\\\
+The \gls{bow} is commonly used to vectorize the textual representation of each symbolic time series, but there is common knowledge in the text mining community that if a \textit{term} occurs in all \textit{documents}, then it is less relevant. In order to counteract this possible limitation, the \gls{tfidf} matrix is used.\\\\
 \textbf{Term Frequency Inverse Document Frequency:} The \gls{tfidf} matrix increases the relevance of $t$ by means of the $t_f$, while reducing its importance in proportion to the number of \textit{documents}, $d$ that contain the term $t$. The model is defined by being a ratio between the $t_f$ and the \textit{inverse document frequency} (idf), which is calculated as follows:
 
 \begin{equation}
@@ -407,9 +407,49 @@ The \gls{bow} is commonly used to vectorize the textual representation of each s
     tfidf(t, d, D) = tf(t, d) \cdot idf(t, D) 
 \end{equation}
 
-Both \gls{bow} and \gls{tfidf} are matrices that have a vector representation of each \textit{document}, where each element of the vector is the relevance of the \textit{term}. That means that the cosine distance can be used to compute the difference between \textit{documents}.
+Both \gls{bow} and \gls{tfidf} are matrices that have a vector representation of each \textit{document}, where each element of the vector is the relevance of the \textit{term}. That means that the euclidean or cosine distance (among others) can be used to compute the difference between \textit{documents}.
 \par
-Due to the probabilistic nature of the \gls{bow} and the fact that it contains discrete features, it is suitable to use in naive Bayes classifiers. In the other end, the \gls{tfidf} is typically used with linear \gls{svm} classifiers \cite{scikit-learn}.
+Due to the probabilistic nature of the \gls{bow} and the fact that it contains discrete features, it is suitable to use in naïve Bayes classifiers. In the other end, the \gls{tfidf} is typically used with linear \gls{svm} classifiers \cite{scikit-learn}.
+
+\subsection{Text-based Classifiers}
+\label{subsec:text_classifiers}
+
+As mentioned in the previous Section, linear classifiers, such as naïve Bayes and \gls{svm}s, are conventionally used for text document classifications. We will briefly explain the mechanisms of each of these classifiers that will be used in this work.
+
+\subsubsection{Naïve Bayes Classifier}
+\label{subsec:bayesian}
+
+Naïve Bayes classifiers are a set of probabilistic linear classifiers that follow Bayes' theorem \cite{bayes_rule, NB_site}, which implies that the probability of an event occurring is based on \textit{prior} knowledge of conditions that might be related with this event. The term \textit{naïve} is used because these classifiers assume that features are mutually independent. 
+
+The probability of an event translates as the probability of an object belonging to a specific class ($w_j$) given the observed features ($x_i$ - feature vector). This probability ($P(w_j|x_i)$ - posterior probability) is given by the general equation based from Bayes' theorem \cite{bayes_rule, NB, NB_site}:
+
+\begin{equation}
+P(w_j|x_i) = \frac{P(x_i|w_j) \dot P(w_j)}{P(x_i)}.
+\end{equation}
+
+\begin{itemize}
+\item $P(x|w_j)$ is the class-conditional probability (likelihood), which calculates \textit{how likely} the feature is observed given that it belongs to class $w_j$. It includes the probabilistic contributions of all feature dimensions:
+
+\begin{equation}
+P(x|w_j) = P(x_1|w_j) \dot P(x_2|w_j) ... \dot P(x_n|w_j) = \prod^n_{k=1}P(x_k|w_j)
+\end{equation}
+
+\item $P(w_j)$ is the \textit{prior probability}. The general probability of a class. In case the classes are uniformly distributed, the posterior probability is dependent on the class-conditional probabilities.
+\item $P(x)$ is the \textit{evidence}, which is the probability of encountering feature $x$ independently of the class label.
+\end{itemize}
+
+During the training process, the posterior probability is maximized. Several approaches can be found to compute naïve Bayes models, namely \textit{Gaussian}, \textit{Multinomial}, \textit{Complement}, \textit{Bernoulli} and \textit{Categorical} naïve Bayes. In this manuscript, we will show the usage of a \textit{Multinomial} naïve Bayes model for classification, which uses word count feature vectors and is more appropriate to be used with \gls{bow} or \gls{tfidf} models. We will use the \textit{Python} implementation given by the \textit{scikit-learn} package called \textit{MultinomialNB} \cite{scikit-learn}.
+
+\subsubsection{Linear Support Vector Machines (SVM)}
+\label{subsec:svm}
+
+The \gls{svm} classifier is a conventional method that separates different classes by finding the \textit{hyperplane} from $n$-dimensional space ($n$ equal to the number of features) that puts all samples from the same class the furthest apart from the other classes' samples. The training process has the purpose of finding this hyperplane by maximizing the margin distances between the hyperplane's surface and all samples. The hyperplanes can be written as the set of features $x$ that satisfy the following equation: 
+
+\begin{equation}
+\mathbf {w} ^{\mathsf {T}}\mathbf {x} - b = 0,
+\end{equation}
+
+where $\mathbf {w}$ are the weights for the optimal hyperplane, given as a linear combination of support vectors \cite{svm}. The support vectors belong to samples that give shape and orientation to the hyperplane. There are several ways of performing the maximum-margin hyperplane optimization, originally linear, but with non-linear metrics also available. In this work, we used the linear \gls{svm} implementation available at the \textit{Python} implementation given by the \textit{scikit-learn} package called \textit{LinearSVC} \cite{scikit-learn}.
 
 \subsection{Text Pattern Search}
 \label{subsec:regex_theory}
@@ -459,13 +499,15 @@ In order to understand the way that \gls{regex} work, some of the most used char
 
 \section{Performance and Validation Measures}
 
-This manuscript discusses three main time series data mining problems, namely classification, segmentation, and event/pattern detection. In order to perform a validation of the work developed, standard procedures are used. In this section are explained which procedures are typically used to evaluate the performance of algorithms in the mentioned problems.
+This manuscript discusses three main time series data mining problems, namely classification, segmentation, and event/pattern detection. In order to perform a validation of the work developed, standard procedures are used. In this section are explained which procedures are typically employed to evaluate the performance of algorithms in the mentioned problems.
 
 \subsection{Classification Problems}
 
 One of the most common strategies to evaluate algorithms from the machine learning field are \textit{precision} (P), \textit{recall} (R) and \textit{f1-score} (F1). These measures are calculated based on \textit{true positives} (TP), \textit{false positives} (FP) and \textit{false negatives} (FN). Understanding what these metrics represent depends on the problem. These measures are used in this thesis to evaluate the performance of classification and event detection algorithms.
-\par
-In time series classification problems, a labeled dataset is divided into training and testing sets. The algorithm is trained on the training set and a final validation is made on the testing set. In order to perform the validation of the algorithm, the ground truth labels are compared with the labels predicted by the algorithm. This comparison gives the number of \textit{TP}, \textit{TN}, \textit{FP} and \textit{FN}. 
+
+In time series classification problems, a labeled dataset is divided into training and testing sets. The algorithm learns on the training set and a final evaluation is made on the testing set. In case the algorithm needs to fine-tune \textit{hyperparameters}, it is good practice to perform a cross-validation during the training stage. This ensures that the algorithm is optimized without \textit{seeing} any testing samples and prevents \textit{overfitting}. Several strategies can be used to perform the separation of the training set, such as the \textit{k-fold} or \textit{leave one out}. Besides, these can be made by shuffling, stratifying or grouping it. Choosing the most adequate cross-validation method depends on the distribution of the training samples.
+
+In order to perform the validation or final evaluation of the algorithm, the ground truth labels are compared with the labels predicted by the algorithm on the testing set. This comparison gives the number of \textit{TP}, \textit{TN}, \textit{FP} and \textit{FN}.
 
 \begin{itemize}
     \item $TP_c$ - If the label predicted by the algorithm is equal to the target class (positive when positive);
@@ -499,7 +541,7 @@ F1-score (F1) = 2 \times \frac{P*R}{P+R}
 Accuracy (A) = \frac{TN+TP}{TN+TP+FP+FN}
 \end{equation}
 
-These measures were initially performed in binary classification problems, but can be adapted in multi-classification ones. For this, each class (the target class) is compared to all the other classes, being the target class the \textit{positive} and all the other classes \textit{negative}. All measures are calculated for each class, and a macro and micro average of these metrics is finally calculated (here $c$ represents the number of classes).
+These measures were initially performed in binary classification problems, but can be adapted in multi-class ones as well. For this, each class (the target class) is compared to all the other classes, being the target class the \textit{positive} and all the other classes \textit{negative}. All measures are calculated for each class, and a macro and micro average of these metrics are finally calculated (here $c$ represents the number of classes).
 
 \begin{equation}
 macroP = \Sigma_{i=0}^c \frac{P_i}{c}
@@ -522,7 +564,7 @@ These metrics are typically supported with a \textit{confusion matrix}, which di
 \subsection{Event Detection}
 \label{subsec:event_metrics}
 
-Regarding event detection problems, the process involves finding the sample that corresponds to the ground truth event. Considering that it would not be fair to calculate the performance of an event detection algorithm only by searching if the ground truth sample is found, we calculate the \textit{TP}, \textit{FP} and \textit{FN} based on a tolerance margin. From these measures, metrics from Equations \ref{eq:precision}, \ref{eq:recall} and \ref{eq:f1_score} are calculated. The estimated events are considered one of the following categories:
+Regarding event detection problems, the process involves finding the sample that corresponds to the ground truth event. Considering that it would not be fair to calculate the performance of an event detection algorithm only by searching if the ground truth sample exactly matches the ground truth, we calculate the \textit{TP}, \textit{FP} and \textit{FN} based on a tolerance margin. From these measures, metrics from Equations \ref{eq:precision}, \ref{eq:recall} and \ref{eq:f1_score} are calculated. The estimated events are considered one of the following categories:
 
 \begin{itemize}
     \item $TP_e$ - is counted when the estimated event is in the margin around the ground-truth event;
@@ -533,11 +575,12 @@ Regarding event detection problems, the process involves finding the sample that
     
 \end{itemize}
 
-%Additionally, the distance of the \textit{TP} events from the ground-truth events can be calculated with several distance-based metrics, namely the \gls{mae}, the \gls{mse} and the \gls{Mse}:
-%
-%\begin{equation}
-%    MAE = \sum^{k}_{i=1} \frac{|g_{i} - e_{i}|}{k}
-%\end{equation}
+Additionally, the distance of the \textit{TP} events from the ground-truth events can be calculated with the \gls{mae}:
+
+\begin{equation}
+    MAE = \sum^{k}_{i=1} \frac{|g_{i} - e_{i}|}{k}
+\end{equation}
+
 %
 %\begin{equation}
 %    MSE = \frac{1}{k} \sum^{k}_{i=1} (g_{i} - e_{i})^2
@@ -548,6 +591,8 @@ Regarding event detection problems, the process involves finding the sample that
 %\end{equation}
 
 The precision measure is relevant to indicate if the method can only estimate events that belong to the ground-truth category, while the recall measure is an important indication of how many ground-truth events are missed in the estimation of the method. Both measures are combined in the F1-measure.
+
+
 %\par
 %The distance-based metrics evaluate how far are the TP from the corresponding ground-truth events (\gls{mae} and \gls{mse}) and which is the direction of estimation of events (if before or after the ground-truth events - \gls{Mse}).
 
@@ -601,9 +646,13 @@ As we are introducing novel ways of performing more expressive query-based searc
 \end{description}
 
 
-\subsection{Comparing Algorithms}
+\subsection{Comparing Algorithms' Performances}
 
-In classification problems, a good procedure is to compare the proposed algorithm with the existing state-of-the-art solutions, so that the reader can understand how the results presented are unbiased from the data. In this work, for each strategy proposed in the domains of classification and event detection, we will compare it with existing solutions. There are two typical ways of displaying this comparison: \textit{confrontation maps} and \textit{critical difference maps}, with examples displayed on Figures \ref{fig:performance_plots}.left and \ref{fig:performance_plots}.right, respectively.
+In science, a good practice is to compare the proposed algorithm with other existing solutions, such that the reader can understand how the results presented are unbiased from the data. In this work, each strategy proposed in the domains of classification and event detection will be compared with existing solutions. Typically, the results will have accuracy or F1-scores metrics, sometimes from very large datasets. Averaging these scores may not give a reliable view of performance differences between methods, specially if these scores are the performance of the algorithm over different datasets, with different sizes, scenarios and difficulties. In that case, other techniques should be used to present the results such that the reader can have the full picture. 
+
+One possible strategy involves counting the times a method wins, draws or loses against another method. This can be helpful to have a broader picture of the results in addition to the average metrics. We will use this count strategy for both classification and segmentation tasks since we will be using multiple datasets, with different lengths, difficulties and contexts. 
+
+Visual tools can also be employed for this purpose, namely \textit{confrontation maps} and \textit{critical distance maps}, with examples displayed on Figures \ref{fig:performance_plots}.left and \ref{fig:performance_plots}.right, respectively.
 
 \begin{figure}
 \includegraphics[width=\linewidth]{performance_plots.pdf}
@@ -615,8 +664,8 @@ In classification problems, a good procedure is to compare the proposed algorith
 
 When the proposed algorithm is applied to a dataset and compared with another algorithm, we might be tempted to display an overwhelming quantity of information in a table. Although this is a valid approach that should be made to give a full picture to the reader, there should also be a straightforward way of displaying the same information, but reading it at a glance. With confrontation maps, we can compare the performance of two algorithms just to very intuitively understand if there is a significant difference in their performance. Typically, this map is a scatter plot comparing the \textit{F1-score} or \textit{accuracy} of algorithm 1 \textit{versus} algorithm 2. Figure \ref{fig:performance_plots}.left displays an example of it taken from \cite{keogh_presentation}. Each dot of the plot is a dataset. When it is above the diagonal, it is better classified by algorithm 1, while if below, it is better classified by algorithm 2. In this example, algorithm 1 is better in most datasets.
 
-\subsubsection{Critical Difference}
+\subsubsection{Critical Distance}
 
-Critical difference maps are a way of comparing the performance of multiple algorithms or variations of the same algorithm. The plot is a representation of a statistical test over the performance result of each algorithm. The test evaluates if the difference in the performance is significant (critical difference) or not. For instance, on Figure \ref{fig:performance_plots}.right, the plot compares 5 different classifiers (\textit{clf1} to \textit{clf5}) and highlights that the difference in performance is not significant between \textit{clf1, 2} and \textit{4}, neither between \textit{clf3 and 5}. However, \textit{clf3} and \textit{5} have a much better performance than the other classifiers. The closer the classifiers are from the right (1), the better they are. The tick bar connects the classifier with performances that are not significantly different in the statistical test.
+Critical difference maps are a way of comparing the performance of multiple algorithms or variations of the same algorithm. The plot is a representation of a statistical test over the performance result of each algorithm. The test evaluates if the difference in the performance is significant (critical distance) or not. For instance, in Figure \ref{fig:performance_plots}.right, the plot compares 5 different classifiers (\textit{clf1} to \textit{clf5}) and highlights that the difference in performance is not significant between \textit{clf1, 2} and \textit{4}, neither between \textit{clf3 and 5}. However, \textit{clf3} and \textit{5} have a much better performance than the other classifiers. The closer the classifiers are from the right (1), the better they are. The tick bar connects the classifier with performances that are not significantly different in the statistical test.
 \par
-In this work, we will use an implemented critical difference method from \cite{critical_dif}, which uses the  \textit{Wilcoxon-Holm} test, which counteracts the problem of multiple comparisons and calculates pairwise significance between all methods evaluated \cite{stat_test}.
+In this work, we will use an implemented critical distance method from \cite{critical_dif}, which uses the  \textit{Wilcoxon-Holm} test to counteracts the problem of multiple comparisons and calculates pairwise significance between all methods evaluated \cite{stat_test}. The null hypothesis of the \textit{Wilcoxon} signed rank test is that the median of the population of differences between the paired data is zero, while the alternative hypothesis is that it is not zero. The significance is then evaluated with the \textit{Holm} test to accept or reject the multiple hypothesis results based on the p-values resulting from the pairwise tests.

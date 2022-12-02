@@ -14,7 +14,7 @@
 \begin{figure}[h]
 \centering
 \includegraphics[width=\linewidth]{intro_chapter5.pdf}
-\caption{Information retrieval topics explained in this Chapter. Each of these topics is a result of analyzing the \gls{ssm}.}
+\caption{Information retrieval topics explained in this Chapter. Each of these topics is a result of analysing the \gls{ssm}.}
 \label{fig:info_retrieval_topics}
 \end{figure}
 
@@ -28,14 +28,14 @@ Researchers are interested in understanding the structure of the recorded signal
     \item \textbf{Summarization}: to summarize visually the time series by partitioning it into relevant and uniform/periodic segments and joining segments based on their similarity.
 \end{itemize}
 
-In this Chapter, we present the proposed solutions to these five problems mentioned above, inspired by a method used for audio signal analysis and thumbnail generation \cite{fmp1, audiolabs1, audiolabs2, cpd_audio}. Such a method has not yet been extended to other types of \textit{time series} domains that could greatly benefit from it \cite{muller_music_health}. The method uses a feature-based \gls{ssm} of (multidimensional) time series, from which visual and analytical information is rendered to perform the segmentation process and associate \textit{subsequences} of the time series with each other, which forwards automatic labelling and ultimately can be used to summarize the signal. We extended its application to \textit{biosignals} with the usage of general features and introduced new methods to analyze the \gls{ssm} for periodic segmentation, labelling, query search, and summarization.
+In this Chapter, we present the proposed solutions to the five problems mentioned above, which are inspired by a method used for audio signal analysis and thumbnail generation \cite{fmp1, audiolabs1, audiolabs2, cpd_audio}. Such a method has not yet been extended to other types of \textit{time series} domains that could greatly benefit from it \cite{muller_music_health}. The method uses a feature-based \gls{ssm} of (multidimensional) time series, from which visual and analytical information is rendered to perform the segmentation process and associate \textit{subsequences} of the time series with each other. This association based on similarity can be used towards automatic labelling and ultimately to summarize the signal. We extended its application to \textit{biosignals} with the usage of general features and introduced new methods to analyse the \gls{ssm} for periodic segmentation, labelling, query search, and summarization.
 
 
 \section{The Problem}
 
 Defining what is relevant in a time series highly depends on the context and purpose of the analysis, but globally, for any type of time series, there is a general interest in understanding how the signal is structured and how are \textit{subsequences} related, especially for tasks related to data labelling. The structure of a time series is built of \textit{segments} delimited by \textit{events}. The problem explored in this section is the search for such \textit{events} and how to find the ones that are significant and useful to then perform a similarity search and summarization of the time series.
 \par
-From the definition of \textit{event} (see Chapter 2 Section \ref{sec:global}), we highlight two primary considerations for the detection of events: (1) an event is a change in the behavior of the time series, and (2) it has to be significant both \textit{statistically} and \textit{qualitatively}. The \textit{qualitative} aspect indicates subjectivity from the analyst because of the domain or context of the problem. Considering this, we will start by explaining the dimensions of the problem: (1) search and (2) type of significance. 
+From the definition of \textit{event} (see Chapter 2 Section \ref{sec:global}), we highlight two primary considerations for the detection of events: (1) an event is a change in the behaviour of the time series, and (2) it has to be significant both \textit{statistically} and \textit{qualitatively}. The \textit{qualitative} aspect indicates subjectivity from the analyst because of the domain or context of the problem. Considering this, we will start by explaining the dimensions of the problem: (1) search and (2) type of significance. 
 
 \subsection{Search Ranks}
 
@@ -68,7 +68,7 @@ Figure \ref{fig:event_search} illustrates the search ranks of the problem formed
 
 \begin{itemize}
     \item \textbf{Dimensionality}: The search can be applied to one or multiple time series. In multidimensional space, some events can coincide in several time series, while others are specified on a particular dimension. For example, some gestures produce noticeable signals on only one dimension of the three-axis accelerometer.
-    \item \textbf{Timescale}: \textit{Events}' occurrence can vary from different timescales. For example, when the signal being analyzed is zoomed in from hour to minute scales, some events may disappear while new events may be detected.
+    \item \textbf{Timescale}: \textit{Events}' occurrence can vary from different timescales. For example, when the signal being analysed is zoomed in from hour to minute scales, some events may disappear while new events may be detected.
     \item \textbf{Representation}: The searchable objects can be straightforwardly the temporal nature of time series or other representation, such as frequency or other extracted features.
 \end{itemize}
 
@@ -78,7 +78,7 @@ Besides the ranks mentioned above, the search procedure can be customized by con
   \item \textbf{Property change}: The change of a property, such as a change in mean or frequency, or a set of properties is greater than a threshold, e.g., \textcolor{myblue}{low} to \textcolor{mygreen}{high} frequency - \includegraphics[height=2.5ex, valign=m]{walking_jogging.png}.
   \item \textbf{Peak/Valley}: Peaks and valleys can typically be associated with significant physical changes, e.g., \gls{ecg} \textcolor{mygreen2}{peaks} like \includegraphics[height=3.5ex, valign=m]{high_peak_ecg.png}.
   \item \textbf{Periodicity}: The starting points of each period in a periodic signal are considered relevant, e.g., \gls{abp} periods like \includegraphics[height=2.5ex, valign=m]{bvp_segment.png}.
-  \item \textbf{Recurrent pattern}: Re-occurrences of similar \textit{subsequences} with specific patterns should be of interest. Unlike \textit{periodicity}, \textit{recurrent} patterns do not have a temporal regularity.
+  \item \textbf{Recurrent pattern}: Re-occurrences of similar \textit{subsequences} with specific patterns should be of interest. Unlike \textit{periodicity}, \textit{recurrent} patterns do not have a temporal regularity, e.g., the \textcolor{myblue}{arrhythmias} found in an \gls{ecg} signal like \includegraphics[height=3ex, valign=m]{arrhytmia_thumbnail.pdf}.
   \item \textbf{Anomaly}: Highly dissimilar \textit{subsequences} with particular patterns are of the reference value, e.g., \textcolor{myred}{noise} in a clean signal \includegraphics[height=3ex, valign=m]{ecg_noise_thumbnail.png}.
 \end{itemize}
 
@@ -108,7 +108,7 @@ In this section, we explain the steps of the proposed method. The extraction of 
 \begin{figure}
 \centering
     \includegraphics[width=\linewidth]{SSM_steps.pdf}
-    \caption{A step-by-step flowchart for calculating and analyzing the \gls{ssm}. The signal-based calculation requires input parameters of the window size $w$ and the overlapping percentage $o$ to fulfill the first-stage feature extraction. Features are extracted on each subsequence $(sT_1, sT_2..., sT_N)$, where $N$ is the total number of windows. $K$ features are extracted from window $i$ ($sT_i$: $f_{i_1}, f_{i_2}, ..., f_{i_K}$). Different features are associated with different shapes ($\bigcirc, \Box, \Diamond$, and $\triangle$) in the figures. The features can be extracted on an $M$-variable record and each feature is positioned as a row on the $F_M$ for the \gls{ssm} computation.}
+    \caption{A step-by-step flowchart for calculating and analysing the \gls{ssm}. The signal-based calculation requires input parameters of the window size $w$ and the overlapping percentage $o$ to fulfill the first-stage feature extraction. Features are extracted on each subsequence $(sT_1, sT_2..., sT_N)$, where $N$ is the total number of windows. $K$ features are extracted from window $i$ ($sT_i$: $f_{i_1}, f_{i_2}, ..., f_{i_K}$). Different features are associated with different shapes ($\bigcirc, \Box, \Diamond$, and $\triangle$) in the figures. The features can be extracted on an $M$-variable record and each feature is positioned as a row on the $F_M$ for the \gls{ssm} computation.}
     \label{fig:SSM_scheme}
 \end{figure}
 
@@ -165,7 +165,7 @@ The search for \textit{novelty} is inspired by a method used in musical structur
 \begin{figure}
     \centering
     \includegraphics[width=\linewidth]{sliding_kernel.pdf}
-    \caption{Left: description of the matrix (kernel) used to compute the \textit{novelty function}, based on the works of \textit{Mueller} \textit{et. al} \cite{fmp1, fmp2}. The chequerboard pattern of the kernel $K_N$ is achieved by combining the kernel $K_H$ (homogeneity measure) and $K_C$ (cross-similarity measure). Combined with a Gaussian function, the $K_G$ is obtained; right: the process to compute the novelty function based on the works of \cite{Dannenberg2008,fmp1, fmp2}. Kernel $K_G$ slides along the diagonal of the \gls{ssm} to compute the \textit{novelty function} presented as the bottom sub-plot. Positions A and B point to the effect of block transitions on the \textit{novelty function}.}
+    \caption{Left: description of the matrix (kernel) used to compute the \textit{novelty function}, based on the works of \textit{Mueller} \textit{et al.} \cite{fmp1, fmp2}. The chequerboard pattern of the kernel $K_N$ is achieved by combining the kernel $K_H$ (homogeneity measure) and $K_C$ (cross-similarity measure). Combined with a Gaussian function, the $K_G$ is obtained; right: the process to compute the novelty function based on the works of \cite{Dannenberg2008,fmp1, fmp2}. Kernel $K_G$ slides along the diagonal of the \gls{ssm} to compute the \textit{novelty function} presented as the bottom sub-plot. Positions A and B point to the effect of block transitions on the \textit{novelty function}.}
     \label{fig:kernel_description}
 \end{figure}
 
@@ -275,7 +275,7 @@ Experiments from multiple domains were carried on to validate the practicability
 \end{figure}
 
 
-Figure \ref{fig:use_case1}(top) exemplifies the \gls{ssm}'s usage on a record of an \gls{har} dataset (see Section \ref{dat:dataset3}), where the data of all three accelerometer axes is applied. The \gls{ssm} was computed using a 250-sample window size, and a 95\% overlap. Along the diagonal, the novelty function generates block-wise references for estimating activity transition using a 45-sample kernel.
+Figure \ref{fig:use_case1}(top) exemplifies the \gls{ssm}'s usage on a record of an \gls{har} dataset (\textit{HAR1}, see Section \ref{dat:dataset3}), where the data of all three accelerometer axes is applied. The \gls{ssm} was computed using a 250-sample window size, and a 95\% overlap. Along the diagonal, the novelty function generates block-wise references for estimating activity transition using a 45-sample kernel.
 
 We can identify in Figure \ref{fig:use_case1}(top) that the detected segmentation points match the activity transitions. Although all transitions are visible on the novelty function, the transitions between similar activity patterns in the walking category (straightforward, upstairs, and downstairs) are more challenging to differentiate, as block $A$ suggests, which is plausible since the properties of these segments are morphologically similar.
 
@@ -293,20 +293,20 @@ Questions may arise at this point. Why is the signal periodicity of the three wa
     \centering
     \begin{subfigure}[b]{\textwidth}
          \centering
-         \includegraphics[width=0.9\textwidth]{5_abp_example.pdf}
+         \includegraphics[width=0.9\textwidth]{5_abp_example_1.pdf}
     \end{subfigure}\\
     \vspace{5mm}
     \begin{subfigure}[b]{\textwidth}
          \centering
          \includegraphics[width=0.9\textwidth]{5_abp_example_2.pdf}
     \end{subfigure}
-    \caption{Novelty search on an \gls{abp} signal from Dataset 5 (see Section \ref{sec:dataset}). Top: a window size of 5,000 samples, an overlap of 95\%, and a kernel size of 200 samples. The trapezoidal and the square wave mark the ground truth of slow and fast postural transitions. Bottom: the first 10,000 samples, with a window size of 250 samples, an overlap of 95\%, and a kernel size of 200 samples. The right parts of the top and bottom subfigures plot the corresponding similarity profiles for each subsequence segmented by the novelty function.}
+    \caption{Novelty search on an \gls{abp} signal from Dataset 5 (\textit{TILT}, see Section \ref{sec:dataset2}). Top: a window size of 5,000 samples, an overlap of 95\%, and a kernel size of 200 samples. The trapezoidal and the square wave mark the ground truth of slow and fast postural transitions. Bottom: the first 10,000 samples, with a window size of 250 samples, an overlap of 95\%, and a kernel size of 200 samples. The right parts of the top and bottom subfigures plot the corresponding similarity profiles for each subsequence segmented by the novelty function.}
     \label{fig:use_case2}
 \end{figure}
 
 Many biomedical signals, such as \gls{ecg}, \gls{abp}, and \gls{resp}, contain retrievable structural information like periodicities. Meanwhile, unexpected changes may occur during the acquisition due to physiological responses, medical disorders, or sensing problems like noise, interferences, artefacts, and electrode detachment. We visualize two examples of physiological changes in different types of periodic signals.
 
-The \gls{abp} signal can vary due to postural changes, as an available experiment at \textit{Physionet} confirms \cite{tilt, PhBank}. Figure \ref{fig:use_case2}(top) shows the process of segmenting the \gls{abp} signal based on postural changes, where the trapezoidal and the square wave tag the ground truth of slow and fast postural transitions. The proposed strategy well perceives the change points. Observably, the shape of the raw \gls{abp} signal in each regime is undistinguishable through the naked eye. Therefore, it is constructive to rely solely on the signal itself to implement postural change detection. It is important to point out that the periodicity of the signal is not visible on the matrix because the features were extracted with a window size of 5,000 samples, which is much larger than the period size. A smaller window size of 250 samples in the current scenario allows periodic segmentation, as Figure \ref{fig:use_case2}(bottom) illustrates, where the \gls{ssm} is computed on the first 10,000 samples of Dataset 5 (see Section \ref{sec:dataset}).
+The \gls{abp} signal can vary due to postural changes, as an available experiment at \textit{Physionet} confirms \cite{tilt, PhBank}. Figure \ref{fig:use_case2}(top) shows the process of segmenting the \gls{abp} signal based on postural changes, where the trapezoidal and the square wave tag the ground truth of slow and fast postural transitions. The proposed strategy well perceives the change points. Observably, the shape of the raw \gls{abp} signal in each regime is undistinguishable through the naked eye. Therefore, it is constructive to rely solely on the signal itself to implement postural change detection. It is important to point out that the periodicity of the signal is not visible on the matrix because the features were extracted with a window size of 5,000 samples, which is much larger than the period size. A smaller window size of 250 samples in the current scenario allows periodic segmentation, as Figure \ref{fig:use_case2}(bottom) illustrates, where the \gls{ssm} is computed on the first 10,000 samples of Dataset 2 (\textit{TILT}, see Section \ref{sec:dataset2}).
 The resulting \textit{similarity} function gives prominence to the periodic nature of the \gls{abp} signal.
 
 The \gls{ssm} of Figure \ref{fig:use_case2}(top) also shows which segments are similar to each other. The blue-coloured parts in the matrix indicate high similarity, presenting that segments from the same posture are more similar than between different postures. For further illustrative purposes, we computed the similarity profiles of each segment as if segmented by the \textit{novelty} function, which evidences that the corresponding sections could be well clustered based on the similarity profiles ($P_A = P_C$ and $P_B=P_D$). In the same way, the similarity profiles in Figure \ref{fig:use_case2}(bottom) examine the similarity between segmented \textit{subsequences}. Profiles with a similar shape can be grouped ($P_A=P_C=P_E=P_G$ and $P_B=P_D$), which can be applied to automatic clustering, as will be exhibited further in the next Section.
@@ -329,14 +329,14 @@ In addition to the novelty detection, segment \textbf{\textit{A}} previous to th
 \label{sec:multi_example}
 
 The proposed method accepts both single- and multidimensional records. The difference regards the number of features extracted. As compared in Figure \ref{fig:use_case4}, the same set of features is extracted from each time series to build the $F_M$.
-Using a single or several time series of a multidimensional record is an option, depending on the purpose. In some cases, the use of non-complete dimensions may miss relevant events, as Figure \ref{fig:use_case4} instances the record ``Occupancy'' from Dataset 7 (see Section \ref{dat:dataset10}). 
+Using a single or several time series of a multidimensional record is an option, depending on the purpose. In some cases, the use of non-complete dimensions may miss relevant events, as Figure \ref{fig:use_case4} instances the record ``Occupancy'' from Dataset 9 (\textit{ATCPD}, see Section \ref{dat:dataset10}). 
 
 The record is a multidimensional time series that measures room occupancy based on temperature, humidity, light, and $CO_2$. By comparing the signals and formations in the left and the right parts of Figure \ref{fig:use_case4}, it can be understood that some events can be detected using the $CO_2$ series exclusively, but some are missed.
 
 \begin{figure}
     \centering
     \includegraphics[width=\textwidth]{use_case4_multi.pdf}
-    \caption{The proposed method applied on the \textit{Occupancy} record of Dataset 7 (see Section \ref{dat:dataset10}). Left: calculations on the separate $CO_2$ time series only; right: calculations performed by extracting features on the complete four time series.}
+    \caption{The proposed method applied on the \textit{Occupancy} record of Dataset 9 (\textit{ATCPD}, see Section \ref{dat:dataset10}). Left: calculations on the separate $CO_2$ time series only; right: calculations performed by extracting features on the complete four time series.}
     \label{fig:use_case4}
 \end{figure}
 
@@ -348,7 +348,7 @@ Following the presented work, we studied how to use it for a meaningful summary 
 
 \subsection{Elements with Relevance}
 
-In this section, we have been discussing which elements are relevant in time series, mostly associated with \textit{events}. From \textit{events} we can segment homogeneous \textit{subsequences}, recurrent or periodic patterns and anomalies. The relationship between these segments is possible by analyzing their similarity. In addition, a characterization of the segments is possible with statistical analysis. In that sense, the relevant elements to summarize in a time series are (1) \textit{homogeneous segments}, (2) \textit{periodic patterns}, (3) \textit{recurrent patterns}, (4) \textit{anomalies}, (5) association based on similarity and (6) statistical characterization.
+In this section, we have been discussing which elements are relevant in time series, mostly associated with \textit{events}. From \textit{events} we can segment homogeneous \textit{subsequences}, recurrent or periodic patterns and anomalies. The relationship between these segments is possible by analysing their similarity. In addition, a characterization of the segments is possible with statistical analysis. In that sense, the relevant elements to summarize in a time series are (1) \textit{homogeneous segments}, (2) \textit{periodic patterns}, (3) \textit{recurrent patterns}, (4) \textit{anomalies}, (5) association based on similarity and (6) statistical characterization.
 
 \subsection{Compact Design}
 
@@ -371,7 +371,7 @@ The proposed visualization strategy has several elements that can be used to tra
 \label{fig:summarize_steps}
 \end{figure}
 
-The steps are indicated in Figure \ref{fig:summarize_steps} for the \gls{abp} signal example. After computing the \gls{ssm}, it is firstly analyzed to segment the signal based on the \textit{nova} function. These segments are then compared based on the \textit{similarity profiles}. Additional layers can be created by performing an iterative and multi-scale segmentation. With this process, the time series is segmented (\textit{novelty layer}), subsegmented (\textit{subsegment layer}), each segment is connected to the nearest neighbor segment (\textit{nearest neighbor chords}) and the colors for each segment is given based on their similarity to the first segment. Figures \ref{fig:summarize_step1}, \ref{fig:summarize_step2} and \ref{fig:summarize_step3} show the step-by-step process to summarize the time series by analyzing the \gls{ssm}. 
+The steps are indicated in Figure \ref{fig:summarize_steps} for the \gls{abp} signal example. After computing the \gls{ssm}, it is firstly analysed to segment the signal based on the \textit{nova} function. These segments are then compared based on the \textit{similarity profiles}. Additional layers can be created by performing an iterative and multi-scale segmentation. With this process, the time series is segmented (\textit{novelty layer}), subsegmented (\textit{subsegment layer}), each segment is connected to the nearest neighbor segment (\textit{nearest neighbor chords}) and the colors for each segment is given based on their similarity to the first segment. Figures \ref{fig:summarize_step1}, \ref{fig:summarize_step2} and \ref{fig:summarize_step3} show the step-by-step process to summarize the time series by analysing the \gls{ssm}. 
 
 \begin{figure}
 \centering

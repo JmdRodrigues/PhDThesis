@@ -1,0 +1,38 @@
+- Change image in Fundamentals
+- Reduce size of tables in Appendixes...(maybe share the code so that everyone can run the examples and we could share)
+- Change and resume
+
+- Chapter Dataset:
+figuras de cada dataset, etc...faz sentido?
+
+- Apendices com tabelas gigantes, faz sentido?
+
+Content of thesis
+
+Abstract:
+- Mensagem do Abstract tem de ser melhor passada e mais inspiradora
+- Não faço menção a métricas de outros algoritmos
+
+Outros comentários:
+Critical Distance/Difference
+
+
+
+
+
+
+Parte Burocrática:
+
+Relatório sobre submissão de tese
+(Pres: José Paulo...)
+(Externo: Prof. Jaime)
+
+Highlights: 
+Tese preparada
+
+Parecer de entrega de tese
+Proposta de Júri
+
+Submeter após ECTs
+Enviar documento a dizer que a CAT concorda 
+(Uma das partes importantes: que tenha publicações relevantes)
