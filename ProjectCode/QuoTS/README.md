@@ -1,7 +1,5 @@
-This project was made in partnership with the CSLab from the Universität Bremen.
+This project was made in partnership with the UCR Time Series Lab from the University of California, Riverside.
 
-It has the potential to be used for a remote instruction of workers learning new motions.
+Here you can find the repository with the code and experiments:
 
-You can find a presentation with demos at: 
-
-https://docs.google.com/presentation/d/1TKHZ9-4uSU-lf2fd-9fas_aW6GhZiVW9/edit?usp=share_link&ouid=108944102040997263497&rtpof=true&sd=true
+https://github.com/Anonymous14151/QuoTS

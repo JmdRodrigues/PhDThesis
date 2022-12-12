@@ -8,36 +8,16 @@
 
 \typeout{NT FILE abstrac-pt.tex}%
 
-Independentemente da língua em que a dissertação esteja redigida, é necessário um resumo na mesma língua do texto principal e outro resumo noutra língua. Pressupõe-se que as duas línguas em questão sejam o português e o inglês.
+Enquanto analistas de dados no ramo da engenharia biomédica, procuramos desvendar estruturas e padrões, inerentes aos biosinais, que permitem compreender fenómenos fisiológicos associados. Métodos e algoritmos são utilizados como meios de interação e comunicação de forma a permitir aos dados expressarem o seu conteúdo para extrair a informação de interesse. Nem sempre se torna simples retirar esta informação, sendo que, especialmente com o uso mais frequente dos biodispositivos \textit{vestíveis}, torna-se cada vez mais relevante ter acesso a ferramentas que ajudem os analistas a explorar, analisar, e recolher informação, para reduzir a dificuldade, tempo e custo deste inevitável processo.
 
-Os resumos devem aparecer primeiro na língua do texto principal e depois na outra língua. Por exemplo, se a dissertação for redigida em português, o resumo em português aparecerá primeiro, seguido do resumo em inglês (\emph{abstract}), seguido do texto principal em português. Se a dissertação for redigida em inglês, o resumo em inglês (\emph{abstract} aparecerá primeiro, seguido do resumo em português, seguido do texto principal em inglês.
+Neste trabalho, a comunicação entre o analista e os biosinais é explorada, procurando responder às seguintes questões: Podemos \textit{decifrar} a \textit{linguagem dos biosinais}? Podemos usar palavras para descrever padrões e formas específicas dos biosinais? Haverão mudanças estruturais que podem ser desvendadas? 
 
-Na versão \LaTeX\, o template NOVAthesis irá ordenar automaticamente os dois resumos tendo em consideração a língua do texto principal. É possível alterar este comportamento adicionando
-\begin{verbatim}
-    \abstractorder(<MAIN_LANG>):={<LANG_1>,...,<LANG_N>}
-\end{verbatim}
-\noindent à zona de customização no preâmbulo do documento, e.g.,
-\begin{verbatim}
-    \abstractorder(de):={de,en,it}
-\end{verbatim}
+Novos métodos são propostos para a análise mais rápida, útil e significativa das séries temporais, abrindo o caminho para um meio de comunicação mais expressivo e intuitivo entre o analista e os dados recolhidos. Mais especificamente, são propostas ferramentas para (1) a segmentação automática de biosinais uni ou multimodais, por meio de uma matriz de auto-similaridade (SSM), calculada a partir da representação das características do sinal; (2) procuras de padrões mais expressivas e intuitivas com (a) uma nova representação simbólica das séries temporais (SSTS), (b) palavras que representam características significativas usadas com operadores (\textit{QuoTS}); e (3) classificação de séries temporais com base na representação simbólica dos sinais (HearTS).
 
-Os resumos não devem ultrapassar uma página e, de forma genérica, devem responder às seguintes questões (é essencial adaptá-los às práticas habituais da sua área científica):
-
-\begin{enumerate}
-  \item Qual é o problema?
-  \item Porque é que é um problema interessante/desafiante?
-  \item Qual é a proposta de abordagem/solução?
-  \item Quais são as consequências/resultados da solução proposta?
-\end{enumerate}
-
-% E agora vamos fazer um teste com uma quebra de linha no hífen a ver se a \LaTeX\ duplica o hífen na linha seguinte se usarmos \verb+"-+… em vez de \verb+-+.
-%
-% zzzz zzz zzzz zzz zzzz zzz zzzz zzz zzzz zzz zzzz zzz zzzz zzz zzzz zzz zzzz comentar"-lhe zzz zzzz zzz zzzz
-%
-% Sim!  Funciona! :)
+Em relação ao tópico (1) foi apresentado um suporte visual lúcido para interpretar os biosinais com a SSM, enquanto também é possível realizar a segmentação automático com o uso da função de novidade e similaridade, a caminho do processo de categorização automática. Em (2.a), a representação simbólica proposta mostra-se competente em diversos casos de uso de biosnais, tal como o método proposto em (2.b), no contexto de procura de padrões em biosinais, com a ajuda de um vocabulário simples. Estes dois métodos propostos apresentaram resultados sólidos na idenficação dos padrões desejados, sobretudo com mais intuição e expressivadade. Finalmente, em (2.c) foi apresentado que o sinal poderia ser transformado em texto e ser usado em problemas de classificação utilizando classificadores tradicionalmente usados em texto.
 
 % Palavras-chave do resumo em Português
 \begin{keywords}
-Palavra-chave 1, Palavra-chave 2, Palavra-chave 3, Palavra-chave 4
+biosinais, séries temporais, similaridade, segmentação, significado, estrutura, simbólico, texto, expressividade, classificação, padrão, características
 \end{keywords}
 % to add an extra black line

@@ -19,7 +19,7 @@ In this Chapter, we highlight the main contributions of this thesis in each of t
 
 As we mentioned in Chapter \ref{cha:introduction}, this thesis contributes to three main topics, namely \textit{Sensing}, \textit{Analysis} and \textit{Decision Making}:
 \begin{itemize}
-\item \textit{Sensing:} In this context, a deep understanding of the existing technology to record biosignals was made. At some point, the focus moved towards technology existing to monitor occupational variables. A written work is available regarding the usage of fiber-optics for the monitoring of motion and postural variables in automotive industries, which can be found in \cite{fiber_optics} and it is compared to other existing methods. In addition, a study of the state of the art sensors existing on the market was made to understand the fit in the occupational health problematic. A presentation is available at \cite{sensors_slides}, showing the existing materials on the market and that cover human motion and physiology, more focused for occupational health. The contributions in this area are more related with the knowledge gained and how it was used to more appropriately prepare an acquisition plan regarding the acquisition of occupational variables in several settings, namely automotive industry (Volkswagen Autoeuropa), clothing manufacturers and office/desk jobs.\\
+\item \textit{Sensing:} In this context, a deep understanding of the existing technology to record biosignals was made. At some point, the focus moved towards technology existing to monitor occupational variables. A written work is available regarding the usage of fiber-optics for the monitoring of motion and postural variables in automotive industries, which can be found in \cite{fiber_optics} and it is compared to other existing methods. In addition, a study of the state of the art sensors existing on the market was made to understand the fit in the occupational health problematic. A presentation is available at \cite{sensors_slides}, showing the existing materials on the market and that cover human motion and physiology, more focused for occupational health. Several publications were also made regarding the setup and usage of inertial sensors in occupational settings \cite{sara, santos2019, lua, microergo, sara_silva}. The contributions in this area are more related with the knowledge gained and how it was used to more appropriately prepare an acquisition plan regarding the acquisition of occupational variables in several settings, namely automotive industry (Volkswagen Autoeuropa), clothing manufacturers and office/desk jobs.\\
 
 \item \textit{Analysis:} This work has demonstrated a deeper exploration of the topics related with the analysis of biosignals and time series in general. The contributions include the usage of the \gls{ssm} for the segmentation of time series (\textit{novelty} and \textit{periodic} functions), summarization and creation of similarity profiles for (semi-)automatic clustering. A novel symbolic representation of time series was introduced, and examples were provided in how to apply it for pattern search with \gls{regex} (\gls{ssts}) and text-based classification (\gls{hearts}). A novel search mechanism was also developed, closer to natural language search, with keywords and operators (\gls{quots}). A more detailed explanation of these contributions are provided on a further section.\\
 
@@ -65,7 +65,7 @@ Having queries closer to the way we express what we see was one of the main moti
 
 In close collaboration with Volkswagen Autoeuropa and the Faculty of Human Motricity of Lisbon (FMH), we developed a method to automatically suggest job rotation schedules based on ergonomic standards available at the factory. These standard factors are from the AutoErgo tool, based on \gls{eaws} measures. The motivation for the development of such a tool was to help team leaders to manage job rotation schedules more quickly and in a more informed way. Team leaders organize the working schedule for their team by assigning each worker to a sequence of workstations for the entire week, which is a time consuming tasks and not always informed in the risk level that each tasks represents for a worker. In this method, risk exposure, diversity in exposure, as well as team homogeneity, are taken into consideration when suggesting a daily rotation plan. The process was made by developing a genetic based optimization algorithm that followed an objective function developed by our team. The motivation, algorithm and results can be seen at \cite{jobrotation1}.
 \par
-This work was developed at the initial stage of the PhD, being valuable to get a better intuition of biosignals related with human motion. Having gained this intuition helped in understanding relevant aspects of signals and transfer this gain knowledge into the algorithms developed. For instance, problems such as segmentation were common in the signals acquired, which promoted the development of methods that could solve them (\gls{ssm}). In addition, the shape of signals, associated with specific motions, were interesting to study in order to get inspired in the possible symbolic translation (\gls{ssts}).
+This work was developed at the initial stage of the PhD, being valuable to get a better intuition of biosignals related with human motion. Having gained this intuition helped in understanding relevant aspects of signals and transfer this gained knowledge into the algorithms developed. For instance, problems such as segmentation were common in the signals acquired, which promoted the development of methods that could solve them (\gls{ssm}). In addition, the shape of signals, associated with specific motions, were interesting to study in order to get inspired in the possible symbolic translation (\gls{ssts}).
 
 \subsection{MicroErgo - Concept for Personal Assessment of Occupational Risk in Desk/Office Jobs}
 
@@ -75,13 +75,17 @@ A lot of focus has been given to occupational health scenarios during this thesi
 
 The methods studied and developed in this thesis are general and applicable to any type of time series. This means that these are applicable to direct measures from the occupational domain for information retrieval, as showed on the last section of the previous chapter. We showed that this context was always considered and highly influenced by problems from industry and office/desk jobs. 
 \par
-During this period, a complete understanding of occupational variables was made. This was essential to understand the sensors that could be interesting to use to monitor these variables. Only inertial variables were used to perform a motion capture of upper body segments, which would give most of the angular information needed to study postural variables present on \gls{eaws} (this was how dataset 14 - Section \ref{dat:dataset_industry} was acquired and more details can be found there.). The usage of direct measures in this context helped in understanding the level of risk a specific workstation represents for a worker. For instance, it is possible to understand for a specific working cycle, which percentage of time it has a high, medium and low risk (using standard ergonomic measures from \gls{rula}.). It was also possible to conclude that the same workstation is performed differently by workers with different anthropometric features, which means that a specific workstation should not be considered to have the same risk score for all workers. These conclusions can be found at \cite{sara}.
+During this period, a complete understanding of occupational variables was made. This was essential to understand the sensors that could be interesting to use to monitor these variables. Only inertial variables were used to perform a motion capture of upper body segments, which would give most of the angular information needed to study postural variables present on \gls{eaws} (this was how Dataset 14, \textit{VAOD}, Section \ref{dat:dataset_industry} was acquired and more details can be found there.). The usage of direct measures in this context helped in understanding the level of risk a specific workstation represents for a worker. For instance, it is possible to understand for a specific working cycle, which percentage of time it has a high, medium and low risk (using standard ergonomic measures from \gls{rula}). It was also possible to conclude that the same workstation is performed differently by workers with different anthropometric features, which means that a specific workstation should not be considered to have the same risk score for all workers. These conclusions can be found at \cite{sara}.
 \par
 The usage of direct measures in this context is therefore highly valuable, considering that standard methods can be used to (mostly) automatically calculate risk scores for each worker and each workstation. Using these measures, a specific workstation can be studied in detail, by means of understanding which processes contribute with the highest risk, for example. Another scenario involves studying how to adapt new workstations to improve productivity or reduce occupational risk. In either case, these direct measures can be used to measure the risk of the processes that were added/removed/modified to the workstation being proposed and understand if it truly is beneficial or not.
 \par
 The value of direct measures is also related to the existing and continuously increasing knowledge in data mining. Methods, such as the ones developed in this work, can be used to extract relevant information from this data. As we showed, segmentation and pattern search are examples of possible mechanisms for information retrieval in these datasets. Specific \textit{known} shapes can be searched with query-based mechanisms, either by text or \textit{subsequences} used as examples. At some point, supervised learning methods can be made to create working profiles for workstations and workers that consider differences in anthropometric features, specific types of processes and the associations between these. 
 \par
-Finally, another possible usage of these direct measures, would be to design automatically job rotation schedules that use this personal and individual information. As we showed previously, an algorithm was developed with this purpose, but the measures considered were from \gls{eaws} standards, which, as reflected in \cite{sara}, do not consider differences between workers. This provides an additional level of detail that could help better assign workers to workstations, based on their level of capacity.
+Finally, another possible usage of these direct measures, would be to design automatically job rotation schedules that use this personal and individual information. As we showed previously, an algorithm was developed with this purpose, but the measures considered were from \gls{eaws} standards, which, as reflected in \cite{sara}, do not consider differences between workers. This provides an additional level of detail that could help to better assign workers to workstations based on their level of capacity.
+
+\subsection{Support in Motion Training}
+
+In industrial tasks, beginner workers have to learn many tasks in multiple workstations. The learning ability differs from worker to worker depending on multiple factors. Several of these tasks have a \textit{standard} motion, with a specific pattern. This \textit{standard} typically follows the optimization for productivity and occupational health. Having a tool that could be used to understand which are the areas of the signal where the motions differ the most and give a real time feedback was an idea that was explored during my stay at the Universität Bremen, being able to develop a tool that asks for two different subjects to perform the same motion and compares it. The videos of both executions is recorded and aligned following the \gls{dtw} distance. Some highlights of this work can be found at \url{https://github.com/JmdRodrigues/PhDThesis/tree/main/ProjectCode/LabLinking}.
 
 \subsection{Volatile Organic Compounds Classification}
 
@@ -89,22 +93,33 @@ A Master Thesis in collaboration with the Biomolecular Engineering Group, from t
 
 \section{Scientific Production}
 
-During the period of this thesis, the work developed has been disseminated \textit{via} scientific publications. In addition, several research collaborations were made that also resulted in collaborative publications. The outcomes are hereby presented.
+The knowledge gathered during my stay at the Biosignals group from LIBPhys-UNL has been been disseminated \textit{via} scientific publications. In addition, several research collaborations were made that also resulted in collaborative publications. The outcomes are hereby presented.
 
 \subsection{Journal Publications}
 
 \begin{itemize}
 
+\item (Under revised version review) Rodrigues, João; Liu, Hui; Folgado, Duarte; Belo, David; Schultz, Tanja and Gamboa, Hugo;  "Feature-Based Information Retrieval of Multimodal Biosignals Using a Self-Similarity Matrix: Focus on Automatic Segmentation".
+
+\item Mollaei, Nafiseh; Fujao, Carlos; Rodrigues, Joao; Cepeda, Cepeda and Gamboa, Hugo. "Occupational health knowledge discovery based on association rules applied to workers’ body parts protection: a case study in the automotive industry", Computer Methods in Biomechanics and Biomedical Engineering, 2022, doi: 10.1080/10255842.2022.2152678
+
 \item M. L. Nunes et al., "Posture Risk Assessment in an Automotive Assembly Line Using Inertial Sensors," in IEEE Access, vol. 10, pp. 83221-83235, 2022, doi: 10.1109/ACCESS.2022.3196473.
 
-\item Mollaei N, Fujao C, Silva L, Rodrigues J, Cepeda C, Gamboa H. Human-Centered Explainable Artificial Intelligence: Automotive Occupational Health Protection Profiles in Prevention Musculoskeletal Symptoms. International Journal Environment Research and Public Health. 2022 Aug 3;19(15):9552. doi: 10.3390/ijerph19159552. PMID: 35954919; PMCID: PMC9368597.
+\item Mollaei N., Fujao C., Silva L., Rodrigues J., Cepeda C., Gamboa H.. Human-Centered Explainable Artificial Intelligence: Automotive Occupational Health Protection Profiles in Prevention Musculoskeletal Symptoms. International Journal Environment Research and Public Health. 2022 Aug 3;19(15):9552. doi: 10.3390/ijerph19159552. PMID: 35954919; PMCID: PMC9368597.
 
-\item Assunção, Ana; Mollaei, Nafiseh; Rodrigues, João; Osório, Daniel; Veloso, António; Cautela, Filomena; Gamboa, Hugo. A genetic algorithm approach to design job rotation schedules ensuring homogeneity and diversity of exposure in the automotive industry, Heliyon, Volume 8, Issue 5, e09396 (2022). https://doi.org/10.1016/j.heliyon.
+\item Gamboa, P.; Varandas, R.; Rodrigues, J.; Cepeda, C.; Quaresma, C.; Gamboa, H. Attention Classification Based on Biosignals during Standard Cognitive Tasks for Occupational Domains. Computers 2022, 11, 49. https://doi.org/10.3390/computers11040049.
+
+\item Assunção, A.; Mollaei, N.; Rodrigues, J.; Osório, D.; Veloso, A.; Cautela, F.; Gamboa, H.. A genetic algorithm approach to design job rotation schedules ensuring homogeneity and diversity of exposure in the automotive industry, Heliyon, Volume 8, Issue 5, e09396 (2022). https://doi.org/10.1016/j.heliyon.
 2022.e09396.
 
 \item Ramos, G.; Vaz, J. R.; Mendonça, G. V.; Pezarat-Correia, P.; Rodrigues, J.; Alfaras, M.; Gamboa, H.. "Fatigue Evaluation through Machine Learning and a Global Fatigue Descriptor". Journal of Healthcare Engineering 2020 (2020): 1-18. http://dx.doi.org/10.1155/2020/6484129.
 
-\item Rodrigues, João; Folgado, Duarte; Belo, David; Gamboa, Hugo. "SSTS: A syntactic tool for pattern search on time series". Information Processing and Management 56 1 (2019): 61-76. http://dx.doi.org/10.1016/j.ipm.2018.09.001.
+\item Rodrigues, J.; Folgado, D.; Belo, D.; Gamboa, H.. "SSTS: A syntactic tool for pattern search on time series". Information Processing and Management 56 1 (2019): 61-76. http://dx.doi.org/10.1016/j.ipm.2018.09.001.
+
+\item Belo, D., Rodrigues, J., Vaz, J.R. et al. Biosignals learning and synthesis using deep neural networks. BioMed Eng OnLine 16, 115 (2017). https://doi.org/10.1186/s12938-017-0405-0
+
+\item Rodrigues, J., Belo, D., Gamboa, H., Noise detection on ECG based on agglomerative clustering of morphological features, Computers in Biology and Medicine, Volume 87 (2017): 322-334, ISSN 0010-4825, https://doi.org/10.1016/ j.compbiomed.2017.06.009.
+
 \end{itemize}
 
 \subsection{Book Chapters}
@@ -120,32 +135,31 @@ During the period of this thesis, the work developed has been disseminated \text
 
 \end{itemize}
 
-
 \subsection{Conference Proceedings}
 
 \begin{itemize}
 
-\item Maryam Shahcheraghi, Ryan Mercer, João Manuel de Almeida Rodrigues, Audrey Der, Hugo Filipe Silveira Gamboa, Zachary Zimmerman, and Eamonn Keogh, "Scaling Time Series Similarity Matrices to Massive Data", IEEE International Conference on Data Mining (ICDM), Orlando, FL, USA, December 2022. \textit{(Accepted)}
+\item Shahcheraghi, M.; Mercer, R.; Rodrigues, J.; Der, A.; Gamboa, H.; Zimmerman, Z.; and Keogh, E.; "Scaling Time Series Similarity Matrices to Massive Data", IEEE International Conference on Data Mining (ICDM), Orlando, FL, USA, December 2022. \textit{(Accepted)}
 
-\item Silva, Sara; Cepeda, Catia; Rodrigues, João; Probst, Phillip; Gamboa, Hugo. "Assessing Occupational Health with a Cross-platform Application based on Self-reports and Biosignals". Paper presented in BIOSTEC, Virtual, 2022.
+\item Silva, S.; Cepeda, C.; Rodrigues, J.; Probst, P. and Gamboa, H. (2022). Assessing Occupational Health with a Cross-platform Application based on Self-reports and Biosignals. In Proceedings of the 15th International Joint Conference on Biomedical Engineering Systems and Technologies - HEALTHINF, ISBN 978-989-758-552-4; ISSN 2184-4305, pages 549-556. DOI: 10.5220/0010846700003123
 
-\item Alves, Rita; Rodrigues, João; Ramou, Efthymia; Palma, Susana; Roque, Ana; Gamboa, Hugo. "Classification of Volatile Compounds with Morphological Analysis of e-nose Response". Virtual, 2022.
+\item Alves, R.; Rodrigues, J.; Ramou, E.; Palma, S.; Roque, A. and Gamboa, H. (2022). Classification of Volatile Compounds with Morphological Analysis of e-nose Response. In Proceedings of the 15th International Joint Conference on Biomedical Engineering Systems and Technologies - BIOSIGNALS, ISBN 978-989-758-552-4; ISSN 2184-4305, pages 31-39. DOI: 10.5220/0010827200003123
 
-\item Mollaei, Nafiseh; Cepeda, Catia; Rodrigues, Joao; Gamboa, Hugo. "Biomedical Text Mining: Applicability of Machine Learning-based Natural Language Processing in Medical Database". Virtual, 2022.
+\item Mollaei, N.; Cepeda, C.; Rodrigues, J. and Gamboa, H. (2022). Biomedical Text Mining: Applicability of Machine Learning-based Natural Language Processing in Medical Database. In Proceedings of the 15th International Joint Conference on Biomedical Engineering Systems and Technologies - BIOSIGNALS, ISBN 978-989-758-552-4; ISSN 2184-4305, pages 159-166. DOI: 10.5220/0010819500003123
 
-\item Rodrigues, Joao; Probst, Phillip; Gamboa, Hugo. "TSSummarize: A Visual Strategy to Summarize Biosignals". 2021.
+\item J. Rodrigues et al., "microErgo: A Concept for an Ergonomic Self-Assessment Tool," 2021 Seventh International conference on Bio Signals, Images, and Instrumentation (ICBSII), 2021, pp. 1-6, doi: 10.1109/ICBSII51839.2021.9445156
 
-\item Santos, António; Rodrigues, João; Folgado, Duarte; Santos, Sara; Fujão, Carlos; Gamboa, Hugo. "Self-Similarity Matrix of Morphological Features for Motion Data Analysis in Manufacturing Scenarios". 2021.
+\item J. Rodrigues, P. Probst and H. Gamboa, "TSSummarize: A Visual Strategy to Summarize Biosignals," 2021 Seventh International conference on Bio Signals, Images, and Instrumentation (ICBSII), 2021, pp. 1-6, doi: 10.1109/ICBSII51839.2021.9445154.
 
-\item Rodrigues, Joao; Gamboa, Hugo; Kublanov, Vladimir; Dolganov, Anton. "Storage of Biomedical Signals: Comparative Review of Formats and Databases". Paper presented in Multi-Conference on Engineering, Computer and Information Sciences (SIBIRCON), Yekaterinburg, 2019.
+\item Santos, A.; Rodrigues, J.; Folgado, D.; Santos, S.; Fujão, C. and Gamboa, H. (2021). Self-Similarity Matrix of Morphological Features for Motion Data Analysis in Manufacturing Scenarios. In Proceedings of the 14th International Joint Conference on Biomedical Engineering Systems and Technologies - BIOSIGNALS, ISBN 978-989-758-490-9; ISSN 2184-4305, pages 80-90. DOI: 10.5220/0010252800800090
+
+\item Rodrigues, J.; Gamboa, H.; Kublanov, V.; Dolganov, A.. "Storage of Biomedical Signals: Comparative Review of Formats and Databases". Paper presented in Multi-Conference on Engineering, Computer and Information Sciences (SIBIRCON), Yekaterinburg, 2019.
 
 \end{itemize}
 
 \subsection{Planned Publications}
 
 \begin{itemize}
-\item J. Rodrigues et al., Feature-Based Information Retrieval of Multimodal Biosignals Using a Self-Similarity Matrix: Applications for Automatic Segmentation and Labelling - \textit{Submitted - Under Revision}.
-
 \item Novelty Function-Based Automatic Activity Segmentation of Multimodal Biosignals Acquired from Wearable Sensors (in partnership with the Cognitive Systems Lab - University of Bremen)
 
 \item HeaRTS - Human Readable Time Series Classification
@@ -185,50 +199,67 @@ In this thesis, we contributed to the state of the art with several methods, her
 
 The content of this thesis used peer-reviewed sections of the listed publications above. The sections that used part of this text are listed as follows:
 
-%\begin{table}
-%\centering
-%\begin{tabular}{ll}
-%\toprule
-%Section & Publication\\
-%\midrule
-%Section 2 & Essential definitions use the text from paper X\\
-%
-%\end{tabular}
-%\end{table}
-
-
+\begin{table}[h]
+\centering
+\begin{tabular}{lL{0.8\linewidth}}
+\toprule
+Chapter & Publication\\
+\midrule
+2 & Essential definitions use the text from the peer-reviewed publication \cite{nova_tobe}\\
+3 & The literature review text used on several peer-reviewed works published by the author was used in several of these sections, namely \cite{nova_tobe, ssts, class_voc, antonio, tssumarize}\\
+4 & The content was based on the peer-reviewed publication \cite{nova_tobe}\\
+5 & Part of the content and text was based on the peer-reviewed publication \cite{ssts}\\
+6 & Text and results are based on the peer-reviewed publications \cite{nova_tobe, antonio, ssts, class_voc}\\
+\end{tabular}
+\end{table}
 
 \subsection{Awards}
 
 \subsubsection{Fullbright}
 
-I was awarded in 2021 a Fullbright scholarship to pursue a research project at the Computer Science Department of the University of California, Riverside (UCR). The exchange program was made under the supervision of prof. Eamonn Keogh. It made possible a close collaboration in the development of \gls{quots}. We are now working in the submission of a conference paper and a journal paper on this topic.
+I was awarded in 2021 a Fullbright scholarship to pursue a research project at the Computer Science Department of the University of California, Riverside (UCR). The exchange program was made under the supervision of Prof. Eamonn Keogh. It made possible a close collaboration in the development of \gls{quots}. We are now working in the submission of a conference paper and a journal paper on this topic.
 
 \subsubsection{Best Paper Award}
 
 The best paper award for the category was awarded to the publication "MicroErgo: A Concept for Self-Assessment of Occupational Risk" at the Seventh International Conference on Biosignals, Images and Instrumentation conference, 2021.
 
+\subsubsection{Hanse-Wissenschaftskolleg Scholarship for Advanced Studies}
+
+I was awarded in 2022 a scholarship at the Hanse-Wissenschaftskolleg: Center for Advanced Studies. During this period, I was able to collaborate with the Cognitive Systems Lab from the Universität Bremen, supervised by Prof. Tanja Schultz. 
+
 \section{Future Work}
+
 \subsection{Overall Improvements to compute the \gls{ssm} and Segmentation Process}
 
 The \gls{ssm} was computed by using the standard approach found at \cite{fmp1}. The results show promise in using this strategy for several tasks. We believe there are improvements that can be made in the feature extraction process, and contribute to a better \gls{ssm}. Currently, neither a dimensionality reduction method, such as Principal Component Analysis (PCA), nor a feature selection process, are performed prior to computing the \gls{ssm}. Performing these might be a way of improving the general matrix representation and remove features that do not contribute to explain the similarity between subsequences. Additionally, feature stacking has been proved to help in increasing the accuracy of feature-based classification of time series \cite{hartmann2021featurespace}. This means that it should better represent differences between subsequences and should be tested on the current approach.
 \par
 Another relevant improvement would be to find a way to minimize the number of parameters used for the novelty segmentation task. Currently, the size of the sliding window that extracts features and the size of the sliding kernel that computes the novelty function are independent. It would be interesting to reduce the number of variables by finding a relationship between the kernel and moving window, make the sizes adaptive based on a specific metric or perform a training process where these parameters are computed for a specific domain and kept the same for future iterations (as we showed the values of these parameters are close together for the same dataset and type of task).
 \par
-The general idea when this method was used, was that changes on the signal should be represented by a change in the overall set of features. This leads to the idea that different changes can be associated with a specific group of features. In the future, we should study which are the features that better describe a specific type of feature.
+The general idea when this method was used, was that changes on the signal should be represented by a change in the overall set of features. This leads to the idea that different changes can be associated with a specific group of features. In the future, we should study which are the features that better describe a specific type of change.
 
-\subsection{Unsupervised Automatic Segmentation and Labeling of Time Series}
+\subsection{Benchmarking Multi-Segmentation Tasks in Multimodal Time Series}
 
-We have already mentioned in a previous chapter that the proposed methods help moving towards unsupervised and automatic segmentation and labeling of time series. We have showed that the segmentation process is well performed, but lacked the validation for automatic labeling. We believe that using the similarity profiles after a first segmentation process would provide this ability of automatically returning a completely segmented and annotated signal. In the future, we will test this approach on public datasets.
+While working in the topic of segmentation, we did our best to make a fair validation. It was very difficult to find data with multimodal information and that could have multiple events. We initially found one benchmark (\textit{ATCPD}) with real-world time series and multiple events, and more recently found another benchmark of univariate time series, with mostly single events (\textit{UCRS}). We find that more datasets should be available, because in the \textit{ATCPD} Dataset, changes are mainly focused in changes of statistical properties, while in the \textit{UCRS} Dataset, regime changes are covered, but in most of the signals, only one event is searched, which makes the task easier than what is normally found in data acquired from longer sessions, as in the signals we used in this work. We also think that a better standardization of the validation process should be done. Effectively, the validation we used with $TP$, $FP$ and $FN$ is typically employed, but might be unfair in cases where an event is not considered because it is at the border of the tolerance zone. However, when using only distance measures, we might be unfairly exaggerating the penalization for cases where $FP$ are, and if the data is not perfectly labelled, wrongly evaluating the used methods. 
+
+We believe this topic could be more deeply studied and standardized for the community. This includes finding a benchmark with different types of tasks, different types of changes in the signal, different types of data, include uni- and multi- modal cases, as well as multi- and uni-variate cases. In addition, it should cover tasks with different difficulties in terms of how many events have to be found, but also in terms of difficult it is to find the event. This could be a very good contribution to the community.
+
+
+\subsection{Unsupervised Automatic Segmentation and Labelling of Time Series}
+
+We have already mentioned in a previous chapter that the proposed methods help moving towards unsupervised and automatic segmentation and labelling of time series. We have showed that the segmentation process is well performed, but lacked the validation for automatic labelling. We believe that using the similarity profiles after a first segmentation process would provide this ability of automatically returning a completely segmented and annotated signal. In the future, we will test this approach on public datasets.
 
 %This methodology will be exemplified to identify instant repetitions of a given pre-specified time series' sub-sequence of the user's interest. For example, if the analyst wants to understand the contribution of a specific segment of the working cycle for the occupational risk, this sub-sequence could be used as a query to search all the other equal segments. Moreover, current risk evaluations of occupational exposure are made with the assistance of video. Such query-by-example methods could be integrated into a video system that let's the analyst select an interval of the video that corresponds to a specific part of a working cycle, and the algorithm segments the remaining other similar segments. This would increase the speed of analysis and/or labeling process.
 
 
 \subsection{Hierarchical Segmentation of Time Series}
 
-When analyzing a long time series visually, the user has to zoom-in and zoom-out to search for areas of interest. We believe that using the proposed segmentation method we could perform a hierarchical segmentation, that is, apply multiple segmentation stages, with different window lengths. This would provide a multi-layered set of information that can highlight the areas of interest  in different \textit{zoom} levels.
+When analyzing a long time series visually, the user has to zoom-in and zoom-out to search for areas of interest. We believe that using the proposed segmentation method we could perform a hierarchical segmentation, that is, apply multiple segmentation stages, with different window lengths. This would provide a multi-layered set of information that can highlight the areas of interest in different \textit{zoom} levels.
 \par
 As a pilot for this method, the user could define the number of hierarchies  and corresponding window sizes to perform this process, but ideally, the process would be performed with an adaptive sliding window, that alters the dimensions based on a specific metric. This process would be helpful for long time series, with highly variable information along time.
+
+\subsection{Query-based Segmentation}
+
+Having this methodology to perform segmentation of time series, opens many research paths. One that we believe could be relevant happens in cases where we could write a query that would represent the segmentation pattern we intend to find. A typical task involves recording data in a methodological, systematic and recurring way, asking multiple participants to perform the same tasks in the same sequence. Knowing the structure in which the data was recorded could be used as hints for the segmentation process. Let us imagine a typical sequence of activities being recorded, such as \texttt{walking - running - jumping}, and this was repeated three times. We could write a query that could be used to segment such sequence: \texttt{(W R J)\{3\}}. We could use this query as the \textit{hint} given by the user, since it tells the method that it should search for three different regimes (\texttt{W, R} and \texttt{J}) and that it is repeated three times. We believe this could be a relevant contribution to the state of the art in terms of segmentation search.
 
 \subsection{Periodic Segmentation}
 
