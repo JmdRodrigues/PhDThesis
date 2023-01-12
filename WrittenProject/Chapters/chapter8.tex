@@ -34,7 +34,7 @@ The second proposed method for pattern search in time series will be evaluated w
 
 \subsection{Novelty Segmentation}
 
-In this section, we present several examples of how the novelty function (recall Section \ref{sec:novelty_search}, retrieved from the \gls{ssm}, is useful for the segmentation of time series. We also provide a measure of the algorithm's performance considering ground truth events from public benchmarks, while also comparing our proposed solution with existing methods for change point detection from the \textit{Turing Change Point Detection Benchmark} \cite{cpd_alan}.
+In this section, we present several examples of how the novelty function (recall Section \ref{sec:novelty_search}, retrieved from the \gls{ssm}, is useful for the segmentation of time series. We also provide a measure of the algorithm's performance considering ground truth events from public benchmarks, while also comparing our proposed solution with existing methods for change point detection from the \textit{Turing Change Point Detection Benchmark} \cite{cpd_alan}. 
 
 \subsubsection{Quantiative Evaluation Metrics}
 
@@ -42,8 +42,7 @@ In order to evaluate the performance of our proposed method in general scenarios
 
 The quantitative evaluation on biosignals' public datasets was made by accumulating true positive ($TP$), false positive ($FP$), and false negative ($FN$) values with a tolerance zone around the ground truth events. The applied reasonable tolerance was the ground truth wrapped by a window size of the \gls{ssm} computation, inside which a detected event was counted as a $TP$. The case that no estimated event was found inside the tolerance band was considered an $FN$. An estimated event outside the tolerance or duplicating to an already counted $TP$ were regarded as an $FP$. The F1-score based on the precision and recall values was calculated from $TP$, $FN$, and $FP$ values (recall definitions and equations from Section \ref{subsec:event_metrics}).
 
-An online repository \footnote{\url{https://github.com/JmdRodrigues/PhDThesis/tree/main/ProjectCode/NOVA/Results/Tables}} is also available where Tables with detailed parameter usage are presented, namely the window sizes, kernel sizes, and thresholds. In addition, the distribution of F1-scores is available in Appendix \ref{appendix:tables_detailed} Section \ref{app_sec:detailed_results}. 
-
+An online repository \footnote{\url{https://github.com/JmdRodrigues/PhDThesis/tree/main/ProjectCode/NOVA/Results/Tables}} is also available where Tables with detailed parameter usage are presented, namely the window sizes, kernel sizes, and thresholds. In addition, the distribution of F1-scores is available in Appendix \ref{appendix:tables_detailed} Section \ref{app_sec:detailed_results}. We also encourage to use a live version of the method on your own data, which can be found at \footnote{\url{https://jmdrodrigues-irbiosignals-app-streamlit-main-b7t5rc.streamlit.app/}}
 
 \subsubsection{Biosignals' Segmentation}
 
@@ -51,7 +50,7 @@ In the evaluation of biosignal segmentation, the performance of our proposed met
 
 The method has been computed in the same conditions and followed the same procedure for all datasets' records. The features used were the same for each record (see Appendix 2 - \ref{appendix:tables_detailed}), varying the timescale parameter, the overlap size of the sliding window, and the kernel size. The peak detection strategy based on a threshold mechanism is the same for all records, while the threshold value varies from record to record. Results for publicly available datasets are listed in Tables \ref{tab:biosignals_results} and \ref{tab:biosignals_results2}, and Table \ref{tab:alanturing} expands the performance by F1-scores in detecting the change point events from a benchmark.
 
-\begin{table}[H]
+\begin{table}
     \centering
     \caption{Overall results for the performance of the method on novelty segmentation, including true positives (TP), false positives (FP) and false negatives (FN), precision (P), recall (R) and F1-score (F1) values. The last row provides the macro averaged F1-scores (\textit{M.A. F1}) of the four datasets.}
     \label{tab:biosignals_results}
@@ -74,8 +73,7 @@ M.A. F1 & - & - & - & - & - & 0.91 &-&-&-&-&- & 0.83 &-&-&-&-&-& 0.69\\
 \end{tabular}}
 \end{table}
 
-
-\begin{table}[H]
+\begin{table}
     \centering
     \caption{Results to summarize the comparison between the methods tested. In this table, each record of each dataset is counted for each method as a win, draw or loss. The count is made for each dataset and finally, for all datasets altogether (W|D|L).}
     \label{tab:biosignals_results2}
@@ -246,6 +244,23 @@ In terms of computation time, the algorithm performs (1) a sliding window to ext
 %Rewrite
 The sliding window to extract features has an $O(n)$ time complexity. The dot product between matrices has a conventional $O(m^2n)$ time complexity. Expressly, $m$ and $n$ represent the number of features and the inputted signal's size, respectively, in our proposed method. The correlation computation of a kernel on the \gls{ssm}'s diagonal has a complexity of $O(nM^2)$, where the sliding kernel's size $M$ equals $2L+1$.
 
+\subsubsection{Distance of True Positives to Ground Truth}
+\label{sec:distance_intro}
+
+From the results presented in the previous Section, we showed that the proposed method is capable of identifying changes in signals. However, how precise is the method in detecting these events? For this, we measured the distance from the $TP$ events and the corresponding ground truth. A more detailed explanation of these results are showed in Appendix \ref{appendix:tables_detailed} (Section \ref{sec:distances}).
+
+The distance values, in seconds, show that, typically, the proposed method, with the parameters used, is less precise than the other methods in most datasets. It is a clear limitation at this stage, but we identified several reasons for this:
+
+\begin{itemize}
+
+\item \textbf{\textit{search timescale}}: The larger the window size, the less precise is the detection, which makes sense, considering that the resulting novelty function will be more smoothed and peaks will be detected with less precision;
+
+\item \textbf{\textit{signal size}}: The larger the signal, the more difficult it becomes to compute the \gls{ssm}. This results in either reducing the overlap size, or increasing the window size. In both cases, the resulting novelty function will be more smoothed;
+
+\end{itemize}
+
+The mentioned reasons influence the parameter selection that affects the precision in the detection. This can be corrected if using more appropriate overlap size (higher overlap) and detection strategy (multi-timescale search and different peak strategy).
+
 \subsubsection{Discussion of Novelty Segmentation Results}
 \label{sec:novelty_seg_discussion}
 
@@ -266,7 +281,7 @@ The appropriate window length depends on the purpose of the search:
 \begin{itemize}
     \item If a small window length, e.g., 0.05 seconds, is chosen, the novelty function will mostly detail changes within a heartbeat.
     \item If opting for a window length approximately equal to the \gls{ecg}'s \textit{PQRS} complex, each transition between complexes will be projected.
-    \item If even larger windows are applied, e.g., 1 or 2 seconds, the jump artefact will be more significant on the \gls{ssm} and be spotlighted on the novelty function. Hence, in such a case, the window length of 1 second should be appropriate for segmenting clean versus noisy ECG signals.
+    \item If even larger windows are applied, e.g., 1 or 2 seconds, the jump artefact will be more significant on the \gls{ssm} and be spotlighted on the novelty function. Hence, in such a case, the window length of 1 second should be appropriate for segmenting clean versus noisy \gls{ecg} signals.
 \end{itemize}
 
 \begin{figure}
@@ -281,7 +296,7 @@ When using the same window length on all the other records of the same dataset, 
 The threshold used to determine which peaks are considered as points of interest is not relevant to the \gls{ssm} calculations but closely related to event detection and automatic segmentation. If the data is a black box, the choice of threshold is a matter of observation and speculation. With informed knowledge of the data, the threshold can be predetermined and experimented with rules based on ranking the detected peaks from highest to lowest:
 
 \begin{itemize}
-    \item Set the total number (or quantity range) of points of interest as the threshold. E.g., an ECG series with $x$ heartbeats; an ACC series with $y$ recorded gaits of walking activity.
+    \item Set the total number (or quantity range) of points of interest as the threshold. E.g., an \gls{ecg} series with $x$ heartbeats; an \gls{acc} series with $y$ recorded gaits of walking activity.
     \item Count the total number of peaks and specify a percentage as the threshold. This work takes such an approach because of the diverse datasets and signals involved.
     \item Add sliding windows to the novelty function based on the known periodicity information of the time series, and define the number of points of interest expected to be present in each window as the threshold.
 \end{itemize}
@@ -297,7 +312,7 @@ The threshold used to determine which peaks are considered as points of interest
 
 \begin{figure}
 \centering
-\includegraphics[width=0.75\linewidth]{periodic_detection_example.pdf}
+\includegraphics[width=0.5\linewidth]{periodic_detection_example.pdf}
 \caption{Computing the \gls{ssm} of the periodic signal from subject 1, activity 0 (see Section \ref{dat:dataset12}). The ground truth is shown in orange (the first signal). The similarity function and distance profile from the query-based search are showed below the \gls{ssm}. The \gls{ssm} was computed with a window size of 5290 samples, and an overlap of 85\%.}
 \label{fig:periodic_detection}
 \end{figure}
@@ -315,25 +330,25 @@ Using the similarity function enhances the periodic nature of the time series wh
           & \multicolumn{4}{c}{Similarity function} & \multicolumn{4}{c}{Query-based search}\\
 Activity &    TP &     FP &    FN &  F1-score &    TP &     FP &   FN &  F1-score \\
 \midrule
-0  &   348 &   37.0 &    33 &      0.91 &   375 &   15.0 &    6 &      0.97 \\
-1  &   349 &   36.0 &    30 &      0.91 &   375 &   28.0 &    4 &      0.96 \\
-2  &   323 &   39.0 &    58 &      0.87 &   381 &   48.0 &    0 &      0.94 \\
-3  &   358 &   27.0 &    23 &      0.93 &   381 &   37.0 &    0 &      0.95 \\
-4  &   335 &   17.0 &    39 &      0.92 &   372 &   35.0 &    2 &      0.95 \\
-5  &   323 &   75.0 &    59 &      0.83 &   381 &   51.0 &    1 &      0.94 \\
-6  &   365 &    4.0 &    16 &      0.97 &   380 &   13.0 &    1 &      0.98 \\
-7  &   354 &   28.0 &    27 &      0.93 &   380 &   15.0 &    1 &      0.98 \\
-8  &   336 &   25.0 &    44 &      0.91 &   364 &   35.0 &   16 &      0.93 \\
-9  &   333 &   42.0 &    27 &      0.91 &   354 &   10.0 &    6 &      0.98 \\
-10 &   341 &   31.0 &    40 &      0.91 &   379 &   17.0 &    2 &      0.98 \\
-11 &   324 &   15.0 &    36 &      0.93 &   351 &   20.0 &    9 &      0.96 \\
-12 &   682 &   74.0 &    52 &      0.92 &   718 &   68.0 &   16 &      0.94 \\
-13 &   770 &   30.0 &   766 &      0.66 &   685 &  122.0 &  851 &      0.58 \\
-14 &   322 &   50.0 &    40 &      0.88 &   353 &   41.0 &    9 &      0.93 \\
-15 &   344 &   38.0 &    17 &      0.93 &   360 &   29.0 &    1 &      0.96 \\
-16 &   584 &   60.0 &   126 &      0.86 &   659 &   26.0 &   51 &      0.94 \\
+0  &   348 &   37 &    33 &      0.91 &   375 &   15.0 &    6 &      0.97 \\
+1  &   349 &   36 &    30 &      0.91 &   375 &   28.0 &    4 &      0.96 \\
+2  &   323 &   39 &    58 &      0.87 &   381 &   48.0 &    0 &      0.94 \\
+3  &   358 &   27 &    23 &      0.93 &   381 &   37.0 &    0 &      0.95 \\
+4  &   335 &   17 &    39 &      0.92 &   372 &   35.0 &    2 &      0.95 \\
+5  &   323 &   75 &    59 &      0.83 &   381 &   51 &    1 &      0.94 \\
+6  &   365 &    4 &    16 &      0.97 &   380 &   13 &    1 &      0.98 \\
+7  &   354 &   28 &    27 &      0.93 &   380 &   15 &    1 &      0.98 \\
+8  &   336 &   25 &    44 &      0.91 &   364 &   35 &   16 &      0.93 \\
+9  &   333 &   42 &    27 &      0.91 &   354 &   10 &    6 &      0.98 \\
+10 &   341 &   31 &    40 &      0.91 &   379 &   17 &    2 &      0.98 \\
+11 &   324 &   15 &    36 &      0.93 &   351 &   20 &    9 &      0.96 \\
+12 &   682 &   74 &    52 &      0.92 &   718 &   68 &   16 &      0.94 \\
+13 &   770 &   30 &   766 &      0.66 &   685 &  122 &  851 &      0.58 \\
+14 &   322 &   50 &    40 &      0.88 &   353 &   41 &    9 &      0.93 \\
+15 &   344 &   38 &    17 &      0.93 &   360 &   29 &    1 &      0.96 \\
+16 &   584 &   60 &   126 &      0.86 &   659 &   26 &   51 &      0.94 \\
 \midrule
-Total &  6791 &  628.0 &  1433 &      0.89 &  7248 &  610.0 &  976 &      0.93\\
+Total &  6791 &  628 &  1433 &      0.89 &  7248 &  610 &  976 &      0.93\\
 \bottomrule
 \end{tabular}
 \label{tab:periodic_results}
@@ -543,7 +558,7 @@ Stable Lifting Detection & \ref{fig:Summary2}.f & Mag Abs Sm 1000 {\large \textb
     \caption{(Continuation of the previous figure). Summary of the resolution of the problems 4 (Electrocardiogram peak detector), 5 (Straight line trajectory tracking), and 6 (Lifting exercise), listed in the previous Section with the \gls{ssts}.}
 \end{figure}
 
-At this point, introductory examples have been explained and can be used to understand the workability of the tool. Table \ref{tab:Summary} and Fig. \ref{fig:Summary2} summarize the example's resolution for each step of the pipeline. Additional examples are also included and can be found in the GitHub repository of the tool\footnote{\url{https://github.com/novabiosignals/SyntacticSeachOnTimeSeries}}.
+At this point, introductory examples have been explained and can be used to understand the workability of the tool. Table \ref{tab:Summary} and Fig. \ref{fig:Summary2} summarize the example's resolution for each step of the pipeline. Additional examples are also included and can be found in the GitHub repository of the tool\footnote{\url{https://github.com/novabiosignals/SyntacticSeachOnTimeSeries}}. You can also try out in a web version, available at \footnote{\url{https://novabiosignals.github.io/SyntacticSearchonTimeSeries/}}.
 
 
 \subsection{Measure of Expressiveness}
@@ -652,7 +667,7 @@ We expect \gls{ssts} to have a broad range of applications that can extend to th
 
 \section{Time Series Classification with HeaRTS}
 
-In this section, the performance of \gls{hearts} is evaluated in the time series classification task by being applied to the \textit{UCR time series classification benchmark} and compared with the traditional 1-NN \gls{ed}. As was mentioned on Chapter \ref{sec:hearts}, this process can be performed in multiple ways, namely with the combination of a \textit{Baysian} or \gls{svm} classifiers with either a \gls{bow} or a \gls{tfidf} model. These combinations were also compared. This evaluation will help us answer if it is possible to use a text-based representation of time series with words extracted by \gls{ssts} queries with a traditional text-mining strategy.
+In this section, the performance of \gls{hearts} is evaluated in the time series classification task by being applied to the \textit{UCR time series classification benchmark} and compared with the traditional 1-NN \gls{ed}. As was mentioned on Chapter \ref{sec:hearts}, this process can be performed in multiple ways, namely with the combination of a \textit{Bayesian} or \gls{svm} classifiers with either a \gls{bow} or a \gls{tfidf} model. These combinations were also compared. This evaluation will help us answer if it is possible to use a text-based representation of time series with words extracted by \gls{ssts} queries with a traditional text-mining strategy.
 
 In addition to these experiments, we performed an individual analysis of several use-cases to understand how to extract meaningful explanation about differences between signals based on this linguistic translation. This study should tell us if the words extracted are valuable to highlight the \textit{subsequences} that are most relevant to distinguish the time series from one class in regard to all the others. 
 
@@ -686,7 +701,7 @@ The performance was measured for both the cross-validation step and the validati
 \begin{figure}
     \centering
     \includegraphics[width=0.95\linewidth]{hearts_methods_comparisons.pdf}
-    \caption{right) Classification accuracies for the Bag of Synthatic Patterns in comparison with the euclidean distance combined with 1-NN classifier (1-NN ED) with standard train and test; left) with a 10 fold cross validation.}
+    \caption{(left) Comparison of classification accuracies of \gls{hearts} when using the \gls{bow} or \gls{tfidf}. (right) Comparison of classification accuracies of \gls{hearts} when using an \gls{svm} or \gls{nb} classifier. The colormap indicates the distance in accuracy between methods, being blue an indication of the upper left method being better, and red the bottom right method being better. Recall graph explanation from \ref{sec:maps1}.}
     \label{fig:comparison_2}
 \end{figure}
 
@@ -697,7 +712,7 @@ We are now in position to compare the best text-based method (\gls{hearts}) with
 \begin{figure}
     \centering
     \includegraphics[width=0.95\linewidth]{hearts_comparison_with_ED_MAIN.pdf}
-    \caption{right) Classification accuracies for the Bag of Synthatic Patterns in comparison with the euclidean distance combined with 1-NN classifier (1-NN ED) with standard train and test; left) with a 10 fold cross validation.}
+    \caption{right) Classification accuracies for the Bag of Synthatic Patterns in comparison with the euclidean distance combined with 1-NN classifier (1-NN ED) with standard train and test; left) with a 10 fold cross validation. The colormap indicates the distance in accuracy between methods, being blue an indication of the upper left method being better, and red the bottom right method being better. Recall graph explanation from \ref{sec:maps1}.}
     \label{fig:ed_comparison}
 \end{figure}
 
@@ -749,7 +764,7 @@ Regarding the \textit{ShapeletSim} dataset, the data has also two classes. In on
 \subsection{Discussion}
 \label{sec:discussion_hearts}
 
-In this section, we wanted to answer two main research questions: (1) can we solve time series classification tasks based on their textual representation following traditional \textit{NLP} methods, and (2) could we use the words that describe the time series to hint about differences between classes of time series. For this purpose, we applied the proposed method on the \textit{UCR} classification benchmark and highlighted several relevant use-cases and the overall results achieved.
+In this section, we wanted to answer two main research questions: (1) can we solve time series classification tasks based on their textual representation following traditional \textit{NLP} methods, and (2) could we use the words that describe the time series to hint about and explain the differences between classes of time series. For this purpose, we applied the proposed method on the \textit{UCR} classification benchmark and highlighted several relevant use-cases and the overall results achieved.
 \par
 The results provide evidence that it is possible to compare time series based on a textual representation and use traditional text-mining strategies for classification purposes. Not only is it possible to compare the vectors of time series documents with the cosine distance (as we have seen on Figure \ref{fig:distribution_dendogram}, but \gls{bow} or \gls{tfidf} models can be used with a linear \gls{svm} to solve classification tasks.
 \par
@@ -757,7 +772,7 @@ Additionally, the fact that words are weighted based on their relevance to disti
 
 Another relevant point is the fact that words used might not be capable of expressing the differences between classes. Many cases with high accuracies can be highlighted, but their interpretability falls short. For instance, for the dataset \textit{ECGFiveDays}, a binary classification problem. The method has 0.96 of accuracy, but does not show expressively the difference between classes.
 \par
-The textual representation is valuable in the sense that text mining domain knowledge can be used on time series. Nevertheless, we can profit from this knowledge as much as the translation of the time series into text is rich, valuable, and domain-specific. With the current set of \gls{ssts} queries we can make a limited description that works well in simple signals described mostly by their derivative dynamics. The keywords extracted for these time series still have limited readability being even harder for more complex examples. However, if more expressive queries are used to make a more robust translation, the keywords extracted can be more valuable and relatable to the time series we are looking at. Therefore, a more diverse set of queries should be used to make possible the extraction of more relevant keywords. At some point, a reduction and selection of the most relevant keywords should be made.
+The textual representation is valuable in the sense that text mining domain knowledge can be used on time series. Nevertheless, we can profit from this knowledge as much as the translation of the time series into text is rich, valuable, and domain-specific. With the current set of \gls{ssts} queries we can make a limited description that works well in simple signals described mostly by their derivative dynamics. The keywords extracted for these time series still have limited readability being even harder for more complex examples. However, if more expressive queries are used to make a more robust translation, the keywords extracted can be more valuable and relatable to the time series studied. Therefore, a more diverse set of queries should be used to make possible the extraction of more relevant keywords. At some point, a reduction and selection of the most relevant keywords should be made.
 
 \section{Pattern Search with QuoTS}
 

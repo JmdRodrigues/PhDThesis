@@ -1,0 +1,8 @@
+streamlit
+matplotlib
+soundfile
+tsfel
+numpy
+scipy
+novainstrumentation
+plotly

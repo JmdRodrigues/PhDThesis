@@ -1,0 +1,24 @@
+\begin{tabular}{lrrrrrrrr}
+    \caption{Parameter configuration and experimental results of each signal in Dataset 7 (ECG2, see Section A.7). $W_{size}$: window size; $K$: kernel size in ratio of the window size; $O$: overlap ratio of the window size. $T$: amplitude threshold for event detection; Novelty: our proposed method with the novelty function; WL: window-based segmentation; BS: binary segmentation. The tolerance used to calculate the F1-score ($F1$) equals the window size for novelty function computation.}
+    \centering
+    \begin{tabular}{ccccccccc}
+    \toprule
+    & \multicolumn{5}{c}{Novelty} & \multicolumn{2}{c}{WL} & BS\\
+    \midrule
+    Signal &     $W_{size}$ &     $K$ &     $O$ &   $T$    &     $F1$ & $W_{size}$ & $F1$ & $F1$\\
+    \cmidrule(lr){2-6} \cmidrule(lr){7-8} \cmidrule(lr){9-9}\\
+1  &  12500 &  0.63 &  0.14 &  0.95 &  1.00 &  50000 &  0.96 &  0.97 \\
+2  &  12500 &  1.25 &  0.19 &  0.95 &  0.97 &  50000 &  0.96 &  0.97 \\
+3  &  25000 &  2.50 &  0.10 &  0.95 &  0.92 &  50000 &  0.92 &  0.83 \\
+4  &  50000 &  0.62 &  0.28 &  0.95 &  0.93 &  50000 &  0.85 &  0.48 \\
+5  &  50000 &  0.62 &  0.14 &  0.95 &  0.67 &  50000 &  0.64 &  0.34 \\
+6  &  12500 &  0.63 &  0.14 &  0.95 &  1.00 &  50000 &  0.96 &  0.90 \\
+7  &  12500 &  1.25 &  0.19 &  0.95 &  1.00 &  50000 &  0.96 &  0.90 \\
+8  &  12500 &  1.25 &  0.23 &  0.95 &  1.00 &  25000 &  0.93 &  0.90 \\
+9  &  12500 &  1.25 &  0.28 &  0.95 &  1.00 &  25000 &  0.86 &  0.55 \\
+10  &  12500 &  1.25 &  0.32 &  0.95 &  0.96 &  25000 &  0.71 &  0.34 \\
+11 &  25000 &  2.50 &  0.41 &  0.95 &  0.75 &  50000 &  0.67 &  0.34 \\
+12 &  12500 &  1.25 &  0.10 &  0.95 &  1.00 &  50000 &  0.96 &  0.90 \\ 
+
+\bottomrule
+\end{tabular}
